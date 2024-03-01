@@ -27,7 +27,7 @@
     --accent-dark: #1e40af;
     --primary: #cc7d24;
     --primary-dark: #9c601c;
-    --primary-fg: #f3f4f6;
+    --primary-fg: #f9fafb;
     --secondary: #374151;
     --secondary-fg: #f9fafb;
     --hinted: #111827;
@@ -39,9 +39,23 @@
 }
 
 @layer base {
+    @font-face {
+        font-family: "LabGrotesqueRegular";
+        src: url("/LabGrotesqueRegular.otf") format("opentype");
+    }
+    @font-face {
+        font-family: "LabGrotesqueMedium";
+        src: url("/LabGrotesqueMedium.otf") format("opentype");
+    }
+    @font-face {
+        font-family: "LabGrotesqueBold";
+        src: url("/LabGrotesqueBold.otf") format("opentype");
+    }
+
     html,
     body {
         @apply w-full leading-normal;
+        font-family: "LabGrotesqueRegular", sans-serif;
     }
 
     .hidden {
@@ -50,14 +64,17 @@
 
     h1 {
         @apply font-bold text-xl;
+        font-family: "LabGrotesqueMedium", sans-serif;
     }
 
     h2 {
         @apply font-bold text-lg;
+        font-family: "LabGrotesqueMedium", sans-serif;
     }
 
     h3 {
         @apply font-bold;
+        font-family: "LabGrotesqueMedium", sans-serif;
     }
 
     a {
@@ -66,6 +83,10 @@
 
     iframe {
         outline: none;
+    }
+
+    a {
+        @apply text-blue-500;
     }
 }
 
@@ -134,6 +155,10 @@
         bottom: 0 !important;
         justify-content: flex-start !important;
         height: auto !important;
+    }
+
+    q-l {
+        @apply inline-flex items-baseline;
     }
 }
 

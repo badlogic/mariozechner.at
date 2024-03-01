@@ -118,6 +118,12 @@ import eyeOpenIconSvg from "remixicon/icons/System/eye-line.svg";
 import eyeClosedIconSvg from "remixicon/icons/System/eye-off-line.svg";
 // @ts-ignore
 import sendIconSvg from "remixicon/icons/Business/send-plane-2-line.svg";
+// @ts-ignore
+import quotesIconSvg from "remixicon/icons/Editor/double-quotes-r.svg";
+// @ts-ignore
+import twitterIconSvg from "remixicon/icons/Logos/twitter-line.svg";
+// @ts-ignore
+import mastodonIconSvg from "remixicon/icons/Logos/mastodon-line.svg";
 
 // @ts-ignore
 import favIconSvg from "../../html/favicon.svg";
@@ -185,3 +191,6 @@ export const eyeOpenIcon = unsafeHTML(eyeOpenIconSvg);
 export const eyeClosedIcon = unsafeHTML(eyeClosedIconSvg);
 export const favIcon = unsafeHTML(favIconSvg);
 export const sendIcon = unsafeHTML(sendIconSvg);
+export const quotesIcon = unsafeHTML(quotesIconSvg);
+export const twitterIcon = unsafeHTML(twitterIconSvg);
+export const mastodonIcon = unsafeHTML(mastodonIconSvg);

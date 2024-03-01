@@ -1,7 +1,7 @@
 {
-    "name": "__app_name__",
-    "short_name": "__app_name__",
-    "description": "__app_description__",
+    "name": "mariozechner-at",
+    "short_name": "mariozechner-at",
+    "description": "Mario Zechner - software developer, author, speaker",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#000c15",

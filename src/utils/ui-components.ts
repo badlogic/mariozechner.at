@@ -1,8 +1,21 @@
 import { LitElement, PropertyValueMap, TemplateResult, html, nothing, render } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { map } from "lit/directives/map.js";
-import { errorIcon, arrowUpDoubleIcon, spinnerIcon, upDownIcon, moonIcon, sunIcon, settingsIcon, arrowLeftIcon, arrowRightIcon } from "./icons.js";
+import {
+    errorIcon,
+    arrowUpDoubleIcon,
+    spinnerIcon,
+    upDownIcon,
+    moonIcon,
+    sunIcon,
+    settingsIcon,
+    arrowLeftIcon,
+    arrowRightIcon,
+    quoteIcon,
+    quotesIcon,
+} from "./icons.js";
 import { router } from "./routing.js";
+import { Store, Theme } from "./store.js";
 
 export function dom(template: TemplateResult, container?: HTMLElement | DocumentFragment): HTMLElement[] {
     if (container) {
@@ -834,4 +847,92 @@ export function uploadJson(callback: (data: any) => void): void {
     });
 
     inputElement.click();
+}
+
+@customElement("theme-toggle")
+export class ThemeToggle extends BaseElement {
+    @state()
+    theme: Theme = "dark";
+
+    connectedCallback(): void {
+        super.connectedCallback();
+        this.theme = Store.getTheme() ?? "dark";
+        this.setTheme(this.theme);
+    }
+
+    setTheme(theme: Theme) {
+        Store.setTheme(theme);
+        if (theme == "dark") document.documentElement.classList.add("dark");
+        else document.documentElement.classList.remove("dark");
+    }
+
+    toggleTheme() {
+        this.theme = this.theme == "dark" ? "light" : "dark";
+        this.setTheme(this.theme);
+    }
+
+    render() {
+        return html`<button class="flex items-center justify-center w-10 h-10" @click=${this.toggleTheme}>
+            <i class="icon w-5 h-5">${this.theme == "dark" ? moonIcon : sunIcon}</i>
+        </button>`;
+    }
+}
+
+@customElement("q-l")
+export class QuoteLink extends BaseElement {
+    @property()
+    href = "";
+
+    render() {
+        return html`<a href=${this.href} class="text-[12px] inline-flex items-baseline" style="transform: translateY(-6px);"
+            ><span>[</span><i class="icon w-3 h-3">${quotesIcon}</i><span>]</span></a
+        >`;
+    }
+}
+
+@customElement("color-band")
+export class ColorBand extends BaseElement {
+    protected updated(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
+        super.updated(_changedProperties);
+
+        let colors = [
+            "#fe8242",
+            "#dd3c5a",
+            "#aa3e6c",
+            "#fe5d45",
+            "#fe9840",
+            "#893062",
+            "#fd3e4a",
+            "#c04267",
+            "#ef4159",
+            "#fd4d3d",
+            "#feab40",
+            "#d0486a",
+        ];
+
+        const brightness = (color: string) => {
+            const [r, g, b] = color.match(/\w\w/g)?.map((hex) => parseInt(hex, 16)) || [];
+            return (r * 299 + g * 587 + b * 114) / 1000;
+        };
+
+        colors = colors.sort((a, b) => brightness(b) - brightness(a));
+
+        const canvas = this.querySelector("canvas")!;
+        const ctx = canvas?.getContext("2d");
+        if (ctx) {
+            const { width, height } = canvas;
+            const barHeight = (height / colors.length) | 0;
+
+            colors.forEach((color, index) => {
+                const barWidth = width * 0.4; // Each bar is 40% of the canvas width
+                const xOffset = width - barWidth - (index * (width - barWidth)) / (colors.length - 1); // Calculate X offset
+                ctx.fillStyle = color;
+                ctx.fillRect(xOffset + Math.random() * width * 0.1 - Math.random() * width * 0.1, index * barHeight, barWidth, 2);
+            });
+        }
+    }
+
+    render() {
+        return html`<canvas class="w-full h-full"></canvas>`;
+    }
 }

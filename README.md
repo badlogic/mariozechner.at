@@ -1,6 +1,6 @@
-# app-template
+# mariozechner.at
 
-Used to create new (progressive) web apps and deploy them to a server running Docker and nginx-proxy for SSL cert generation.
+Infrastructure and content for https://mariozechner.at.
 
 ### Development
 

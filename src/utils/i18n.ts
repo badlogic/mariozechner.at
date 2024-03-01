@@ -1,17 +1,19 @@
 export interface Messages {
-    "Whoops, that page doesn't exist": string;
-    "Couldn't load mesage": string;
     "Invalid stream": string;
-    "Sorry, an unknown error occured": string;
     "End of list": string;
+    "Sorry, an unknown error occured": string;
+    "Whoops, that page doesn't exist": string;
+    "developer, coach, speaker": string;
+    "Schörgelgasse 3, 8010 Graz, Austria": string;
 }
 
 const english: Messages = {
-    "Whoops, that page doesn't exist": "Whoops, that page doesn't exist",
-    "Couldn't load mesage": "Couldn't load mesage",
     "Invalid stream": "Invalid stream",
-    "Sorry, an unknown error occured": "Sorry, an unknown error occured",
     "End of list": "End of list",
+    "Sorry, an unknown error occured": "Sorry, an unknown error occured",
+    "Whoops, that page doesn't exist": "Whoops, that page doesn't exist",
+    "developer, coach, speaker": "developer • coach • speaker",
+    "Schörgelgasse 3, 8010 Graz, Austria": "Schörgelgasse 3, 8010 Graz, Austria",
 };
 
 export type LanguageCode = "en";
