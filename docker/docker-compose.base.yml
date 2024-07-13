@@ -14,19 +14,6 @@ services:
         networks:
             - network
 
-    server:
-        build:
-            context: .
-            dockerfile: Dockerfile
-        stop_grace_period: 0s
-        environment:
-            PORT: 3333
-        volumes:
-            - ./data:/data
-            - ../:/app
-        networks:
-            - network
-
 networks:
     network:
         driver: bridge

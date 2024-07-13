@@ -1,0 +1,16 @@
+:root {
+    --font-family: sans-serif;
+    --text-color: #000000;
+    --dimmed-text-color: #333;
+    --background-color: #fff;
+    --link-color: rgb(59, 130, 246);
+    --link-hover-color: #0056b3;
+    --border-color: #ccc;
+}
+
+[data-theme="dark"] {
+    --text-color: #fff;
+    --dimmed-text-color: #ccc;
+    --background-color: #111111;
+    --border-color: #444;
+}

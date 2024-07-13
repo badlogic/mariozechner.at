@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-npm run build
+blargh --in src --out html
 host=slayer.marioslab.io
 host_dir=/home/badlogic/mariozechner.at
 current_date=$(date "+%Y-%m-%d %H:%M:%S")

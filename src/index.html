@@ -1,0 +1,79 @@
+<%= render("./_partials/header.html") %>
+
+    <script src="components.js"></script>
+
+    <div class="flex flex-row pb-4 pt-4">
+        <a href="/" style="color: var(--text-color); text-decoration: none;">
+            <div class="flex flex-col">
+                <h1>{ Mario Zechner }</h1>
+                <span>developer • coach • speaker</span>
+            </div>
+        </a>
+        <theme-toggle class="mb-auto ml-auto"></theme-toggle>
+    </div>
+
+    <color-band class="w-full mt-4 mb-4" style="height: 80px;"></color-band>
+
+    <h4 class="mb-4">Who I am</h4>
+    <p>
+        I'm an independent software developer, coach, and angel investor with over 15 years of experience in academia
+        <q-l href="https://scholar.google.at/citations?user=6hFnJ00AAAAJ&hl=en"></q-l>, startups
+        <q-l
+            href="https://www.businesswire.com/news/home/20151021005382/en/Xamarin-Acquires-RoboVM-Now-the-Only-Cross-Platform-Mobile-Development-Company-for-the-Top-Two-Enterprise-Languages"
+        ></q-l
+        >, industry, and open-source software <q-l href="https://github.com/badlogic"></q-l>.
+    </p>
+    <p>My primary technical expertise lies in applied machine learning, data science, compiler engineering, and computer graphics.</p>
+    <p>
+        I've led interdisciplinary, international teams and projects, devised and supervised the implementation of product roadmaps and
+        business plans, acquired customers, and secured funding.
+    </p>
+    <p>
+        I've authored books <q-l href="https://link.springer.com/book/10.1007/978-1-4302-3043-4"></q-l> and academic papers
+        <q-l href="https://scholar.google.com/citations?user=6hFnJ00AAAAJ&hl=en&oi=ao"></q-l>, been a speaker on the technical conference
+        circuit <q-l href="https://vimeo.com/181931320"></q-l><q-l href="https://gamedevdays.com/speaker/mario-zechner/"></q-l>, won
+        awards <q-l href="https://web.archive.org/web/20160312004045/https://www.oracle.com/javaone/rock-star-wall-of-fame.html"></q-l
+        ><q-l
+            href="https://web.archive.org/web/20210921141558/https://www.constantinus.net/de/wall-of-fame/archiv/wall-of-fame-archiv.html?Ergebnisse=50&blatt=13"
+        ></q-l
+        ><q-l href="https://blogs.oracle.com/java/post/2014-dukes-choice-award-winners"></q-l>, taught at school and university, mentored
+        young entrepreneurs, and invested in early-stage startups.
+    </p>
+    <p>
+        The birth of my son was a pivotal moment, inspiring me to contribute to the community
+        <q-l href="https://cards-for-ukraine.at"></q-l> and leverage my skills to highlight societal issues
+        <q-l href="https://www.wired.com/story/heisse-preise-food-prices/"></q-l><q-l href="https://heisse-preise.io/media.html"></q-l>.
+    </p>
+
+    <h4 class="mt-8 mb-4">What I offer</h4>
+    <ul>
+        <li>Pro-bono mentoring of young entrepreneurs on technical and business aspects</li>
+        <li>Technical workshops <q-l href="https://github.com/badlogic/genai-workshop/tree/main"></q-l></li>
+        <li>Independent consulting on compelling projects</li>
+    </ul>
+    <div>Pricing is tailored to meet individual or organizational needs.</div>
+
+    <h4 class="mt-8 mb-4">Get in touch</h4>
+    <div class="flex flex-col">
+        <div class="flex gap-2 mb-3">
+            <a href="https://twitter.com/badlogicgames"><i class="icon w-8 h-8"><%=render("./_icons/twitter-line.svg")%></i></a>
+            <a href="https://mastodon.gamedev.place/@badlogic"><i class="icon w-8 h-8"><%=render("./_icons/mastodon-line.svg")%></i></a>
+            <a href="https://github.com/badlogic"><i class="icon w-8 h-8"><%=render("./_icons/github-line.svg")%></i></a>
+        </div>
+        <a href="mailto:contact@mariozechner.at">contact@mariozechner.at</a>
+        <span>Glacisstraße 63</span>
+        <span>8010 Graz</span>
+        <span>Austria</span>
+    </div>
+
+    <h4 class="mt-8 mb-4">Musings</h4>
+    <a href="https://marioslab.io">Personal blog</a></li>
+
+    <div class="mt-auto text-xs text-center">
+        This page respects your privacy, not employing cookies or similar technologies, nor collecting any personally identifiable
+        information.
+    </div>
+
+
+
+    <%= render("./_partials/footer.html") %>
