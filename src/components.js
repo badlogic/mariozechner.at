@@ -67,6 +67,8 @@ class ColorBand extends HTMLElement {
         colors = colors.sort((a, b) => brightness(b) - brightness(a));
 
         const canvas = this.querySelector("canvas");
+        canvas.width = canvas.clientWidth;
+        canvas.height = canvas.clientHeight;
         const ctx = canvas?.getContext("2d");
         if (ctx) {
             const { width, height } = canvas;
