@@ -1,20 +1,23 @@
 <%= render("./_partials/header.html") %>
 
-    <script src="components.js"></script>
-
-    <div class="flex flex-row pb-4 pt-4">
-        <a href="/" style="color: var(--text-color); text-decoration: none;">
-            <div class="flex flex-col">
-                <h1>{ Mario Zechner }</h1>
-                <span>developer • coach • speaker</span>
-            </div>
-        </a>
-        <theme-toggle class="mb-auto ml-auto"></theme-toggle>
-    </div>
-
     <color-band class="w-full mt-4 mb-4" style="height: 80px;"></color-band>
 
-    <h4 class="mb-4">Who I am</h4>
+    <h4 class="mb-4">Musings</h4>
+    <%
+        const posts = metas("./posts");
+        posts.sort((a, b) => b.meta.date.localeCompare(a.meta.date));
+    %>
+    <% for (const post of posts) { %>
+        <a href="/posts/<%=post.directory%>/" class="flex gap-4 items-center">
+            <!--<img src="/posts/<%=post.directory%>/<%=post.meta.image%>" style="width: 160px; height: 120px; border-radius: 0.5rem;">-->
+            <div class="flex row gap-4 items-center">
+                <span class="text-sm italic" style="color: var(--dimmed-text-color)"><%=post.meta.date%></span>
+                <h4><%=post.meta.title%></h4>
+            </div>
+        </a>
+    <% } %>
+
+    <h4 class="mt-8 mb-4">Who I am</h4>
     <p>
         I'm an independent software developer, coach, and angel investor with over 15 years of experience in academia
         <q-l href="https://scholar.google.at/citations?user=6hFnJ00AAAAJ&hl=en"></q-l>, startups
@@ -65,15 +68,5 @@
         <span>8010 Graz</span>
         <span>Austria</span>
     </div>
-
-    <h4 class="mt-8 mb-4">Musings</h4>
-    <a href="https://marioslab.io">Personal blog</a></li>
-
-    <div class="mt-auto text-xs text-center">
-        This page respects your privacy, not employing cookies or similar technologies, nor collecting any personally identifiable
-        information.
-    </div>
-
-
 
     <%= render("./_partials/footer.html") %>

@@ -1,6 +1,6 @@
 :root {
     --font-family: sans-serif;
-    --text-color: #000000;
+    --text-color: #222222;
     --dimmed-text-color: #333;
     --background-color: #fff;
     --link-color: rgb(59, 130, 246);
@@ -9,8 +9,9 @@
 }
 
 [data-theme="dark"] {
-    --text-color: #fff;
-    --dimmed-text-color: #ccc;
-    --background-color: #111111;
+    --text-color: #ddd;
+    --dimmed-text-color: #aaa;
+    --background-color: #1e1b2a;
+    --link-color: #65a0ff;
     --border-color: #444;
 }
