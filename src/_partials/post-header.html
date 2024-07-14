@@ -1,4 +1,5 @@
-<%= render("./header.html") %>
+<% console.log(title) %>
+<%= render("./header.html", { title, description: description ?? "" }) %>
 
 <article>
 
