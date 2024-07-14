@@ -1,5 +1,10 @@
-<% meta() %>
-<%= render("../../_partials/post-header.html", { title, image }) %>
+<%
+	meta("../../meta.json")
+	meta()
+	const path = require('path');
+	url = url + "/posts/" + path.basename(path.dirname(outputPath)) + "/";
+%>
+<%= render("../../_partials/post-header.html", { title, image, url }) %>
 
 Three years ago, we had a son. As he grows bigger and smarter, I wonder how I can best introduce him to my favorite pastime: programming. Naturally, being the most ["NIH" dad](https://en.wikipedia.org/wiki/Not_invented_here), I will build my own programming environment for kids. I've previously built programming languages. What could go wrong?
 
@@ -144,6 +149,6 @@ These projects were either geared towards the [public good](https://www.wired.co
 
 Our son is 3 years old now. That should give me ample time to develop something workable based on the above insights. It's not the first time I've tried this, but now I have the proper motivation.
 
-Discuss this post on [Twitter]() or [Mastodon]().
+Discuss this post on [Twitter](https://x.com/badlogicgames/status/1812567575353610536) or [Mastodon](https://mastodon.gamedev.place/@badlogic/112786459075397204).
 
 <%= render("../../_partials/post-footer.html") %>
