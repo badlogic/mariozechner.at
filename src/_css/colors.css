@@ -6,6 +6,7 @@
     --link-color: rgb(59, 130, 246);
     --link-hover-color: #0056b3;
     --border-color: #ccc;
+    --font-weight: 300;
 }
 
 [data-theme="dark"] {
@@ -14,4 +15,5 @@
     --background-color: #1e1b2a;
     --link-color: #65a0ff;
     --border-color: #444;
+    --font-weight: 200;
 }
