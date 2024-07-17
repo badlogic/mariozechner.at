@@ -692,12 +692,12 @@ As you can see, I've kept busy at night over these past 2 years. The magic of us
 
 While the above may look excessive, keep in mind that most of these projects are unpolished turds. It's easy to be productive if you don't need to sell your shit.
 
-The only thing that really mattered in terms of side projects was Cards for Ukraine. Most of the follow up projects I created to solicit donations. Pretty much all Twitter threads showcasing a new thing would end in "And if you are entertained, pleaes donate to [cards-for-ukraine.at](https://cards-for-ukraine.at)".
+The only thing that really mattered in terms of side projects was Cards for Ukraine. Most of the follow up projects I created to solicit donations. Pretty much all Twitter threads showcasing a new thing would end in "And if you are entertained, please donate to [cards-for-ukraine.at](https://cards-for-ukraine.at)".
 
 It worked. Thank you all.
 
 We'll see if my old brain can think of entertaining or even educational content in the future.
 
-Discuss this post on [Twitter]() or [Mastodon]().
+Discuss this post on [Twitter](https://x.com/badlogicgames/status/1813471326943731932) or [Mastodon](https://mastodon.gamedev.place/@badlogic/112799138936363618).
 
 <%= render("../../_partials/post-footer.html") %>
