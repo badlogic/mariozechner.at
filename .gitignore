@@ -1,2 +1,4 @@
 docker/data
 html/
+report.html
+.DS_Store
