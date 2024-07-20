@@ -98,10 +98,16 @@ article code {
     border-radius: 4px;
     padding: 0 0.25em;
     font-style: italic;
+    font-size: 14px;
+    line-height: 1.2rem;
 }
 
 article pre {
     margin-bottom: 1rem;
+}
+
+article pre code {
+    font-style: normal;
 }
 
 article video {
@@ -116,4 +122,8 @@ article ul {
 
 article ul li::before {
     content: none;
+}
+
+article ol {
+    padding-left: 1.5rem;
 }
