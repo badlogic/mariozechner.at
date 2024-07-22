@@ -75,17 +75,13 @@ LOOP WHILE StillWantsToPlay
 
 Of course, nothing really made sense at this point. I did as Microsoft suggested, moved my cursor on top of `LOOP`, and pressed `F1`.
 
-<video controls loop src="media/f1.mp4" type="video/mp4">
-	Sorry, your browser does not support the video tag.
-</video>
+<video controls loop src="media/f1.mp4" type="video/mp4"></video>
 
 QBasic came with a <u>full-blown contextual help system</u>. Every keyword and command from the standard library had its own help page. The help pages included examples and were <u>worded in a very beginner-friendly way</u>. When viewing the help for a token, QBasic didn't just throw you into a separate full-screen; it kept the editor on screen, which meant there was <u>no context switching</u>.
 
 All the examples given on the help pages were <u>tiny, self-contained programs</u> that you could copy and paste into a blank `.BAS` file, run, and modify.
 
-<video controls loop src="media/examples.mp4" type="video/mp4">
-	Sorry, your browser does not support the video tag.
-</video>
+<video controls loop src="media/examples.mp4" type="video/mp4"></video>
 
 I remember spending two nights playing with `LINE`, then discovering `CIRCLE` and friends. The simplicity of the examples and the <u>lack of ceremony</u> to get them running made for <u>fast and instantly rewarding exploration</u>.
 
@@ -95,21 +91,15 @@ Instead of an accompanying website, the <u>tutorial text was part of the source 
 
 Due to my prior PC experience, I was already a somewhat proficient keyboard user. Still, syntax errors were common. QBasic's syntax was line-based. Every time you hit `ENTER`, the completed line would be checked by the parser, and you would get <u>immediate feedback on any syntax errors</u>.
 
-<video controls loop src="media/syntaxerror.mp4" type="video/mp4">
-	Sorry, your browser does not support the video tag.
-</video>
+<video controls loop src="media/syntaxerror.mp4" type="video/mp4"></video>
 
 As my knowledge grew, so did my programs. With bigger programs came bugs that were hard to reason about just by looking at the code. QBasic included a <u>capable debugger</u> that allowed setting breakpoints and evaluating expressions when the program was paused. QuickBasic, QBasic's big brother, let you create up to eight watchpoints with arbitrary expressions and set conditional breakpoints. You could also modify the running program. All this was packaged in the simplest possible UI. The following video shows QuickBasic instead of QBasic.
 
-<video controls loop src="media/debugger.mp4" type="video/mp4">
-	Sorry, your browser does not support the video tag.
-</video>
+<video controls loop src="media/debugger.mp4" type="video/mp4"></video>
 
 Another crucial aspect of creating bigger programs was <u>code navigation</u>. QBasic had an interesting solution: a single `.BAS` file constituted a module. All code outside a procedure was module-level code. When opening a .BAS file, QBasic would only show the module-level code. Procedures were shown on their own screen. QBasic also had some rudimentary <u>search and refactoring functionality</u> in the form of text replacement.
 
-<video controls loop src="media/navigation.mp4" type="video/mp4">
-	Sorry, your browser does not support the video tag.
-</video>
+<video controls loop src="media/navigation.mp4" type="video/mp4"></video>
 
 Six months after opening QBasic for the first time, I became proficient enough to write little text adventures and simple graphical games. Whenever a friend came over, I'd proudly show off my creations. My friends, used to higher-quality games on their GameBoy, SNES, and other devices, were hard to impress. Why couldn't they see the brilliance of my little oeuvres?
 

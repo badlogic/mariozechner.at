@@ -6,7 +6,9 @@
 %>
 <%= render("../../_partials/post-header.html", { title, image, url }) %>
 
-I love [Live++](https://liveplusplus.tech/) by Molecular Matters, aka [Stefan Reinalter](https://x.com/molecularmusing). It's an exceptionally fantastic C/C++ hot-reload/live coding solution for Windows, Xbox, and PlayStation 5. If you do any kind of C/C++ development on these platforms, you absolutely should buy a license. I've been using it to work on a Godot module (on Windows), and it's reduced my iteration times to essentially zero for most programming tasks.
+I love [Live++](https://liveplusplus.tech/) by Molecular Matters, aka [Stefan Reinalter](https://x.com/molecularmusing). It's an exceptionally fantastic C/C++ hot-reload/live coding solution for Windows, Xbox, and PlayStation 5. If you do any kind of C/C++ development on these platforms, you absolutely owe it to yourself to get a license.
+
+I've been using it to work on a Godot module (on Windows), and it's reduced my iteration times to essentially zero for most programming tasks. If I compare the billable hours I saved with Live++ to its price, I can only conclude that Stefan hates capitalism.
 
 Sadly, I'm a macOS boi (don't @ me), and Live++ doesn't work on macOS.
 
@@ -504,7 +506,7 @@ Looking at the ARM-specific branch, we first assemble the trampoline. Next, we c
 
 We then write our trampoline to the beginning of the old function and change the protection flags of the function's memory region back to readable/executable. That's it!
 
-With all our little helper functions in place, we can now complete our injection program:
+With all our little helper functions in place, we can now complete our injection program (error checking omitted, because fuck it, I'm on vacation):
 
 ```cpp
 int bar() { return 857; }
@@ -551,6 +553,8 @@ Then it copies over `bar()` to the test program process and sets up the trampoli
 
 This is obviously nowhere near production-ready code or anywhere near the complexity needed to do what Live++ does. For example, the above entirely ignores interactions with a debugger or what happens if a thread is suspended in the middle of a trampoline that's currently being overwritten.
 
-But it gives you a basic idea of what's going on in amazing software like Live++ (and malware, and anti-virus garbage which are essentially malware)! These basic principles also apply to Windows and Linux, where similar system APIs are available.
+But it gives you a basic idea of what's going on in amazing software like Live++ (and malware, and anti-virus garbage which is essentially malware)! These basic principles also apply to Windows and Linux, where similar system APIs are available.
+
+Hack the planet!
 
 <%= render("../../_partials/post-footer.html") %>
