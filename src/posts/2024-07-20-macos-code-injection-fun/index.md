@@ -6,6 +6,9 @@
 %>
 <%= render("../../_partials/post-header.html", { title, image, url }) %>
 
+**Table of contents**
+%%toc%%
+
 I love [Live++](https://liveplusplus.tech/) by Molecular Matters, aka [Stefan Reinalter](https://x.com/molecularmusing). It's an exceptionally fantastic C/C++ hot-reload/live coding solution for Windows, Xbox, and PlayStation 5. If you do any kind of C/C++ development on these platforms, you absolutely owe it to yourself to get a license.
 
 I've been using it to work on a Godot module (on Windows), and it's reduced my iteration times to essentially zero for most programming tasks. If I compare the billable hours I saved with Live++ to its price, I can only conclude that Stefan hates capitalism.
@@ -43,7 +46,7 @@ We'll limit this to macOS, which means we'll be using the [Mach APIs](https://de
 
 None of this is rocket science. But since I couldn't find a straightforward article on this on the internet, I figured I'll write one. You can check out the full source code on [GitHub](https://github.com/badlogic/macinject). Below, we'll run through the different parts.
 
-### CMake setup & entitlements
+## CMake setup & entitlements
 Let's start with a CMake scaffold.
 
 ```cmake
@@ -100,7 +103,7 @@ Or you can use the [VS Code C++ Tools](https://code.visualstudio.com/docs/langua
 
 In both cases, you'll find the executables `test` and `macinject` in the `build/` folder.
 
-### Attaching to a running process
+## Attaching to a running process
 The first thing we need to attach to a running process is its process id (`pid`). We could mess around with various APIs or tools to figure out the pid of our test program. But let's make our lives simple. I've modified `test/test.cpp` above as follows:
 
 ```cpp
@@ -203,7 +206,7 @@ Next, we make our first Mach API call to `task_for_pid()`. It creates what's cal
 
 The rest is merely some very terrible error checking and logging. A scheme we'll apply to other functions as well, because I'm lazy.
 
-### Suspending and resuming a process
+## Suspending and resuming a process
 Before we can mess with the process, we should suspend all its threads. Reading and writing data from and to a remote process like our test program is generally not atomic, so we better suspend the program before we do anything like that.
 
 Once we are done messing with the program, we want to resume the process again.
@@ -232,7 +235,7 @@ bool resume(RemoteProcess &proc) {
 }
 ```
 
-### Writing and reading process memory
+## Writing and reading process memory
 Once we've suspended a process, we can safely read and write from and to its memory. We use the `vm_write()` and `vm_read_overwrite()` Mach API calls for that. Pretty self-explanatory.
 
 ```cpp
@@ -283,7 +286,7 @@ If we run `test` followed by `macinject`, we get:
 
 Look, mom, I'm a hacker now.
 
-### Injecting code
+## Injecting code
 For our final trick, we'll inject some code. To jog your memory, here's `foo()` from the test program again:
 
 ```cpp
@@ -549,7 +552,7 @@ I first run `test`, the test program, followed by `macinject`, the injection pro
 
 Then it copies over `bar()` to the test program process and sets up the trampoline, resulting in the test program actually running `bar()`, thus logging `857`.
 
-### Caveat emptor
+## Caveat emptor
 
 This is obviously nowhere near production-ready code or anywhere near the complexity needed to do what Live++ does. For example, the above entirely ignores interactions with a debugger or what happens if a thread is suspended in the middle of a trampoline that's currently being overwritten.
 

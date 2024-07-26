@@ -3,5 +3,6 @@
     "date": "2024-07-14",
     "image": "media/qbasic.png",
     "caption": "Home (1995-2001).",
-    "description": "Thoughts on acquiring computational thinking skills based on my own experience."
+    "description": "Thoughts on acquiring computational thinking skills based on my own experience.",
+    "published": true
 }

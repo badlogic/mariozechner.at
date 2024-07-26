@@ -6,7 +6,7 @@
 
     <h4 class="mb-4">Musings</h4>
     <%
-        const posts = metas("./posts");
+        const posts = metas("./posts").filter((p) => p.meta.published);
         posts.sort((a, b) => b.meta.date.localeCompare(a.meta.date));
     %>
     <% for (const post of posts) { %>

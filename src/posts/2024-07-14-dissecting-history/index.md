@@ -14,13 +14,13 @@ I thus work under the following (shaky) assumptions: by analyzing my own history
 
 It's not my plan to ignore the literature, but I want to augment it with my own experience.
 
-### Saving up
+## Saving up
 
 I'd been saving up for a 486 DX 2 with 40MHz, 8MB of RAM, and a whopping 50MB HDD. As a naive 10-year-old in the countryside, without the internet, I had no way of knowing the real cost of a PC. It wasn't obvious to me that my meager savings would only buy a pocket calculator. My parents were saving up in secret as well. Every week, I’d ask my mum if I had saved enough. After two years of this routine, mum and dad solemnly announced, "It is time!" They strapped me into the car and took me to the (now defunct) computer retailer Vobis in the big city. My parents let me put the money on the counter. I completed my first big transaction at the grand old age of 12.
 
 That was in 1995. Years later, I realized that my parents had covered about 99.99% of the asking price. That explained our somewhat rustic, short, annual vacations. It also shed light on why dad sometimes came home late: he’d been earning extra cash fixing cars and doing construction work after his regular job. The damn machine cost my mum and dad a considerable amount of their annual income. I can’t express in words how much this meant and will forever mean to me.
 
-### Playful beginnings
+## Playful beginnings
 
 So there I was, machine plugged in, display and keyboard connected. What to do? Play games, of course! Naturally, I couldn't afford to buy them. A relative had connections to a super secret underground channel that'd copy floppies for the cost of a lollipop. I had a lot of floppies, all with labels in terrible handwriting: "Prince of Persia", "DOOM", "Dune II", or "Monkey Island".
 
@@ -30,7 +30,7 @@ Within a year, I could afford a mouse and a double-speed CD-ROM drive. Installin
 
 <u>Unconsciously, I learned how to use a PC.</u> Not because I wanted to become a programmer, but so I could play all those amazing games.
 
-### Leveling up
+## Leveling up
 
 <img src="media/gorilla.jpg">
 <figcaption>GORILLA.BAS, wherein we learend, that bananas can explode.</figcaption>
@@ -47,7 +47,7 @@ Back home, I booted my machine, copied the contents of the floppy to the hard dr
 C:\GAMES\QBASIC.EXE /RUN NIBBLES.BAS
 ```
 
-### Helpful explorations
+## Helpful explorations
 
 Running this magic spell resulted in <u>instant gratification</u>. The command would launch the game [Nibbles](https://www.dosgamesarchive.com/play/nibbles/), an early variant of "Snake," which we all enjoyed on our Nokia phones.
 
@@ -105,7 +105,7 @@ Six months after opening QBasic for the first time, I became proficient enough t
 
 I also couldn't convince any of them to learn programming. Only one friend had a PC, but he preferred playing games. While I offered to teach the others at my place, the prospect of spending time in front of a computer and typing what must have seemed like hieroglyphs didn't appeal to them. I felt alone. Worse, I hit a knowledge ceiling.
 
-### Making friends
+## Making friends
 Programming is not inherently social. Yet, I longed to share my thoughts and work with like-minded people. At the end of 1997, when I was 14, my parents fulfilled another long-time wish: my first guitar. It was the cheapest Spanish concert guitar money could buy, but it was mine! My parents had already spent money on recorder lessons for my sister. Our deal was that they'd buy me a guitar, on the condition that I had to learn to play it without taking lessons. Challenge accepted.
 
 My circle of friends included older peers who were proficient guitar players and happy to mentor me. I finally had people to hang out with, learn from, and share my work with—something programming couldn't offer me. I would occasionally write the odd little program, but my focus shifted almost entirely toward music.
@@ -132,7 +132,7 @@ In 2003, I started my brief university career, exposing me to new ideas, includi
 
 I was extremely lucky to live through my formative years at the end of the 90s. But I was even luckier to have all these supportive people in my life, from my loving parents to my teacher and even random strangers on the internet who ended up becoming friends for life. I hope I can pay it back in kind.
 
-### So what's next?
+## So what's next?
 I've spent the past two years working on fun side projects in the evenings, as time permits. I'll write about them when I can.
 
 These projects were either geared towards the [public good](https://www.wired.com/story/heisse-preise-food-prices/) or [public entertainment](https://leitkulturomat.marioslab.io/). They aren't quite relevant to my son's growth and learning.
