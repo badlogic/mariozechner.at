@@ -4,10 +4,25 @@
 
     <color-band class="w-full mt-4 mb-4" style="height: 80px;"></color-band>
 
-    <h4 class="mb-4">Musings</h4>
+    <h4 class="mb-4">Musings <a href="/rss.xml" class="text-sm">(RSS)</a></h4>
     <%
         const posts = metas("./posts").filter((p) => p.meta.published);
         posts.sort((a, b) => b.meta.date.localeCompare(a.meta.date));
+
+        const channel = {
+            title: "{ Mario Zechner }",
+            description: "Musings fr an old computer guy.",
+            url: "https://mariozechner.at"
+        }
+        const items = posts.map((p) => {
+            return {
+                title: p.meta.title,
+                description: p.meta.description,
+                pubdate: p.meta.date,
+                url: channel.url + `/posts/${p.directory}`
+            }
+        })
+        rss("./rss.xml", channel, items);
     %>
     <% for (const post of posts) { %>
         <a href="/posts/<%=post.directory%>/" class="flex gap-4 items-center">
