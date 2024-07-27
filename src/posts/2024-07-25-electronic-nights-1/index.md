@@ -74,12 +74,6 @@ Where to start? Luckily, I have many qualified people in my circle of social med
 And as expected I got a ton of great suggestions. Here's what I ended up with.
 
 ## Educational resources
-Where to start? Luckily, I have many qualified people in my social media circle. So, I reached out on [Twitter](https://x.com/badlogicgames/status/1814014120489795853) and [Mastodon](https://mastodon.gamedev.place/@badlogic/112809058254707818).
-
-<img loading="lazy" src="media/twitter.jpg" class="mx-auto" style="max-width: 320px">
-<img loading="lazy" src="media/mastodon.jpg" class="mx-auto" style="max-width: 320px">
-
-As expected, I got a ton of great suggestions. Here's what I ended up with.
 
 There were many book suggestions, with [The Art of Electronics](https://artofelectronics.net/) being a popular one.
 
@@ -259,6 +253,6 @@ And that concluded night one.
 ## Up next
 With everything in place, I can now move on to bigger projects. I actually already have, but that would break the narrative of this blog post.
 
-Next time, I'll walk you through how I built my first electronics game using nothing more than 3 LEDs, 3 buttons, and 300 lines of C++-ish code.
+Next time, I'll walk through how I built my first electronics game using nothing more than 3 LEDs, 3 buttons, and 300 lines of C++-ish code. So, I basically cheated with code.
 
 <%= render("../../_partials/post-footer.html") %>
