@@ -84,6 +84,7 @@ article blockquote {
     border-left: 4px solid var(--border-color);
     padding-left: 1rem;
     margin-bottom: 1rem;
+    font-style: italic;
 }
 
 article blockquote > p {
@@ -135,4 +136,8 @@ article li > ul {
 
 article ol {
     padding-left: 1.5rem;
+}
+
+.katex-display {
+    margin-top: 0;
 }

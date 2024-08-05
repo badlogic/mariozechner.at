@@ -1,0 +1,37 @@
+<% meta("../meta.json") %>
+
+<%= render("../_partials/header.html", { title, description }) %>
+
+    <color-band class="w-full mt-4 mb-4" style="height: 80px;"></color-band>
+
+    <h4 class="mb-4">Posts Archive <a href="/rss.xml" class="text-sm">(RSS)</a></h4>
+    <%
+        const posts = metas("./");
+        posts.sort((a, b) => b.meta.date.localeCompare(a.meta.date));
+
+        const channel = {
+            title: "{ Mario Zechner }",
+            description: "Musings from an old computer guy.",
+            url: "https://mariozechner.at"
+        }
+        const items = posts.map((p) => {
+            return {
+                title: p.meta.title,
+                description: p.meta.description,
+                pubdate: p.meta.date,
+                url: channel.url + `/posts/${p.directory}`
+            }
+        })
+        rss("./rss.xml", channel, items);
+    %>
+    <% for (const post of posts) { %>
+        <a href="/posts/<%=post.directory%>/" class="flex gap-4 items-center">
+            <!--<img src="/posts/<%=post.directory%>/<%=post.meta.image%>" style="width: 160px; height: 120px; border-radius: 0.5rem;">-->
+            <div class="flex row gap-4 items-center">
+                <span class="text-sm italic" style="color: var(--dimmed-text-color)"><%=post.meta.date%></span>
+                <h4><%=post.meta.title%></h4>
+            </div>
+        </a>
+    <% } %>
+
+    <%= render("../_partials/footer.html") %>

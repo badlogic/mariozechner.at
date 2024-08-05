@@ -611,3 +611,7 @@
 .font-black {
   font-weight: 900;
 }
+
+.imw {
+  max-width: 320px;
+}
