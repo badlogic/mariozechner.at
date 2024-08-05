@@ -9,6 +9,8 @@
 **Table of contents**
 %%toc%%
 
+[Last time](/posts/2024-07-25-electronic-nights-1), I discussed my motivation to learn electronics, and resources I found to get started.
+
 The goal for the second electronic night was to understand basic circuits.
 
 This post will mostly focus on the projects and the little theory I learned while doing them. Note that **I'm not trying to teach electronics here**. I do not know what I'm doing! Please read the educational resources provided in this and the other articles of this series. I'm merely documenting what I've learned in my own words, as that helps me structure my mental model and deepen my understanding. You've been warned.
@@ -94,7 +96,7 @@ Here's a resistor.
 
 <img src="media/resistor.jpg" class="mx-auto imw">
 
-It has some color bands on it which encode its resistance, given in ohms ($$\Omega$$). This one is a 5-band resistor, with the colors red, red, black, black, brown. There are also 4- and 6-band resistors. You can use [online tools](https://www.digikey.at/en/resources/conversion-calculators/conversion-calculator-resistor-color-code) to decode them, learn how to decode them manually, or use a [multimeter](https://en.wikipedia.org/wiki/Multimeter) to measure a resistor's resistance. This one is a $$220 \, \Omega$$ resistor.
+It has some color bands on it which encode its resistance, given in ohms ($\Omega$). This one is a 5-band resistor, with the colors red, red, black, black, brown. There are also 4- and 6-band resistors. You can use [online tools](https://www.digikey.at/en/resources/conversion-calculators/conversion-calculator-resistor-color-code) to decode them, learn how to decode them manually, or use a [multimeter](https://en.wikipedia.org/wiki/Multimeter) to measure a resistor's resistance. This one is a $220 \, \Omega$ resistor.
 
 > **Lesson learned**: I find it hard to see the actual colors on these things, even with a magnifying glass. Buying and learning how to use a [multimeter](https://en.wikipedia.org/wiki/Multimeter) to measure them has paid off. Putting them in labeled boxes also helps.
 
@@ -104,9 +106,9 @@ $$
 I = \frac{V}{R}
 $$
 
-This equation is known as [Ohm's law](https://en.wikipedia.org/wiki/Ohm%27s_law). $$I$$ is the current in amperes flowing through the resistor. $$V$$ is the voltage across its terminals. And $$R$$ is its resistance. If we know two quantities, we can calculate the third.
+This equation is known as [Ohm's law](https://en.wikipedia.org/wiki/Ohm%27s_law). $I$ is the current in amperes flowing through the resistor. $V$ is the voltage across its terminals. And $R$ is its resistance. If we know two quantities, we can calculate the third.
 
-If we attach the resistor above to a 9V battery, we know two quantities: voltage across the resistor (9V) and resistance ($$220 \, \Omega$$). Plugging that into the equation gives us:
+If we attach the resistor above to a 9V battery, we know two quantities: voltage across the resistor (9V) and resistance ($220 \, \Omega$). Plugging that into the equation gives us:
 
 $$
 I = \frac{9V}{220 \, \Omega} = 0.040 \, A = 40 \, mA
@@ -120,19 +122,19 @@ Nothing exploded. But the resistor got noticeably warm. Here's what its [data sh
 
 <img src="media/resistor-datasheet.png" class="mx-auto">
 
-With 9V across it from the battery, we are in safe territory regarding voltage. But what about the power rating of $$1/4W$$ (where $$W$$ stands for watts)? There's another mathematical model for that.
+With 9V across it from the battery, we are in safe territory regarding voltage. But what about the power rating of $1/4W$ (where $W$ stands for watts)? There's another mathematical model for that.
 
 $$
 P = I \times V
 $$
 
-To calculate the power $$P$$ the resistor experiences in watts, we can multiply the current through it by the voltage across it.
+To calculate the power $P$ the resistor experiences in watts, we can multiply the current through it by the voltage across it.
 
 $$
 P = 0.04A \times 9V = 0.36W
 $$
 
-That's a little over the $$0.25W$$ the resistor is rated for. Whoops. Maybe I can fix it by placing two resistors in series, that is, behind each other? Maybe together, they can slow down the current even more?
+That's a little over the $0.25W$ the resistor is rated for. Whoops. Maybe I can fix it by placing two resistors in series, that is, behind each other? Maybe together, they can slow down the current even more?
 
 <img src="media/two-resistors.jpg" class="mx-auto">
 
@@ -184,7 +186,7 @@ Since the current through $R_{2}$ and its resistance are equal to those of $R_{1
 
 Which leads to rule number three:
 
-> **Series circuit rule 3: The sum of voltage drops across all components in a series circuit equals the supply voltage.**
+> **Series circuit rule 3: The sum of voltage drops across all components in a series circuit equals the voltage between the points at the beginning and end of the series circuit.**
 
 The supply voltage is the voltage measured across points 1 and 3 above. Think of it as the input and output voltage of the series circuit. We can see that the voltage drops across each resistor add up nicely to the $9V$ supply voltage.
 
@@ -214,7 +216,7 @@ The little triangle with arrows is the symbol for an LED. The tip of the triangl
 
 LEDs do not conform to Ohm's law. Their voltage drop cannot be calculated as we did above for the resistors. The resistor model does not apply to LEDs. Instead, an LED's voltage drop is fixed and called "forward voltage." For the LED to conduct current, the voltage across it must be at least as high as its forward voltage. The LED will "eat" that fixed amount of voltage, leaving the rest for the remainder of the series circuit. We can use this fixed voltage drop to analyze the circuit.
 
-The voltage drops in a series circuit must sum up to the supply voltage. This allows us to calculate the voltage drop across the resistor:
+The voltage drops in a series circuit must sum up to the total voltage across the series circuit. This allows us to calculate the voltage drop across the resistor:
 
 $$
  V_{supply} = 9V, V_{LED} = 2.2V
@@ -283,7 +285,7 @@ Generally, if a schematic has a voltage source and ground symbols, we can consid
 
 All the ground symbol really represents is a point with no electrical potential. It serves as a reference point to measure voltages relative to another point on the circuit.
 
-The current will flow through points 1, 2, and 3 down to ground. It will not flow through the remaining LEDs on the right, as they are not part of the loop by being connected to the ground.
+The current will flow through points 1, 2, and 3 down to ground. It will not flow through the remaining LEDs on the right, as they are not part of the loop by being connected to the ground. Or put another way: the current will go the path of least resistance, which is down to the ground.
 
 I can add another LED to the circuit by moving the wire connecting to ground to points 4, 5, or 6. Here's what happens.
 
@@ -352,7 +354,7 @@ All LEDs have full brightness! What's going on? Here's the schematic view.
 
 The symbol before ground is a switch symbol. The thing I use on the breadboard is a pushbutton, which has its own symbol, but I think the switch is clearer. If the pushbutton is not pressed, then there's no connection to ground, and thus no current. Nothing lights up. Let's assume the button is being pressed for the rest of this section, so point 8 directly connects to ground.
 
-In this **parallel circuit**, we have 4 **parallel branches**, each with a $220 \Omega$ resistor and a red LED with a forward voltage of $1.8V$. The key insight is that they all feed off of the same voltage potential. The points 1, 2, 3, and 4 are all at $5V$ relative to ground, so that is also the voltage each branch gets!
+In this **parallel circuit**, we have 4 **parallel branches**, each with a $220 \Omega$ resistor and a red LED with a forward voltage of $1.8V$. The key insight is that they all feed off of the same voltage potential. The points 1, 2, 3, and 4 are all at $5V$ relative to ground, so that is also the voltage across each branch!
 
 That is, the voltage drop between points 1 and 8 is $5V$, so is the voltage drop between points 2 and 7, 3 and 6, and 4 and 5! This gives us the first rule of parallel circuits.
 

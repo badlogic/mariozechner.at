@@ -253,6 +253,6 @@ And that concluded night one.
 ## Up next
 With everything in place, I can now move on to bigger projects. I actually already have, but that would break the narrative of this blog post.
 
-Next time, I'll walk through how I built my first electronics game using nothing more than 3 LEDs, 3 buttons, and 300 lines of C++-ish code. So, I basically cheated with code.
+[Next time](/posts/2024-08-05-electronic-nights-2/), I'll walk through what I learned about basic circuits.
 
 <%= render("../../_partials/post-footer.html") %>
