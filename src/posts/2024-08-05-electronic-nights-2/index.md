@@ -76,7 +76,7 @@ So, did the resistance of the LED to the current kill it? Well, yes and no. To u
 - **Current**: The number of electrons passing through a point in the circuit per second, measured in amperes (A).
 - **Resistance**: The amount of pushback a material or component exerts against the electron flow, measured in ohms (Ω).
 
-An LED is actually a very low-resistance component. As a type of [diode](https://en.wikipedia.org/wiki/Diode), its mission objective is to let as much current through in one direction while preventing it from flowing in the opposite direction. An LED has **polarity**, meaning it matters which way it is connected to a voltage source. The longer leg of the LED needs to be connected to the positive pole, and the shorter leg to the negative pole.
+An LED is actually a very low-resistance component. As a type of [diode](https://en.wikipedia.org/wiki/Diode), its mission objective is to let as much current through in one direction while preventing it from flowing in the opposite direction. An LED has **polarity**, meaning it matters which way it is connected to a voltage source. The longer leg of the LED needs to be connected to the positive pole, and the shorter leg to the negative pole. You can also check where on the LED the flat part is, which is the side the shorter leg (cathode) is.
 
 Just looking at the puny LED in the video above should tell you that it likely has its limits. These limits can be found in its [data sheet](https://www.sparkfun.com/datasheets/Components/LED/COM-09590-YSL-R531R3D-D2.pdf).
 
@@ -297,7 +297,7 @@ I can add another LED to the circuit by moving the wire connecting to ground to 
 
 The more LEDs I add, the dimmer they get. When all 4 LEDs are part of the loop, none of them light up. Why is that?
 
-Each LED drops 1.8V of current, leaving less voltage for the resistor. This means the amount of current that goes through the resistor is also less. We've already seen this in the last project, where we subtracted $V_{LED}$ from the supply voltage before calculating the resistor values.
+Each LED drops 1.8V of voltage, leaving less voltage for the resistor. This means the amount of current that goes through the resistor is also less. We've already seen this in the last project, where we subtracted $V_{LED}$ from the supply voltage before calculating the resistor values.
 
 We can express this mathematically:
 
