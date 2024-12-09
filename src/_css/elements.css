@@ -131,6 +131,10 @@ article video {
     border-radius: 0.5rem;
 }
 
+article ul {
+    margin-bottom: 2rem;
+}
+
 .katex-display {
     margin-top: 0;
 }
