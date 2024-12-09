@@ -7,7 +7,9 @@
 <%= render("../../_partials/post-header.html", { title, image, url }) %>
 
 **Table of contents**
+<div class="toc">
 %%toc%%
+</div>
 
 [Last time](/posts/2024-07-25-electronic-nights-1), I discussed my motivation to learn electronics, and resources I found to get started.
 

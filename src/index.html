@@ -4,7 +4,7 @@
 
     <color-band class="w-full mt-4 mb-4" style="height: 80px;"></color-band>
 
-    <h4 class="mb-4">Musings <a href="/rss.xml" class="text-sm">(RSS)</a></h4>
+    <h4 class="mb-4 font-medium">Musings <a href="/rss.xml" class="text-sm">(RSS)</a></h4>
     <%
         const posts = metas("./posts").filter((p) => p.meta.published);
         posts.sort((a, b) => b.meta.date.localeCompare(a.meta.date));
@@ -24,17 +24,19 @@
         })
         rss("./rss.xml", channel, items);
     %>
-    <% for (const post of posts) { %>
-        <a href="/posts/<%=post.directory%>/" class="flex gap-4 items-center">
-            <!--<img src="/posts/<%=post.directory%>/<%=post.meta.image%>" style="width: 160px; height: 120px; border-radius: 0.5rem;">-->
-            <div class="flex row gap-4 items-center">
-                <span class="text-sm italic" style="color: var(--dimmed-text-color)"><%=post.meta.date%></span>
-                <h4><%=post.meta.title%></h4>
-            </div>
-        </a>
-    <% } %>
+    <div class="flex flex-col gap-4">
+        <% for (const post of posts) { %>
+            <a href="/posts/<%=post.directory%>/" class="flex gap-4 items-center">
+                <!--<img src="/posts/<%=post.directory%>/<%=post.meta.image%>" style="width: 160px; height: 120px; border-radius: 0.5rem;">-->
+                <div class="flex row gap-4 items-baseline">
+                    <span class="text-sm text-muted italic whitespace-nowrap"><%=post.meta.date%></span>
+                    <span><%=post.meta.title%></span>
+                </div>
+            </a>
+        <% } %>
+    </div>
 
-    <h4 class="mt-8 mb-4">Who I am</h4>
+    <h4 class="mt-8 mb-4 font-medium">Who I am</h4>
     <p>
         I'm an independent software developer, coach, and angel investor with over 15 years of experience in academia
         <q-l href="https://scholar.google.at/citations?user=6hFnJ00AAAAJ&hl=en"></q-l>, startups
@@ -65,7 +67,7 @@
         <q-l href="https://www.wired.com/story/heisse-preise-food-prices/"></q-l><q-l href="https://heisse-preise.io/media.html"></q-l>.
     </p>
 
-    <h4 class="mt-8 mb-4">What I offer</h4>
+    <h4 class="mt-8 mb-4 font-medium">What I offer</h4>
     <ul>
         <li>Pro-bono mentoring of young entrepreneurs on technical and business aspects</li>
         <li>Technical workshops <q-l href="https://github.com/badlogic/genai-workshop/tree/main"></q-l></li>
@@ -73,11 +75,12 @@
     </ul>
     <div>Pricing is tailored to meet individual or organizational needs.</div>
 
-    <h4 class="mt-8 mb-4">Get in touch</h4>
+    <h4 class="mt-8 mb-4 font-bold">Get in touch</h4>
     <div class="flex flex-col">
         <div class="flex gap-2 mb-3">
-            <a href="https://twitter.com/badlogicgames"><i class="icon w-8 h-8"><%=render("./_icons/twitter-line.svg")%></i></a>
+            <a href="https://bsky.app/badlogic"><i class="icon w-8 h-8"><%=render("./_icons/bluesky-line.svg")%></i></a>
             <a href="https://mastodon.gamedev.place/@badlogic"><i class="icon w-8 h-8"><%=render("./_icons/mastodon-line.svg")%></i></a>
+            <a href="https://twitter.com/badlogicgames"><i class="icon w-8 h-8"><%=render("./_icons/twitter-line.svg")%></i></a>
             <a href="https://github.com/badlogic"><i class="icon w-8 h-8"><%=render("./_icons/github-line.svg")%></i></a>
         </div>
         <a href="mailto:contact@mariozechner.at">contact@mariozechner.at</a>

@@ -21,7 +21,9 @@ Starting in 2022, my work shifted towards being more accessible to non-nerds. I 
 Buckle up, buttercup. This is going to be a long read. I'm just going to run through all the projects since May 2022 and give you some hopefully entertaining backroom details.
 
 **Table of contents**
+<div class="toc">
 %%toc%%
+</div>
 
 ## Cards for Ukraine
 

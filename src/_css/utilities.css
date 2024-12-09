@@ -25,6 +25,10 @@
   gap: 1rem;
 }
 
+.gap-8 {
+  gap: 1.5rem;
+}
+
 .items-start {
   align-items: flex-start;
 }
@@ -580,6 +584,10 @@
   text-align: center;
 }
 
+.text-muted {
+  color: var(--dimmed-text-color)
+}
+
 .italic {
   font-style: italic;
 }
@@ -614,4 +622,8 @@
 
 .imw {
   max-width: 320px;
+}
+
+.whitespace-nowrap {
+  white-space: nowrap;
 }

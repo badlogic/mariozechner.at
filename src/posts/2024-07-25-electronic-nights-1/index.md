@@ -7,7 +7,9 @@
 <%= render("../../_partials/post-header.html", { title, image, url }) %>
 
 **Table of contents**
+<div class="toc">
 %%toc%%
+</div>
 
 I've always been into software. I can barely attach a 9V battery and would probably kill myself trying to jump-start a car. Hardware just never grabbed my interest—there's so much to explore in software.
 

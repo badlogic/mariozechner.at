@@ -7,7 +7,9 @@
 <%= render("../../_partials/post-header.html", { title, image, url }) %>
 
 **Table of contents**
+<div class="toc">
 %%toc%%
+</div>
 
 I love [Live++](https://liveplusplus.tech/) by Molecular Matters, aka [Stefan Reinalter](https://x.com/molecularmusing). It's an exceptionally fantastic C/C++ hot-reload/live coding solution for Windows, Xbox, and PlayStation 5. If you do any kind of C/C++ development on these platforms, you absolutely owe it to yourself to get a license.
 

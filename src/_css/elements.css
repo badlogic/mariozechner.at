@@ -8,7 +8,7 @@ body {
     color: var(--text-color);
     font-family: var(--font-family);
     background-color: var(--background-color);
-    line-height: 24px;
+    line-height: 1.5rem;
     font-size: 16px;
     font-weight: var(--font-weight);
 }
@@ -47,12 +47,14 @@ a {
 }
 
 ul {
-    list-style-type: none;
+    list-style-type: disc;
+    padding-left: 1.5rem;
+    line-height: 1.5rem;
     margin-bottom: 1rem;
 }
 
-ul li::before {
-    content: "- ";
+ul li {
+    margin-top: 1rem;
 }
 
 .icon {
@@ -69,6 +71,10 @@ ul li::before {
 article {
     display: flex;
     flex-direction: column;
+}
+
+article > p {
+    line-height: 2rem;
 }
 
 article img {
@@ -100,7 +106,7 @@ article figcaption {
 
 article h1, article h2, article h3, article h4 {
     margin-bottom: 1rem;
-    border-bottom: 1px solid var(--border-color);
+    margin-top: 1em;
 }
 
 article code {
@@ -125,19 +131,31 @@ article video {
     border-radius: 0.5rem;
 }
 
-article ul {
-    list-style-type: none;
-    margin-left: 1rem;
-}
-
-article li > ul {
-    margin-bottom: 0;
-}
-
-article ol {
-    padding-left: 1.5rem;
-}
-
 .katex-display {
     margin-top: 0;
+}
+
+.toc {
+    margin-bottom: 2rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1rem 0.5rem;
+}
+
+.toc ul {
+    list-style-type: none;
+    padding-inline-start: 0.5rem;
+    line-height: 1.25rem;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.toc li {
+    margin: 0;
+}
+
+.toc ul li > ul {
+    margin-top: 0.75rem;
 }

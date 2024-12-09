@@ -7,7 +7,9 @@
 <%= render("../../_partials/post-header.html", { title, image, url }) %>
 
 **Table of Contents**
+<div class="toc">
 %%toc%%
+</div>
 
 [Last time](/posts/2024-08-05-electronic-nights-2), I basically relived physics class as experienced by 16-year-old teens in high school. With my basic understanding of circuits and the models I can use to analyze and construct them, it is now time to do some programming. More specifically: programming that lets me modify elements in the circuit.
 
