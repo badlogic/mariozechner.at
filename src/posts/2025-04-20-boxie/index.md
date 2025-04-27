@@ -9,16 +9,16 @@
 **Table of Contents**
 %%toc%%
 
-At the end of July 2024, I embarked on a journy to learn electronics so I could build little gadgets for my son. In my [introductory post](/posts/2024-07-25-electronic-nights-1/) I described a few electronic toys he uses a lot, including the [Tonie Box](https://www.tonies.com/), a device that plays audiobooks and has a [huge library](https://www.tonie.io/books) of content. The Tonie Box is great, until it isn't. As outlined in my original post, it has a bunch of deficencies. Back then, I did not think I would ever be in a position to build my own replacement.
+At the end of July 2024, I embarked on a journey to learn electronics so I could build little gadgets for my son. In my [introductory post](/posts/2024-07-25-electronic-nights-1/) I described a few electronic toys he uses frequently, including the [Tonie Box](https://www.tonies.com/), a device that plays audiobooks and has a [huge library](https://www.tonie.io/books) of content. The Tonie Box is great, until it isn't. As outlined in my original post, it has several deficiencies. Back then, I didn't think I would ever be able to build my own replacement.
 
-Fast forward a few months, and I've learned enough electronics to actually build my son's own audio player. Here's the premilinary result:
+Fast forward a few months, and I've learned enough electronics to build my son's own audio player. Here's the preliminary result:
 
 <video src="./media/boxie_320.mp4" controls style="width:320px;height:auto;display:block;margin:0 auto;"></video>
 
 It's been in "prod" since January 2025. It's his daily driver, be it at the breakfast table or when going for stroll in his buggy. Yes, the volume control is backwards. Easy to fix in software.
 
 ## What I learned these past months
-Turns out it's easier than I thought. I had to pick up a few skills:
+It turned out to be easier than I thought. I had to pick up these skills:
 
 - Learn how to solder all kinds of components, including surface mounted components
 - Abandon Arduino and embrace the [ESP32 line of microcontrollers](https://www.espressif.com/en/products/socs/esp32), which are a million times more versatile, powerful and cheaper.
@@ -30,9 +30,9 @@ I also had to buy myself some tools. Here's my battle station.
 
 <img src="./media/battlestation.jpg" alt="Battle Station" style="width: 100%;">
 
-The list of all my tools (including links to sites where you may or may not be able to purchase them):
+The list of all my tools (with purchase links):
 
-- [ERSA RDS80 soldering stations](https://www.ersa-shop.com/produkt/rds80-elektronisch-geregelte-loetstation-80w/). It's one of the higher priced amatuer soldering stations, but it's a workhorse. I'm using the [832KDLF 2,2mm chissel tip](https://www.reichelt.at/at/de/shop/produkt/loetspitze_0832kdlf_2_2_mm_meisselfoermig_gerade-19360) pretty much exclusively. Also get the [dry cleaner metal wool](https://www.amazon.de/dp/B00725AW18?ref=ppx_yo2ov_dt_b_fed_asin_title). Vastly superior to the sponge that comes with the station for cleaning the soldering iron tip.
+- [ERSA RDS80 soldering station](https://www.ersa-shop.com/produkt/rds80-elektronisch-geregelte-loetstation-80w/). One of the higher-priced amateur soldering stations, but it's a workhorse. I use the [832KDLF 2.2mm chisel tip](https://www.reichelt.at/at/de/shop/produkt/loetspitze_0832kdlf_2_2_mm_meisselfoermig_gerade-19360) almost exclusively. Also get the [dry cleaner metal wool](https://www.amazon.de/dp/B00725AW18). It's vastly superior to the included sponge for cleaning the soldering iron tip.
 - [armack typ32-3 0.5mm solder wire](https://www.amazon.de/armack-L%C3%B6tdraht-Typ32-3-%C3%98-100g/dp/B07JY712QD), which works for pretty much anything, including hand soldering SMD components. I use 350C° on the soldering station. Lead-free.
 - [Yihua 85D hot air soldering stations](https://www.amazon.de/YIHUA-858D-Entl%C3%B6tstation-einstellbarer-Temperaturkontrolle/dp/B0BYSKPJQX), a cheap and effective hot air "gun" for reflowing or desoldering components.
 - [Miniware MHP50 hot plate](https://www.amazon.de/MINIWARE-MHP50-Nano-Ceremic-Beschichtung-TemperaturHei%C3%9F-L%C3%B6tstation/dp/B0CRDYCHXS), a marvelous little thing for soldering SMD components. Since most of my PCB designs are pretty small, I now mostly solder with this. More on that later.
@@ -60,11 +60,12 @@ The list of all my tools (including links to sites where you may or may not be a
 - [Any old electronics learning set](https://www.amazon.de/s?k=electronic+components+set). You want LEDs, buttons, throughhole resistors and capacitors, switches, etc. Basically anything you can stick into a breadboard. This helps with prototyping. I got a few different kits as I learned and build up a little library of components that way.
 - [A 3D printed](https://eu.store.bambulab.com/en-at/collections/3d-printer/products/x1-carbon). I understand that BambuLab has gotten a bad rap over the past few months. And I do own a Prusa printer as well. However, I'm old, and time is precious. And the X1 Carbon "just works". It's literally plug and play and produces excellent results without any need for tinkering. I'm sorry.
 
-Now, the past few entries on this blog may have given you the idea, that I'll teach you everything you need to get the a stage, where you can use all the above tools. I'm afraid to inform you that this is not the case. It would take considerable resources on my end, which I'd rather spend on my family and tinkering with my own projects.
+Now, my recent blog entries may have given you the idea that I'll teach you everything needed to reach this stage. I'm afraid that's not the case. It would take considerable resources, which I'd rather spend on my family and personal projects.
 
-However, the above list of tools and things to learn is a good starting point, once you're passed the "made an LED blink with an Arduino" stage. (SMD) soldering, PCB design, 3D modelling for 3D printing and so on are all things many gifted people have described in depth, either in book or video form, much better than I ever could. See my previous posts for recommendations.
+However, the above list of tools and skills is a good starting point once you're past the "made an LED blink with an Arduino" stage. Many talented people have described (SMD) soldering, PCB design, and 3D modeling in depth, either in books or videos, much better than I could. See my previous posts for recommendations.
 
-I also found that studying existing designs is a fantastic way to learn, same as with software. For example, all [Adafruit products] are open source, meaning you can study their schematics and PCB designs for all those little helpful boards they offer. Want to design a power management circuit for your own board? Have a look at their [the PowerBoost 1000](https://www.adafruit.com/product/2465), scroll down to the "Technical Details" section and enjoy the schematics and PCB layout files. Similarly, as I created my own ESP32-based boards, I took inspiration from the designs by [Unexpected Maker](https://unexpectedmaker.com/) and [Waveshare](https://waveshare.com). Just pick one of their boards, e.g. the excellent [Waveshare ESP32-S3 Mini](https://www.waveshare.com/esp32-s3-tiny.htm) and find the [schematics](https://www.waveshare.com/wiki/ESP32-S3-Tiny) on their Wiki.
+Studying existing designs is also a fantastic way to learn, just as with software. For example, all [Adafruit products] are open source, letting you study their schematics and PCB designs. Want to design a power management circuit? Check out their [PowerBoost 1000](https://www.adafruit.com/product/2465) schematics and PCB layout files. Similarly, when creating my ESP32-based boards, I drew inspiration from [Unexpected Maker](https://unexpectedmaker.com/) and [Waveshare](https://waveshare.com) designs. E.g. check out the [Waveshare ESP32-S3 Mini schematics]
+(https://www.waveshare.com/wiki/ESP32-S3-Tiny).
 
 My final recommendation is to get away from Arduino as soon as you possibly can. It's a great way to learn, but eventually, you'll need to go one level deeper. That opens up a whole new world of possibilities. Like porting DOOM to the ESP32-S3 and have it run at 44FPS.
 
@@ -74,18 +75,20 @@ Eventually, you'll write your own Arduino like framework to handle all the low l
 
 In the remainder of this post, I'll go through the design process of Boxie, walk you through the schematics and PCB layout, show you how I came up with the 3D printed enclosure design, and give an overview of the software I wrote to make it all work.
 
-## Like a Gameboy, but for audiobooks
-I started by thinking about how I want the boy to interact with the device. I'm in love with the Gameboy form factor, so I wanted a device that is similar in size and shape. It should be portable, so it needed to be battery powered.
+## Like a Game Boy, but for audiobooks
+I started by thinking about how I wanted the boy to interact with the device. I'm in love with the Game Boy form factor, so I wanted something similar in size and shape. It needed to be battery powered for portability.
 
-Instead of the Tonie Box's ears that control the volume, I wanted to have a knob he can turn to change the volume. To go to the previous or next chapter or song on the Tonie Box, you have to smack it hard. That usually does not work, and if it does, the Tonie figure usually falls off the device. I wanted simple buttons via which he can navigate through chapters and songs.
+Instead of the Tonie Box's volume-controlling ears, I wanted a simple knob. The Tonie Box requires hard smacks to change chapters or songs, which rarely works and often knocks the Tonie figure off. I opted for simple navigation buttons instead.
 
-As for the actual audio content, the Tonie Box basically stores all audio on an SD card. The Tonie figures are just RFID tags that trigger playback of a specific audio file on the SD card. This whole setup requires the Tonie Box to be connected to the internet to download the audio files. It also (potentially) gives the company a lot of data on what the user is listening to.
+As for content storage, the Tonie Box keeps audio on an SD card, with Tonie figures acting as RFID tags that trigger specific audio files. This requires internet connectivity for downloading files and potentially gives the company usage data.
 
-I hate that. So I decided that the device will be always offline. The content must be brought in "physically", reminiscent of the cassette tapes of my youth. And what better form factor than that of a Gameboy cartridge? With a slight twist. When you insert a cartridge into a Gameboy, the label on the cartridge disappears partially into the slot. Makes sense, you then focus on the display in front to play the game.
+I wanted none of that. The device should be completely offline, with content delivered "physically" like the cassette tapes of my youth. A Game Boy cartridge form factor was perfect, but with a twist. Unlike a Game Boy where the cartridge label partially disappears into the slot, I wanted the cartridge label to remain fully visible.
 
-While driving around in the car with my boy, we usually listen to his audiobooks via Android Auto and Spotify. That displays the audiobook's cover on the screen on my dashboard. While listening to the audiobook, he'd focus on that cover intensely. The covers usually depict the characters in the story, and are distinct for each story. I thus decided that the cartridge's label should always be fully visible to him, while he listens to the audiobook. This means the cartridge sticks out at the top of the device. Yes, it is a potential breaking point. Just means I need the design to be sturdy.
+This decision came from watching my boy in the car. When we listen to audiobooks through Android Auto and Spotify, he intently focuses on the cover art displayed on the dashboard. These covers, showing story characters, are distinct for each book. Having the cartridge visible lets him see the artwork while listening.
 
-Finally, I want the device to be fail-safe as much as possible. No need for a power button. Inserting the cartridge will turn it on. Removing a cartridge will turn it off. Ideally, none of the components inside the device will be damaged or explode when the boy inevitably drops it. This includes the battery, which means LiPos are out, NiMH are in.
+Yes, a protruding cartridge is a potential breaking point, but I'll make the design sturdy enough to handle it.
+
+For reliability, I wanted the device to be as fail-safe as possible. No power button needed, inserting a cartridge turns it on, removing it turns it off. It should survive inevitable drops, which means using durable NiMH batteries instead of LiPos.
 
 In summary, the device needs to be:
 
@@ -98,7 +101,7 @@ In summary, the device needs to be:
 ## The cartridge
 Since I use an ESP32-S3 as the brain, I opted for micro SD cards as the medium to store audio files. It's super easy to access a FAT filesystem on an SD card via ESP-IDF. Just wire up the SD card's pins to the ESP32-S3's GPIOs and use the SD card API.
 
-To elicit that Gameboy cartridge feel and to make inserting and removing the cartridge easy and sturdy, I designed a custom PCB that holds and exposes the micro SD card's pins, and a 3D printed cover, onto which I could stick the label. You can view the end result in this instructional video for my SO, so she can assemble cartridges as well:
+To elicit that Game Boy cartridge feel and to make inserting and removing the cartridge easy and sturdy, I designed a custom PCB that holds and exposes the micro SD card's pins, and a 3D printed cover onto which I could stick the label. You can view the end result in this instructional video for my SO, so she can assemble cartridges as well:
 
 <video src="./media/cartridge_320.mp4" controls style="width:320px;height:auto;display:block;margin:0 auto;"></video>
 
@@ -106,74 +109,74 @@ The PCB is a trivial 2 layer board. A micro SD card socket holds the card. Each 
 
 <img src="./media/cartridge-layout.png" style="width: 100%;">
 
-To decide on the size, I drew a bunch of rectangles onto milimeter grid paper and picked the one that looked right. Grid paper is your best friend when getting a feel for sizes!
+To decide on the size, I drew a bunch of rectangles on millimeter grid paper and picked the one that looked right. Grid paper is your best friend when getting a feel for sizes!
 
 I designed the cover in Fusion 360. I exported the PCB design from EasyEDA as a STEP file and imported it. I created a sketch at the top of the PCB, projected the PCB outline onto it, and extruded it to a depth that looked good. Finally, I added a cutout for the SD card socket, screw holes, and an indented area for the label. That took 5 minutes.
 
 <img src="./media/cartridge-cover.png" style="width: 100%;">
 
-I send off the PCB design to JLCPCB and ordered a batch of 100 PCBs, along with 100 SD card sockets from LCSC. I also printed 30 covers on my 3D printer.
+I sent off the PCB design to JLCPCB and ordered a batch of 100 PCBs, along with 100 SD card sockets from LCSC. I also printed 30 covers on my 3D printer.
 
 I then proceeded to hand solder 100 SD card sockets onto 100 PCBs, cursing myself that I didn't order a stencil and didn't use JLCPCB's assembly service. It took 2 nights. I used a toothpick to apply the solder paste to the pads.
 
 <img src="./media/cartridge-soldering.png" style="width: 100%;">
+<video src="./media/cartridge_2_320.mp4" controls style="width:320px;height:auto;display:block;margin:0 auto; margin-bottom: 1em;"></video>
 <video src="./media/cartridge_1_320.mp4" controls style="width:320px;height:auto;display:block;margin:0 auto; margin-bottom: 1em;"></video>
-<video src="./media/cartridge_2_320.mp4" controls style="width:320px;height:auto;display:block;margin:0 auto;"></video>
 
 Yeah, I'm dumb. You might have noticed the 2 capacitor pads on the PCB layout above. I ended up not populating those, which saved a bit of time.
 
 ## The cartridge slot connector
-How do I connect the cartridge pads to the ESP32-S3? The Gameboy uses a traditional edge connector, with gold plated contacts on the cartridge and a corresponding connector in the cartridge slot.
+How do I connect the cartridge pads to the ESP32-S3? The Game Boy uses a traditional edge connector, with gold plated contacts on the cartridge and a corresponding connector in the slot.
 
-Since I didn't know how to do "chamfered gold fingers" in EasyEDA, nor how to get JLCPCB to manufacture such PCBs, I opted for a different approach. But not without failing first.
+Since I didn't know how to create "chamfered gold fingers" in EasyEDA or get JLCPCB to manufacture such PCBs, I tried a different approach. But not before failing first.
 
-The cartridge design was inspired by one of [Abe's projects](https://www.youtube.com/watch?v=END_PVp3Eds&t=748s). In his design, he uses pogo pins on the cartridge reader to make contact with the pads on the cartridge. So I tried the same:
+The cartridge design was inspired by [Abe's project](https://www.youtube.com/watch?v=END_PVp3Eds&t=748s), which uses pogo pins on the cartridge reader to contact the cartridge pads:
 
 <img src="./media/pogopins.png" style="width: 100%;">
 
-Which did not work at all. It was extremely hard to get the vertical spacing correct. Any even with a somewhat OK spacing, actually inserting a cartridge was tough. Too tough for a 3 year old. It was also very easy to bend the soldered pogo pins.
+This didn't work at all. Getting the vertical spacing correct was extremely difficult, and even with decent spacing, inserting a cartridge was too tough for a 3 year old. The soldered pogo pins also bent easily.
 
-After some thinking, and given the requirement of "a 3 year old should be able to do it", I came up with this:
+After some thinking about the "3 year old friendly" requirement, I came up with this:
 
 <img src="./media/connector-1.png" style="width: 100%;">
 <img src="./media/connector-2.png" style="width: 100%;">
 
-I use battery springs, which are super sturdy and survive contact with a 3 year old's enthusiasm. I don't event solder anything to them, but instead use ring terminals I can easily crimp onto the wires and screw onto the battery springs into the 3D enclosure.
+I used battery springs, which are sturdy enough to handle a 3 year old's enthusiasm. Instead of soldering, I use ring terminals crimped onto wires and screwed onto the battery springs in the 3D enclosure.
 
-The end result is a mechanism that is easy to assemble, easy to repair, and (so far) indestructible. Here's the first time I inserted a cartridge into the mechanism:
+The result is easy to assemble, easy to repair, and (so far) indestructible. Here's the first cartridge insertion test:
 
 <video src="./media/firsttry_320.mp4" controls style="width:320px;height:auto;display:block;margin:0 auto;"></video>
 
-The device's internals were still living on a breadboard at this point, as I hadn't figured out how to actually put them into the enclosure yet.
+The device's internals were still on a breadboard at this point, as I hadn't figured out the enclosure design yet.
 
 ## Selecting a DAC, amp and speaker
-The device should playback music read from an SD card on a mono speaker. For that, I need a digital to analog converter (DAC) that takes digital audio data from the ESP32-S3 and transforms and amplifies it to drive the speaker.
+For mono music playback from an SD card, I needed a digital to analog converter (DAC) to transform and amplify digital audio from the ESP32-S3 to drive the speaker.
 
-There are many integrated circuits available for that task. The [MAX98357A](https://www.analog.com/media/en/technical-documentation/data-sheets/max98357a-max98357b.pdf) is a popular and cheap choice. Adafruit sells an easy to use [breakout board](https://www.adafruit.com/product/3006) for it and you can find dozens of clones on AliExpress and Amazon.
+I chose the popular [MAX98357A](https://www.analog.com/media/en/technical-documentation/data-sheets/max98357a-max98357b.pdf). Adafruit sells a [breakout board](https://www.adafruit.com/product/3006) for it, and there are many clones available.
 
 <img src="./media/maxaudio.png" style="width: 100%;">
 
-The MAX98357A is a mono amplifier that can output up to 3W into a 4 Ohm speaker at 5V. That's more than enough for my use case. It also speaks the [I2S protocol](https://en.wikipedia.org/wiki/I%C2%B2S), which is a standard protocol for digital audio. My little mcugdx framework was already able to handle audio output through I2S, so the MAX98357A was a good fit.
+The MAX98357A is a mono amplifier delivering up to 3W into a 4 Ohm speaker at 5V. Perfect for this project. It uses the [I2S protocol](https://en.wikipedia.org/wiki/I%C2%B2S), which my mcugdx framework already supported.
 
 Given the amp specs, I went on a hunt for a good speaker. I ordered a few spec compliant speakers from Amazon and discovered the art of speaker enclosure design.
 
 <video src="./media/speaker-1_320.mp4" controls style="width:100%;height:auto;display:block;margin:0 auto; margin-bottom: 1em;"></video>
 <video src="./media/speaker-2_320.mp4" controls style="width:100%;height:auto;display:block;margin:0 auto;"></video>
 
-I eventually ended up with a Visaton FR 7/4, which has pretty good bandwidth and sounds good to my ears. Better than the speaker on the Tonie Box.
+I settled on a Visaton FR 7/4, which offers good bandwidth and better sound quality than the Tonie Box speaker.
 
 <img src="./media/visaton.png" style="width: 100%;">
 
 ## ESP32-S3 board with power management and battery charging
 Before starting this project, I actually dabbled in designing my own ESP32-S3 board. There are many great boards on the market, with those from [Waveshare](https://www.waveshare.com/esp32-s3-tiny.htm) and [Unexpected Maker](https://unexpectedmaker.com) being my favorite. But I wanted to learn how to design such a board, should I ever need something that's not available on the market.
 
-Turns out, I needed exactly that. None of the existing boards support charging NiMH batteries. They often don't have undervoltage protection built-in, but instead rely on your measuring the voltage via GPIO and then switching the ESP32-S3 into deep sleep. I wanted to avoid that. Some also don't like having both USB-C and a battery connected at the same time. A requirement for my device, as I don't want to unplug the batteries, just so I can connect a USB-C cable to flash new software or do some debugging.
+Turns out, I needed exactly that. None of the existing boards support charging NiMH batteries. They often don't have undervoltage protection built-in, but instead rely on measuring the voltage via GPIO and then switching the ESP32-S3 into deep sleep. I wanted to avoid that. Some also don't work well with both USB-C and a battery connected simultaneously. A requirement for my device, as I don't want to unplug the batteries just to connect a USB-C cable for flashing new software or debugging.
 
 I went through a few iterations and eventually ended up with this:
 
 <img src="./media/esp32.png" style="width: 100%;">
 
-The board is meant as a jumping off point for all my project designs. As such, its features are not specific to this project, but rather things I've found useful in all my projects:
+The board serves as a foundation for all my project designs. Its features aren't specific to this project, but rather include capabilities I've found useful across all my projects:
 
 - Charging 3x AAA NiMH or a single cell 3.7V LiPo battery via USB-C at 0.5A. Battery chemistry is selected via a dip switch. Optional overheating protection via thermistor.
 - Shares the power coming in via USB-C between battery charging and the rest of the device
@@ -215,7 +218,7 @@ Here's the part of the schematic that deals with battery charging:
 
 CN2 on the right side is a 2 pin 2mm PH connector, to which the battery is connected. VBAT is the battery voltage. On the left side of this block you find 5V_USB, which is the 5V from the USB-C connector. If USB-C is not connected, then VBAT powers the system, while the charger IC does basically nothing. If USB-C is connected, then 5V_USB powers the charger IC, which charges the battery. The battery is cut off from the system in that case, which we'll see in the next section.
 
-The remainder of the schematic is made up of components to configure the charger IC.
+The remainder of the schematic consists of components to configure the charger IC.
 
 R7 connected to ISET sets the charge current to approximately 0.5A. R8 pulls the TS pin down to ground, disabling battery temperature monitoring. The PCB layout has provisions to wire up an NTC thermistor instead of soldering the R8 pull-down resistor.
 
@@ -223,7 +226,7 @@ The CHM_TMR pin is connected to a dip switch, which selects one of two resistors
 
 The VSET pin is connected to a 18k Ohm resistor, which sets the maximal charging voltage to 4.2V for both battery chemistries.
 
-Finally, STAT1 and STAT2 are connected to LEDs, which are connected to VBAT via a 620 Ohm resistor each. STAT1 and STAT2 are open drain ouputs; the IC will pull them low if the LEDs should light up.
+Finally, STAT1 and STAT2 are connected to LEDs, which are connected to VBAT via 620 Ohm resistors. STAT1 and STAT2 are open-drain outputs; the IC will pull them low when the LEDs should light up.
 
 ### Power management
 The system can either be powered by USB-C or by the battery. The USB-C voltage is 5V, while the battery voltage can range anywhere from 3-4.2V. The ESP32-S3 requires 3.3V, so we need to regulate the power source voltage down. We also want to prevent the battery from discharging below 3.08V, so we need a voltage monitor that can power down the ESP32-S3. Here's how that's done:
@@ -234,14 +237,14 @@ On the left side of the schematic, you see 5V_USB and VBAT. VBAT goes through a 
 
 For extra safety, a schottky diode is placed after 5V_USB, just in case power from VBAT or some capacitor manages to sneak through for some reason.
 
-C9 is a decoupling capacitor suggested by the [TPS3839](https://www.ti.com/cn/lit/ds/symlink/tps3839.pdf?ts=1745522482975&ref_url=https%253A%252F%252Fpro.easyeda.com%252F) datasheet. That is an ultra low power supply voltage monitor. If the voltage drops below 3.08V, it pulls its RESET pin low. That reset pin is connected to the EN pin of the low drop out voltage regulator to its right. If it is low, the voltage regulator is disabled, cutting off power to the system, thereby not draining the battery further. This is likely not strictly necessary, as the ESP32-S3 and other connected ICs will brown out way before the battery is drained below 3.08V. But it's a good safety net.
+C9 is a decoupling capacitor suggested by the [TPS3839](https://www.ti.com/cn/lit/ds/symlink/tps3839.pdf?ts=1745522482975&ref_url=https%253A%252F%252Fpro.easyeda.com%252F) datasheet. That is an ultra low power supply voltage monitor. If the voltage drops below 3.08V, it pulls its RESET pin low. That reset pin is connected to the EN pin of the low drop out voltage regulator to its right. If it is low, the voltage regulator is disabled, cutting off power to the system, thereby not draining the battery further. This is likely not strictly necessary, as the ESP32-S3 and other connected ICs will brown out well before the battery drains below 3.08V. But it's a good safety net.
 
 The low drop out voltage regulator is a [LD56100](https://atta.szlcsc.com/upload/public/pdf/source/20220927/260C14BB568125F608A31F1F8EA3901A.pdf). It can provide 1A of current with a dropout voltage of only 120mV. The audio player draws no more than 60mA even with the speaker at max volume. That results in an even lower dropout voltage, which means we can make good use of most of the battery capacity.
 
 The final output of this block is a clean 3.3V voltage, which powers the ESP32-S3 and the audio amp and speaker.
 
 ### PCB Layout
-Once I've dug through countless datasheets and wired everything up in the schematic, I was finally able to start laying out the PCB. It's like advanced Tetris. I really enjoy it (even though I'm not good at it). Here's how I translated the schematic into a printable layout:
+After digging through countless datasheets and wiring everything up in the schematic, I was finally able to start laying out the PCB. It's like advanced Tetris. I really enjoy it (even though I'm not good at it). Here's how I translated the schematic into a printable layout:
 
 <img src="./media/pcblayout-1.png" style="width: 100%;">
 <img src="./media/pcblayout-2.png" style="width: 100%;">
@@ -251,7 +254,7 @@ It's a 4 layer board, with two ground planes in the middle. The top hosts the ci
 If you squint, you can see the differential pair for the USB signals. There are probably a gazillion things that could be done better, but it works and doesn't blow up, which is good enough for me. I'm pretty sure this wouldn't pass any kind of certification necessary to sell it as part of a commercial electronic device.
 
 ### Soldering the board
-I ordered a stencil along with the PCBs, which makes applying the solder paste a lot easier, compared to the tooth pick method I used for the cartridge PCBs.
+I ordered a stencil along with the PCBs, which makes applying solder paste much easier compared to the toothpick method I used for the cartridge PCBs.
 
 <img src="./media/esp32-stencil.png" style="width: 100%;">
 
@@ -259,11 +262,11 @@ Once the paste is applied, I start by dropping capacitors, resistors, tactile sw
 
 <img src="./media/esp32-soldering.png" style="width: 100%;">
 
-With the "easy" components out of the way, I then inspect the solder on the pads for trickier components, like the ESP32-S3, the 1.2mm by 1.6mm LDO voltage regulator, or the USB-C connector. Chances are that the solder paste has melted into a blob or formed bridges between the pads. That tends to happen when too much paste was applied, especially on extremely tiny sub millimeter pads. I then use solder wick or my trusty tooth pick to fix up any bridges.
+With the "easy" components out of the way, I inspect the solder on the pads for trickier components, like the ESP32-S3, the 1.2mm by 1.6mm LDO voltage regulator, and the USB-C connector. Chances are the solder paste has melted into a blob or formed bridges between pads. This tends to happen when too much paste is applied, especially on extremely tiny sub-millimeter pads. I use solder wick or my trusty toothpick to fix any bridges.
 
-Only when I deem the solder on the pads to be good, I then drop the "tricky" components onto the board and hope for the best.
+Only when I deem the solder on the pads to be good do I drop the "tricky" components onto the board and hope for the best.
 
-Once everything is soldered, I flash a simple LED blinking sketch to make sure the board is somewhat working. In case it does not, I use my multi-meter to pain stakingly check for expected voltages across the board. I also use my thermal camera to check for overheating components.
+Once everything is soldered, I flash a simple LED blinking sketch to make sure the board is working. If it's not, I use my multimeter to painstakingly check for expected voltages across the board. I also use my thermal camera to check for overheating components.
 
 ## Buttons, knobs and enclosure
 I designed the enclosure pretty early on in the process, based on the speaker and cartridge dimensions, and the cartridge slot mechanism. The enclosure consists of a top and bottom half, which are held together by M3 screws.
@@ -281,7 +284,7 @@ Turning the top upside down reveals two mounting structures to which a PCB can b
 
 <img src="./media/top-2.png" style="width: 100%;">
 
-The bottom is pretty unremarkable. It features a bay for the 3 AAA NiMH batteries, a few spacers so positioning the top on the bottom is easy, and a weird little contraption consisting of what looks like a rod and two screw holes. Here's what that's for.
+The bottom is pretty unremarkable. It features a bay for the 3 AAA NiMH batteries, a few spacers to make positioning the top on the bottom easier, and a weird little contraption consisting of what looks like a rod and two screw holes. Here's what that's for.
 
 <video src="./media/switch_320.mp4" controls style="width:320px;height:auto;display:block;margin:0 auto;"></video>
 
@@ -292,16 +295,16 @@ When a cartridge is inserted, the rod is pushed down, which pushes a switch that
 The rod solution just works.
 
 # The mother board
-As you can see in the last video, the innards of the device were still living on a breadboard at this point. The ESP32-S3 board, the amp, and the buttons and knob needed to be mounted inside the enclosure somehow. I already designed mounting brackets on the top half of the enclosure, taking into account the size of the tactile swithces, the potentiometer, and their 3D printed covers. That allowed me to measure the left over space in the enclosure inside Fusion 360, based on which I sized a carrier PCB or motherboard. Here's the schematic:
+As you can see in the last video, the innards of the device were still living on a breadboard at this point. The ESP32-S3 board, the amp, and the buttons and knob needed to be mounted inside the enclosure somehow. I had already designed mounting brackets on the top half of the enclosure, taking into account the size of the tactile switches, the potentiometer, and their 3D printed covers. This allowed me to measure the remaining space in the enclosure inside Fusion 360, based on which I sized a carrier PCB or motherboard. Here's the schematic:
 
 <img src="./media/motherboard.svg" style="width: 100%;">
 
-To the left is the MAX98357A audio amplifier break out board. The ESP32-S3 board is at the center. At the bottom are the tactile switches and the potentiometer. And to the right are the connections to the battery springs of the cartridge slot. Everything is wired to appropriate pins on the ESP32-S3 board. The SD card traces also feature pull-ups as necessary.
+To the left is the MAX98357A audio amplifier breakout board. The ESP32-S3 board is at the center. At the bottom are the tactile switches and the potentiometer. And to the right are the connections to the battery springs of the cartridge slot. Everything is wired to appropriate pins on the ESP32-S3 board. The SD card traces also feature pull-ups as necessary.
 
 <img src="./media/motherboard-1.png" style="width: 100%;">
 <img src="./media/motherboard-2.png" style="width: 100%;">
 
-It's a 2 layer board. The top layer houses the tactile switches and the potentiometer. The bottom layer has 2.54mm headers into which I can plug the MAX98357A breakout board and the ESP32-S3 board. In the top right there are pads for the SD card connections which are wired to the battery springs of the cartridge slot.
+It's a 2-layer board. The top layer houses the tactile switches and the potentiometer. The bottom layer has 2.54mm headers into which I can plug the MAX98357A breakout board and the ESP32-S3 board. In the top right are pads for the SD card connections which are wired to the battery springs of the cartridge slot.
 
 Here's the motherboard with tactile switches, potentiometer, and headers soldered to it:
 
@@ -321,28 +324,28 @@ Then I plug in the ESP32-S3 board and the MAX98357A breakout board and wire up t
 
 (Note that the ESP32-S3 board is an earlier iteration but the principle is the same.)
 
-The trick to getting this all lined up is to actually import 3D models of all components into Fusion 360.
+The trick to getting this all lined up is importing 3D models of all components into Fusion 360.
 
 <img src="./media/motherboard-7.png" style="width: 100%;">
 
-EasyEDA allows exporting a 3D model of the PCB, including the components (if the component has a 3D model). This allows me to expirment with component placement and orientation, try out different PCB layouts, etc. That saves me enormous amounts of time and frustration.
+EasyEDA allows exporting a 3D model of the PCB, including the components (if they have 3D models). This allows me to experiment with component placement and orientation, try out different PCB layouts, etc. That saves me enormous amounts of time and frustration.
 
 ## Software
-The software is stupid simple and based on my mcugdx framework. There entire source code is a [single 390 LOC file](https://github.com/badlogic/mcugdx/blob/main/examples/boxie/main/main.cpp) that invokes the "easy" mcugdx API to:
+The software is straightforward and based on my mcugdx framework. The entire source code is a [single 390 LOC file](https://github.com/badlogic/mcugdx/blob/main/examples/boxie/main/main.cpp) that uses the "easy" mcugdx API to:
 
 - Check if an SD card is present
-- List the MP3 files on the SD card an sort them by name
+- List the MP3 files on the SD card and sort them by name
 - Start playback of the first file on the SD card
 - React to button presses and the volume knob
 
-You can dig into the [mcugdx sources](https://github.com/badlogic/mcugdx/tree/main/src) to how to implement all this under the hood on top of ESP-IDF.
+You can dig into the [mcugdx sources](https://github.com/badlogic/mcugdx/tree/main/src) to see how to implement all this under the hood on top of ESP-IDF.
 
 ## Mario, how do I build this myself?
-I'm glad you asked. It's definitely not for the faint of heart. Assuming you have everything you need to solder SMD components, wires, M1-M3 screwsbasic tools like pliers, etc. (see the things I recommneded above), here are all the things you need specifically for this project:
+I'm glad you asked. It's definitely not for the faint of heart. Assuming you have everything needed to solder SMD components, wires, M1-M3 screws, and basic tools like pliers (see recommended items above), here's what you need specifically for this project:
 
-- [3D model of the enclosure](./project/boxie.3mf), ready to be printed. Just import it into your slicer, enable supports (needed for the USB-C cutout), and print with PLA. This should "just work" with any popular 3D printer, without tons of precision. If you want to modify the enclosure, use this [Fusion 360 file](./project/boxie.f3z).
-- [3D model of the cartridge cover](./project/cartridge-cover.3mf). It's a single cover. Just duplicate it and position the copies in your slicer as you like. You can reduce the infill density to 10% or even lower. It doesn't have to be super strong. The cover is also part of the Fusion 360 enclosure file above, if you want to modify it.
-- [Cartridge PCB Gerber files](./project/cartridge-gerber.zip). A 2 layer board design you can send to a PCB manufacturer like JLCPCB, PCBWay, or Aisler as is. I use JLCPCB. If you want to modify the board, you can import this [EasyEDA Pro project](./project/cartridge.epro) into EasyEDA or KiCad 9+, make your changes, and export the Gerber files from there. Instead of hand soldering the SD card socket like I did, you can also send off the Gerber along with the BOM below to e.g. JLCPCB to get fully assembled PCBs.
+- [3D model of the enclosure](./project/boxie.3mf) - Ready to print. Import into your slicer, enable supports (for USB-C cutout), and print with PLA. Should work with any popular 3D printer. For modifications, use this [Fusion 360 file](./project/boxie.f3z).
+- [3D model of the cartridge cover](./project/cartridge-cover.3mf) - Print multiple copies by duplicating in your slicer. Can use 10% infill or lower. The cover is also in the Fusion 360 enclosure file above.
+- [Cartridge PCB Gerber files](./project/cartridge-gerber.zip) - 2-layer board design for manufacturers like JLCPCB, PCBWay, or Aisler. For modifications, import this [EasyEDA Pro project](./project/cartridge.epro) into EasyEDA or KiCad 9+. Optional: Have JLCPCB assemble the board using the BOM below instead of hand-soldering.
 - [Cartridge BOM](./project/cartridge-bom.xlsx). All components needed to assemble the cartridge. Features LCSC part numbers (where I buy them) as well as manufacturer name and part number if you want to order them some place else. The BOM includes 2 decoupling caps, which according to my real world testing can be omitted.
 - [Motherboard PCB Gerber files](./project/motherboard-gerber.zip). Another 2 layer board ready to be send to a PCB manufacturer. Here's the [EasyEDA Pro project](./project/motherboard.epro) if you want to modify it.
 - [Motherboard BOM](./project/motherboard-bom.xlsx). All the components you need to assemble the motherboard, with LSCS and manufacturer info.
@@ -362,48 +365,45 @@ I'm glad you asked. It's definitely not for the faint of heart. Assuming you hav
 - [Label paper](https://www.avery-zweckform.com/produkt/universal-etiketten-6125). Print audiobook covers on it, stick them to the cartridge cover front.
 
 Assembly steps for the player:
-
-- Printing the enclosure parts
-- Soldering the motherboard and ESP32-S3 board
-- Screw the speaker and speaker cover into the top part of the enclosure.
-- Screw in the motherboard into the top part of the enclosure.
-- Plug in the ESP32-S3 board and the MAX98357A breakout board into the motherboard.
-- Cut 8 silicon electric wires (22AWG) at 20cm length each.
-- Crimp a ring terminal onto one end of each wire.
-- Screw a ring terminal (with crimped wire) plus battery spring onto the top part of the enclosure.
-- Bend the ring terminals downwards, towards the speaker.
-- Route the wires around the speaker, nicely, as shown in the videos and images above.
-- For each wire, ball park how much of the 20cm length you actually need to crimp a Dupont housing onto it and slide it onto the corresponding pin on the motherboard.
-- Cut the hook of the arm of the micro switch.
-- Screw it into the bottom part of the enclosure, right to the battery compartment, as shown in the videos and images above.
-- Connect the bottom battery plate (positive terminal) to the middle pin of the micro switch by soldering a short silicon wire (22AWG) between them. See the videos and images above. (Red wire).
-- Solder another 10cm silicon wire (22AWG) to the right pin of the micro switch. See videos and images above. (Red wire).
-- Solder another 10cm silicon wire (22AWG) to the top battery plate (negative terminal). See videos and images above (black wire).
-- Crimp a JST-PH 2.0mm female terminal to each of the 10cm silicon wires.
+- Print enclosure parts
+- Solder the motherboard and ESP32-S3 board
+- Mount speaker and cover to top enclosure
+- Mount motherboard to top enclosure
+- Install ESP32-S3 and MAX98357A boards
+- Prepare 8 silicon wires (22AWG, 20cm each):
+  - Crimp ring terminals on one end
+  - Attach terminals and springs to enclosure
+  - Route wires around speaker
+  - Trim to length and add Dupont housings for motherboard connections
+- Cut the hook of the micro switch
+- Screw it into the bottom part of the enclosure, right to the battery compartment
+- Connect the bottom battery plate (positive terminal) to the middle pin of the micro switch by soldering a short silicon wire (22AWG) between them
+- Solder another 10cm silicon wire (22AWG) to the right pin of the micro switch
+- Solder another 10cm silicon wire (22AWG) to the top battery plate (negative terminal)
+- Crimp a JST-PH 2.0mm female terminal to each of the 10cm silicon wires
 - Slide the crimped wire ends into a JST-PH 2.0mm housing. Make sure the negative and positive terminals correspond to the negative and positive pins on the JST-PH 2.0mm female socket on the ESP32-S3 board! The board has a - and + signs on the pads of the socket! Don't fuck this up!
-- Connect the JST-PH connector to the corresponding JST-PH 2.0mm female socket on the ESP32-S3 board.
-- Insert the batteries into the battery compartment.
-- Insert the rod into the bottom part of the enclosure.
-- Connect the device via USB-C to your computer. Once it is recognized as a UART/JTAG device, press the boot button the ESP32-S3 board.
-- Screw the top and bottom part of the enclosure together.
+- Connect the JST-PH connector to the corresponding JST-PH 2.0mm female socket on the ESP32-S3 board
+- Insert the batteries into the battery compartment
+- Insert the rod into the bottom part of the enclosure
+- Connect the device via USB-C to your computer. Once it is recognized as a UART/JTAG device, press the boot button the ESP32-S3 board
+- Screw the top and bottom part of the enclosure together
 
-You can now flash the [boxie firmware](https://github.com/badlogic/mcugdx/tree/main/examples/boxie) to the ESP32-S3 board. Clone the repo, then use the ESP-IDF CLI to compile and flash the firmware. Tested with ESP-IDF v5.3.2.
+You can now flash the [boxie firmware](https://github.com/badlogic/mcugdx/tree/main/examples/boxie) to the ESP32-S3 board. Clone the repo, then use the [ESP-IDF CLI](https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-guides/tools/idf-py.html) to compile and flash the firmware. Tested with ESP-IDF v5.3.2. The sdkconfig.defaults file is set up for the custom ESP32-S3 board.
 
 Assembly steps for the cartridge:
-- Print the cartridge cover.
-- Find a cover for the audiobook or music you want to put on the cartridge, size it to 59mm x 62mm, print it onto the label paper and cut it out. I usually do a bunch of these in one go, so I don't waste label paper. I use the [Avery label designer](https://app.avery-zweckform.com/dpo8/appeu/target;name=DE_de;ep=EUP/product;search=6125;templateCategory=Beliebteste%20Artikel;profile=YouPrint/design;product=9161f8c31b2ac54b9aa6474e1f89869f;source=SelectDesign/customize;path=tmpUser%2Fprojects%2Fc98097c9aa3487d3b756fa2e89a6f51f%2Fc98097c9aa3487d3b756fa2e89a6f51f.xml;storage=fsEUPTemp/ctx;consumer=AveryEU;product=9161f8c31b2ac54b9aa6474e1f89869f/view?customize) to lay out the labels.
-- Solder the SD card socket to the cartridge PCB.
-- Insert the SD card into your PC and copy the audiobook or music onto it. Playback order is determined by the file names order. Only MP3 files are supported.
-- Insert the SD card into the cartridge.
-- Screw on the cartridge cover.
+- Print cartridge cover
+- Prepare audiobook/music cover (59mm x 62mm) on label paper
+- Solder SD card socket to PCB
+- Load audio files onto SD card (MP3 only, playback follows filename order)
+- Insert SD card and attach cover
 
 ## Future work
-I really need to add a headphone jack to the device. That shouldn't be too difficult. The jack itself must have a pin that can tell the ESP32-S3 that a headphone is connected. If that's the case, then I need to disable the MAX98357A amplifier by pulling its SD pin low. This will require a reworked motherboard and some trickery to get the voltage on SD right in case no headphones are connected. The jack would likely be positioned oposite the USB-C port and thus also require a minor rework of the enclosure.
+I need to add a headphone jack to the device. The jack must have a pin that signals the ESP32-S3 when headphones are connected. When connected, I'll need to disable the MAX98357A amplifier by pulling its SD pin low. This requires a reworked motherboard and some voltage management for the SD pin when no headphones are present. The jack would be positioned opposite the USB-C port, requiring a minor enclosure modification.
 
-I also need an IC that can take the I2S signal I already send to the MAX98357A and convert it to a headphone jack signal. Haven't looked into that yet. This will also require additional routing on the motherboard, so the I2S signal from the ESP32-S3 is routed to both the MAX98357A and that ominous IC. Suggestions welcome!
+I also need an IC to convert the I2S signal (currently sent to the MAX98357A) to a headphone output. I haven't researched options yet. The motherboard will need additional routing to send the I2S signal from the ESP32-S3 to both the MAX98357A and this new IC. Suggestions welcome!
 
-## Bonuns content: USB cartridge reader
-For shits and giggle, I also designed a USB cartridge reader. Instead of having to unscrew the cover from a cartridge, extract the SD card, and then put it back together, the reader lets me modify the files on a cartridge by just plugging it into my laptop via USB, where it will show up as a mass storage device.
+## Bonus content: USB cartridge reader
+I designed a USB cartridge reader for convenience. Instead of unscrewing a cartridge's cover to access the SD card, the reader lets me modify files by simply plugging the cartridge into my laptop via USB, where it appears as a mass storage device.
 
 <img src="./media/reader-1.png" style="width: 100%;">
 
@@ -411,33 +411,33 @@ Here's the schematic:
 
 <img src="./media/reader-2.png" style="width: 100%;">
 
-It's really just a fancy wrapper around a [Genesys Logic GL823K IC](https://atta.szlcsc.com/upload/public/pdf/source/20190212/C284879_D3054E8AA735401C3047DCECFFFED6D3.pdf), a USB 2.0 SD/MSPRO Card reader controller.
+It's essentially a wrapper around a [Genesys Logic GL823K IC](https://atta.szlcsc.com/upload/public/pdf/source/20190212/C284879_D3054E8AA735401C3047DCECFFFED6D3.pdf), a USB 2.0 SD/MSPRO Card reader controller.
 
-I've never really used it. When I create a new cartridge, I just stick the SD card into my laptop before assembling the cartridge. But it was a fun side project none the less.
+I rarely use it since I typically insert SD cards directly into my laptop before assembling cartridges. Still, it was a fun side project.
 
 ## Bonus content: modding the Andonstar AD249S-M digital microscope
-When you buy that microscope, it comes like this:
+The microscope comes like this originally:
 
 <img src="./media/microscope-1.png" style="width: 100%;">
 
-I hate it. Instead, I want to mount it onto a [Rode PSA1 articulated arm](https://www.amazon.de/-/en/R%C3%B8de-PSA1-articulated-arm-stand/dp/B001D7UYBO/), which I mount to my desk. This allows me pretty much free movement of the microscope across my entire work area.
+I preferred mounting it on a [Rode PSA1 articulated arm](https://www.amazon.de/-/en/R%C3%B8de-PSA1-articulated-arm-stand/dp/B001D7UYBO/) attached to my desk. This gives me nearly unlimited movement across my work area.
 
-The microscope stand has a little control PCB in it, for the LED lights.
+The microscope stand includes a control PCB for the LED lights.
 
 <img src="./media/microscope-2.png" style="width: 100%;">
 
-I disassembled and unsoldered the control PCB and LED light arms.
+I disassembled it and removed the control PCB and LED light arms.
 
 <img src="./media/microscope-3.png" style="width: 100%;">
 
-Then I modeled and 3D printed a mount for the microscope that screws onto the PSA1 arm, houses the control PCB, and lets me screw in the LED light arms.
+I then designed and 3D printed a mount that attaches to the PSA1 arm, houses the control PCB, and accommodates the LED light arms.
 
 <img src="./media/microscope-4.png" style="width: 100%;">
 
 <video src="./media/microscope_320.mp4" controls style="width:100%;height:auto;display:block;margin:0 auto;"></video>
 
-Note that the final iteration uses a different fastening mechanism with a screw and wing nut. But you get the idea.
+Note: The final version uses a different fastening mechanism with a screw and wing nut, but this demonstrates the concept.
 
-Here's the [3MF file](./project/andonstar-bracket.3mf) for the mount, ready to be 3D printed. I used PLA and the BambuLab slicer defaults.
+Here's the [3MF file](./project/andonstar-bracket.3mf) for the mount, ready for 3D printing. I used PLA with BambuLab slicer defaults.
 
 <%= render("../../_partials/post-footer.html") %>
