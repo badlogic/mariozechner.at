@@ -343,9 +343,9 @@ You can dig into the [mcugdx sources](https://github.com/badlogic/mcugdx/tree/ma
 ## Mario, how do I build this myself?
 I'm glad you asked. It's definitely not for the faint of heart. Assuming you have everything needed to solder SMD components, wires, M1-M3 screws, and basic tools like pliers (see recommended items above), here's what you need specifically for this project:
 
-- [3D model of the enclosure](./project/boxie.3mf) - Ready to print. Import into your slicer, enable supports (for USB-C cutout), and print with PLA. Should work with any popular 3D printer. For modifications, use this [Fusion 360 file](./project/boxie.f3z).
-- [3D model of the cartridge cover](./project/cartridge-cover.3mf) - Print multiple copies by duplicating in your slicer. Can use 10% infill or lower. The cover is also in the Fusion 360 enclosure file above.
-- [Cartridge PCB Gerber files](./project/cartridge-gerber.zip) - 2-layer board design for manufacturers like JLCPCB, PCBWay, or Aisler. For modifications, import this [EasyEDA Pro project](./project/cartridge.epro) into EasyEDA or KiCad 9+. Optional: Have JLCPCB assemble the board using the BOM below instead of hand-soldering.
+- [3D model of the enclosure](./project/boxie.3mf) Ready to print. Import into your slicer, enable supports (for USB-C cutout), and print with PLA. Should work with any popular 3D printer. For modifications, use this [Fusion 360 file](./project/boxie.f3z).
+- [3D model of the cartridge cover](./project/cartridge-cover.3mf) Print multiple copies by duplicating in your slicer. Can use 10% infill or lower. The cover is also in the Fusion 360 enclosure file above.
+- [Cartridge PCB Gerber files](./project/cartridge-gerber.zip) 2-layer board design for manufacturers like JLCPCB, PCBWay, or Aisler. For modifications, import this [EasyEDA Pro project](./project/cartridge.epro) into EasyEDA or KiCad 9+. Optional: Have JLCPCB assemble the board using the BOM below instead of hand-soldering.
 - [Cartridge BOM](./project/cartridge-bom.xlsx). All components needed to assemble the cartridge. Features LCSC part numbers (where I buy them) as well as manufacturer name and part number if you want to order them some place else. The BOM includes 2 decoupling caps, which according to my real world testing can be omitted.
 - [Motherboard PCB Gerber files](./project/motherboard-gerber.zip). Another 2 layer board ready to be send to a PCB manufacturer. Here's the [EasyEDA Pro project](./project/motherboard.epro) if you want to modify it.
 - [Motherboard BOM](./project/motherboard-bom.xlsx). All the components you need to assemble the motherboard, with LSCS and manufacturer info.
@@ -388,7 +388,7 @@ Assembly steps for the player:
 - Connect the device via USB-C to your computer. Once it is recognized as a UART/JTAG device, press the boot button the ESP32-S3 board
 - Screw the top and bottom part of the enclosure together
 
-You can now flash the [boxie firmware](https://github.com/badlogic/mcugdx/tree/main/examples/boxie) to the ESP32-S3 board. Clone the repo, then use the [ESP-IDF CLI](https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-guides/tools/idf-py.html) to compile and flash the firmware. Tested with ESP-IDF v5.3.2. The sdkconfig.defaults file is set up for the custom ESP32-S3 board.
+You can now flash the [boxie firmware](https://github.com/badlogic/mcugdx/tree/main/examples/boxie) to the ESP32-S3 board. Clone the repo, then use the [ESP-IDF CLI](https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-guides/tools/idf-py.html) to compile and flash the firmware. Tested with ESP-IDF v5.3.2. The `sdkconfig.defaults` file is set up for the custom ESP32-S3 board.
 
 Assembly steps for the cartridge:
 - Print cartridge cover
