@@ -107,19 +107,19 @@ To elicit that Game Boy cartridge feel and to make inserting and removing the ca
 
 The PCB is a trivial 2 layer board. A micro SD card socket holds the card. Each of the pins is exposed to its corresponding big pad at the bottom of the PCB. Four M2 screw holes let me screw on the 3D printed cover.
 
-<img src="./media/cartridge-layout.png" style="width: 100%;">
+<img src="./media/cartridge-layout.png" style="width: 100%;" loading="lazy">
 
 To decide on the size, I drew a bunch of rectangles on millimeter grid paper and picked the one that looked right. Grid paper is your best friend when getting a feel for sizes!
 
 I designed the cover in Fusion 360. I exported the PCB design from EasyEDA as a STEP file and imported it. I created a sketch at the top of the PCB, projected the PCB outline onto it, and extruded it to a depth that looked good. Finally, I added a cutout for the SD card socket, screw holes, and an indented area for the label. That took 5 minutes.
 
-<img src="./media/cartridge-cover.png" style="width: 100%;">
+<img src="./media/cartridge-cover.png" style="width: 100%;" loading="lazy">
 
 I sent off the PCB design to JLCPCB and ordered a batch of 100 PCBs, along with 100 SD card sockets from LCSC. I also printed 30 covers on my 3D printer.
 
 I then proceeded to hand solder 100 SD card sockets onto 100 PCBs, cursing myself that I didn't order a stencil and didn't use JLCPCB's assembly service. It took 2 nights. I used a toothpick to apply the solder paste to the pads.
 
-<img src="./media/cartridge-soldering.png" style="width: 100%;">
+<img src="./media/cartridge-soldering.png" style="width: 100%;" loading="lazy">
 <video src="./media/cartridge_2_320.mp4" controls style="width:320px;height:auto;display:block;margin:0 auto; margin-bottom: 1em;"></video>
 <video src="./media/cartridge_1_320.mp4" controls style="width:320px;height:auto;display:block;margin:0 auto; margin-bottom: 1em;"></video>
 
@@ -132,14 +132,14 @@ Since I didn't know how to create "chamfered gold fingers" in EasyEDA or get JLC
 
 The cartridge design was inspired by [Abe's project](https://www.youtube.com/watch?v=END_PVp3Eds&t=748s), which uses pogo pins on the cartridge reader to contact the cartridge pads:
 
-<img src="./media/pogopins.png" style="width: 100%;">
+<img src="./media/pogopins.png" style="width: 100%;" loading="lazy">
 
 This didn't work at all. Getting the vertical spacing correct was extremely difficult, and even with decent spacing, inserting a cartridge was too tough for a 3 year old. The soldered pogo pins also bent easily.
 
 After some thinking about the "3 year old friendly" requirement, I came up with this:
 
-<img src="./media/connector-1.png" style="width: 100%;">
-<img src="./media/connector-2.png" style="width: 100%;">
+<img src="./media/connector-1.png" style="width: 100%;" loading="lazy">
+<img src="./media/connector-2.png" style="width: 100%;" loading="lazy">
 
 I used battery springs, which are sturdy enough to handle a 3 year old's enthusiasm. Instead of soldering, I use ring terminals crimped onto wires and screwed onto the battery springs in the 3D enclosure.
 
@@ -154,7 +154,7 @@ For mono music playback from an SD card, I needed a digital to analog converter 
 
 I chose the popular [MAX98357A](https://www.analog.com/media/en/technical-documentation/data-sheets/max98357a-max98357b.pdf). Adafruit sells a [breakout board](https://www.adafruit.com/product/3006) for it, and there are many clones available.
 
-<img src="./media/maxaudio.png" style="width: 100%;">
+<img src="./media/maxaudio.png" style="width: 100%;" loading="lazy">
 
 The MAX98357A is a mono amplifier delivering up to 3W into a 4 Ohm speaker at 5V. Perfect for this project. It uses the [I2S protocol](https://en.wikipedia.org/wiki/I%C2%B2S), which my mcugdx framework already supported.
 
@@ -165,7 +165,7 @@ Given the amp specs, I went on a hunt for a good speaker. I ordered a few spec c
 
 I settled on a Visaton FR 7/4, which offers good bandwidth and better sound quality than the Tonie Box speaker.
 
-<img src="./media/visaton.png" style="width: 100%;">
+<img src="./media/visaton.png" style="width: 100%;" loading="lazy">
 
 ## ESP32-S3 board with power management and battery charging
 Before starting this project, I actually dabbled in designing my own ESP32-S3 board. There are many great boards on the market, with those from [Waveshare](https://www.waveshare.com/esp32-s3-tiny.htm) and [Unexpected Maker](https://unexpectedmaker.com) being my favorite. But I wanted to learn how to design such a board, should I ever need something that's not available on the market.
@@ -174,7 +174,7 @@ Turns out, I needed exactly that. None of the existing boards support charging N
 
 I went through a few iterations and eventually ended up with this:
 
-<img src="./media/esp32.png" style="width: 100%;">
+<img src="./media/esp32.png" style="width: 100%;" loading="lazy">
 
 The board serves as a foundation for all my project designs. Its features aren't specific to this project, but rather include capabilities I've found useful across all my projects:
 
@@ -187,12 +187,12 @@ The board serves as a foundation for all my project designs. Its features aren't
 
 Here's the full schematic:
 
-<img src="./media/schematic.svg" style="width: 100%;">
+<img src="./media/schematic.svg" style="width: 100%;" loading="lazy">
 
 Let me walk you through the schematic real quick.
 
 ### USB-C
-<img src="./media/usb.png" style="width: 100%;">
+<img src="./media/usb.png" style="width: 100%;" loading="lazy">
 
 Connecting a USB-C cable powers the battery charger and the device. The 5.1k Ohm resistors on the CC1 and CC2 pins allow the device to draw 0.5A if connected to a USB 2 source, or 0.9A if connected to a USB 3 source. The USB-C connector provides 5V to the system if connected to a USB source like my laptop.
 
@@ -201,7 +201,7 @@ For debugging and flashing, the DN and DP pins are connected to the ESP32-S3 GPI
 ### ESP32-S3
 There are various variants of the ESP32-S3. I picked one with a built-in antenna, 8MB of flash, and 8MB of PSRAM. That's been sufficient for all my projects so far. And I don't need to wire up those components myself. Here's how it is wired up.
 
-<img src="./media/esp32-schematic.png" style="width: 100%;">
+<img src="./media/esp32-schematic.png" style="width: 100%;" loading="lazy">
 
 This mostly follows the recommendation in the [ESP32-S3 hardware design guidelines](https://docs.espressif.com/projects/esp-hardware-design-guidelines/en/latest/esp32s3/esp-hardware-design-guidelines-en-master-esp32s3.pdf). I didn't include a crystal needed for accurate deep sleep timing, as I never need that feature.
 
@@ -214,7 +214,7 @@ I spent a long time trying to find an IC that can charge both NiMH and LiPo batt
 
 Here's the part of the schematic that deals with battery charging:
 
-<img src="./media/charger.png" style="width: 100%;">
+<img src="./media/charger.png" style="width: 100%;" loading="lazy">
 
 CN2 on the right side is a 2 pin 2mm PH connector, to which the battery is connected. VBAT is the battery voltage. On the left side of this block you find 5V_USB, which is the 5V from the USB-C connector. If USB-C is not connected, then VBAT powers the system, while the charger IC does basically nothing. If USB-C is connected, then 5V_USB powers the charger IC, which charges the battery. The battery is cut off from the system in that case, which we'll see in the next section.
 
@@ -231,7 +231,7 @@ Finally, STAT1 and STAT2 are connected to LEDs, which are connected to VBAT via 
 ### Power management
 The system can either be powered by USB-C or by the battery. The USB-C voltage is 5V, while the battery voltage can range anywhere from 3-4.2V. The ESP32-S3 requires 3.3V, so we need to regulate the power source voltage down. We also want to prevent the battery from discharging below 3.08V, so we need a voltage monitor that can power down the ESP32-S3. Here's how that's done:
 
-<img src="./media/powerpath.png" style="width: 100%;">
+<img src="./media/powerpath.png" style="width: 100%;" loading="lazy">
 
 On the left side of the schematic, you see 5V_USB and VBAT. VBAT goes through a P-channel transistor. If USB-C is connected, the gate is pulled high, which will prevent power from the battery from reaching the system. If USB-C is not connected, the gate is pulled low, meaning that power from VBAT can reach the remainder of the system. This is a little trick I saw in the Unexpected Marker's ESP32-S3 Feather board. It's really simple power path management!
 
@@ -246,8 +246,8 @@ The final output of this block is a clean 3.3V voltage, which powers the ESP32-S
 ### PCB Layout
 After digging through countless datasheets and wiring everything up in the schematic, I was finally able to start laying out the PCB. It's like advanced Tetris. I really enjoy it (even though I'm not good at it). Here's how I translated the schematic into a printable layout:
 
-<img src="./media/pcblayout-1.png" style="width: 100%;">
-<img src="./media/pcblayout-2.png" style="width: 100%;">
+<img src="./media/pcblayout-1.png" style="width: 100%;" loading="lazy">
+<img src="./media/pcblayout-2.png" style="width: 100%;" loading="lazy">
 
 It's a 4 layer board, with two ground planes in the middle. The top hosts the circuits described above, while the bottom exposes most of the GPIOs. The board is breadboard friendly and also has screw holes for mounting in an enclosure. The power traces are thick enough to actually handle up to 1A of current, should the need arise. Though that kind of power could not be delivered via USB-C.
 
@@ -256,11 +256,11 @@ If you squint, you can see the differential pair for the USB signals. There are 
 ### Soldering the board
 I ordered a stencil along with the PCBs, which makes applying solder paste much easier compared to the toothpick method I used for the cartridge PCBs.
 
-<img src="./media/esp32-stencil.png" style="width: 100%;">
+<img src="./media/esp32-stencil.png" style="width: 100%;" loading="lazy">
 
 Once the paste is applied, I start by dropping capacitors, resistors, tactile switches and other components with big pads onto the board. I then turn on my heating plate and let it melt the solder paste.
 
-<img src="./media/esp32-soldering.png" style="width: 100%;">
+<img src="./media/esp32-soldering.png" style="width: 100%;" loading="lazy">
 
 With the "easy" components out of the way, I inspect the solder on the pads for trickier components, like the ESP32-S3, the 1.2mm by 1.6mm LDO voltage regulator, and the USB-C connector. Chances are the solder paste has melted into a blob or formed bridges between pads. This tends to happen when too much paste is applied, especially on extremely tiny sub-millimeter pads. I use solder wick or my trusty toothpick to fix any bridges.
 
@@ -273,16 +273,16 @@ I designed the enclosure pretty early on in the process, based on the speaker an
 
 The top has cutouts for the buttons, volume knob, speaker. It also has a mounting bracket for the battery springs which serves as connectors to the cartridge pads. A separate mesh cover is mounted on top the speaker hole to protect the speaker from my boy's destructive tendencies.
 
-<img src="./media/top-1.png" style="width: 100%;">
+<img src="./media/top-1.png" style="width: 100%;" loading="lazy">
 
 The buttons and knob are simple shapes, with their bottoms extruded, so they don't fall out of the enclosure through the cut outs. In case of the buttons, they sit atop simple tactile switches. The knob has a center cutout so it can be slid onto the potentiometer beneath it.
 
-<img src="./media/buttons-1.png" style="width: 100%;">
-<img src="./media/buttons-2.png" style="width: 100%;">
+<img src="./media/buttons-1.png" style="width: 100%;" loading="lazy">
+<img src="./media/buttons-2.png" style="width: 100%;" loading="lazy">
 
 Turning the top upside down reveals two mounting structures to which a PCB can be screwed beneath the button cutouts. More on that PCB in the next section. You can also see spacers and screw holes for the battery springs, which make up the cartridge slot mechanism. There's also a cutout on the side for the USB-C connector for the ESP32-S3 board.
 
-<img src="./media/top-2.png" style="width: 100%;">
+<img src="./media/top-2.png" style="width: 100%;" loading="lazy">
 
 The bottom is pretty unremarkable. It features a bay for the 3 AAA NiMH batteries, a few spacers to make positioning the top on the bottom easier, and a weird little contraption consisting of what looks like a rod and two screw holes. Here's what that's for.
 
@@ -297,36 +297,36 @@ The rod solution just works.
 # The mother board
 As you can see in the last video, the innards of the device were still living on a breadboard at this point. The ESP32-S3 board, the amp, and the buttons and knob needed to be mounted inside the enclosure somehow. I had already designed mounting brackets on the top half of the enclosure, taking into account the size of the tactile switches, the potentiometer, and their 3D printed covers. This allowed me to measure the remaining space in the enclosure inside Fusion 360, based on which I sized a carrier PCB or motherboard. Here's the schematic:
 
-<img src="./media/motherboard.svg" style="width: 100%;">
+<img src="./media/motherboard.svg" style="width: 100%;" loading="lazy">
 
 To the left is the MAX98357A audio amplifier breakout board. The ESP32-S3 board is at the center. At the bottom are the tactile switches and the potentiometer. And to the right are the connections to the battery springs of the cartridge slot. Everything is wired to appropriate pins on the ESP32-S3 board. The SD card traces also feature pull-ups as necessary.
 
-<img src="./media/motherboard-1.png" style="width: 100%;">
-<img src="./media/motherboard-2.png" style="width: 100%;">
+<img src="./media/motherboard-1.png" style="width: 100%;" loading="lazy">
+<img src="./media/motherboard-2.png" style="width: 100%;" loading="lazy">
 
 It's a 2-layer board. The top layer houses the tactile switches and the potentiometer. The bottom layer has 2.54mm headers into which I can plug the MAX98357A breakout board and the ESP32-S3 board. In the top right are pads for the SD card connections which are wired to the battery springs of the cartridge slot.
 
 Here's the motherboard with tactile switches, potentiometer, and headers soldered to it:
 
-<img src="./media/motherboard-3.png" style="width: 100%;">
+<img src="./media/motherboard-3.png" style="width: 100%;" loading="lazy">
 
 And here it is with the MAX98357A breakout board and the ESP32-S3 board plugged in:
 
-<img src="./media/motherboard-4.png" style="width: 100%;">
+<img src="./media/motherboard-4.png" style="width: 100%;" loading="lazy">
 
 The motherboard is screwed to the top half of the enclosure and wired up with the cartridge slot mechanism.
 
-<img src="./media/motherboard-5.png" style="width: 100%;">
+<img src="./media/motherboard-5.png" style="width: 100%;" loading="lazy">
 
 Then I plug in the ESP32-S3 board and the MAX98357A breakout board and wire up the speaker to the amp, and the battery to the ESP32-S3 board.
 
-<img src="./media/motherboard-6.png" style="width: 100%;">
+<img src="./media/motherboard-6.png" style="width: 100%;" loading="lazy">
 
 (Note that the ESP32-S3 board is an earlier iteration but the principle is the same.)
 
 The trick to getting this all lined up is importing 3D models of all components into Fusion 360.
 
-<img src="./media/motherboard-7.png" style="width: 100%;">
+<img src="./media/motherboard-7.png" style="width: 100%;" loading="lazy">
 
 EasyEDA allows exporting a 3D model of the PCB, including the components (if they have 3D models). This allows me to experiment with component placement and orientation, try out different PCB layouts, etc. That saves me enormous amounts of time and frustration.
 
@@ -405,11 +405,11 @@ I also need an IC to convert the I2S signal (currently sent to the MAX98357A) to
 ## Bonus content: USB cartridge reader
 I designed a USB cartridge reader for convenience. Instead of unscrewing a cartridge's cover to access the SD card, the reader lets me modify files by simply plugging the cartridge into my laptop via USB, where it appears as a mass storage device.
 
-<img src="./media/reader-1.png" style="width: 100%;">
+<img src="./media/reader-1.png" style="width: 100%;" loading="lazy">
 
 Here's the schematic:
 
-<img src="./media/reader-2.png" style="width: 100%;">
+<img src="./media/reader-2.png" style="width: 100%;" loading="lazy">
 
 It's essentially a wrapper around a [Genesys Logic GL823K IC](https://atta.szlcsc.com/upload/public/pdf/source/20190212/C284879_D3054E8AA735401C3047DCECFFFED6D3.pdf), a USB 2.0 SD/MSPRO Card reader controller.
 
@@ -418,21 +418,21 @@ I rarely use it since I typically insert SD cards directly into my laptop before
 ## Bonus content: modding the Andonstar AD249S-M digital microscope
 The microscope comes like this originally:
 
-<img src="./media/microscope-1.png" style="width: 100%;">
+<img src="./media/microscope-1.png" style="width: 100%;" loading="lazy">
 
 I preferred mounting it on a [Rode PSA1 articulated arm](https://www.amazon.de/-/en/R%C3%B8de-PSA1-articulated-arm-stand/dp/B001D7UYBO/) attached to my desk. This gives me nearly unlimited movement across my work area.
 
 The microscope stand includes a control PCB for the LED lights.
 
-<img src="./media/microscope-2.png" style="width: 100%;">
+<img src="./media/microscope-2.png" style="width: 100%;" loading="lazy">
 
 I disassembled it and removed the control PCB and LED light arms.
 
-<img src="./media/microscope-3.png" style="width: 100%;">
+<img src="./media/microscope-3.png" style="width: 100%;" loading="lazy">
 
 I then designed and 3D printed a mount that attaches to the PSA1 arm, houses the control PCB, and accommodates the LED light arms.
 
-<img src="./media/microscope-4.png" style="width: 100%;">
+<img src="./media/microscope-4.png" style="width: 100%;" loading="lazy">
 
 <video src="./media/microscope_320.mp4" controls style="width:100%;height:auto;display:block;margin:0 auto;"></video>
 
