@@ -64,8 +64,7 @@ Now, my recent blog entries may have given you the idea that I'll teach you ever
 
 However, the above list of tools and skills is a good starting point once you're past the "made an LED blink with an Arduino" stage. Many talented people have described (SMD) soldering, PCB design, and 3D modeling in depth, either in books or videos, much better than I could. See my previous posts for recommendations.
 
-Studying existing designs is also a fantastic way to learn, just as with software. For example, all [Adafruit products] are open source, letting you study their schematics and PCB designs. Want to design a power management circuit? Check out their [PowerBoost 1000](https://www.adafruit.com/product/2465) schematics and PCB layout files. Similarly, when creating my ESP32-based boards, I drew inspiration from [Unexpected Maker](https://unexpectedmaker.com/) and [Waveshare](https://waveshare.com) designs. E.g. check out the [Waveshare ESP32-S3 Mini schematics]
-(https://www.waveshare.com/wiki/ESP32-S3-Tiny).
+Studying existing designs is also a fantastic way to learn, just as with software. For example, all [Adafruit products](http://adafruit.com) are open source, letting you study their schematics and PCB designs. Want to design a power management circuit? Check out their [PowerBoost 1000](https://www.adafruit.com/product/2465) schematics and PCB layout files. Similarly, when creating my ESP32-based boards, I drew inspiration from [Unexpected Maker](https://unexpectedmaker.com/) and [Waveshare](https://waveshare.com) designs. E.g. check out the [Waveshare ESP32-S3 Mini schematics](https://www.waveshare.com/wiki/ESP32-S3-Tiny) .
 
 My final recommendation is to get away from Arduino as soon as you possibly can. It's a great way to learn, but eventually, you'll need to go one level deeper. That opens up a whole new world of possibilities. Like porting DOOM to the ESP32-S3 and have it run at 44FPS.
 
@@ -294,7 +293,7 @@ When a cartridge is inserted, the rod is pushed down, which pushes a switch that
 
 The rod solution just works.
 
-# The mother board
+## The mother board
 As you can see in the last video, the innards of the device were still living on a breadboard at this point. The ESP32-S3 board, the amp, and the buttons and knob needed to be mounted inside the enclosure somehow. I had already designed mounting brackets on the top half of the enclosure, taking into account the size of the tactile switches, the potentiometer, and their 3D printed covers. This allowed me to measure the remaining space in the enclosure inside Fusion 360, based on which I sized a carrier PCB or motherboard. Here's the schematic:
 
 <img src="./media/motherboard.svg" style="width: 100%;" loading="lazy">
