@@ -272,9 +272,7 @@ LedAnimationFrame<num_leds> frames[] = {
 };
 ```
 
-The last frame isn't really a frame of the animation. It marks the end of the array of frames, similar to a `\0` at the end of a string in C. I abuse the `duration` field for that by setting it to `0xffffffff`. Note that instead of `HIGH` and `LOW`, I'm using `1` and `
-
-0`. That's what those defines map to anyway, and it's easier to read in my opinion.
+The last frame isn't really a frame of the animation. It marks the end of the array of frames, similar to a `\0` at the end of a string in C. I abuse the `duration` field for that by setting it to `0xffffffff`. Note that instead of `HIGH` and `LOW`, I'm using `1` and `0`. That's what those defines map to anyway, and it's easier to read in my opinion.
 
 To play back those frames, I need to keep track of what frame I'm on and how much time has elapsed since I started "displaying" that frame on the LEDs. If the elapsed time is greater than the frame duration, I switch to the next frame. If I hit the frame with a duration of `0xffffffff`, I wrap around to the first frame.
 

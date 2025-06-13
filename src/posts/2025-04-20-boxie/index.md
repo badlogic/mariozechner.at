@@ -7,7 +7,9 @@
 <%= render("../../_partials/post-header.html", { title, image, url }) %>
 
 **Table of Contents**
+<div class="toc">
 %%toc%%
+</div>
 
 At the end of July 2024, I embarked on a journey to learn electronics so I could build little gadgets for my son. In my [introductory post](/posts/2024-07-25-electronic-nights-1/) I described a few electronic toys he uses frequently, including the [Tonie Box](https://www.tonies.com/), a device that plays audiobooks and has a [huge library](https://www.tonie.io/books) of content. The Tonie Box is great, until it isn't. As outlined in my original post, it has several deficiencies. Back then, I didn't think I would ever be able to build my own replacement.
 
