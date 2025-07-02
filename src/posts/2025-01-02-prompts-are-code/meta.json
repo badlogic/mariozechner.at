@@ -1,0 +1,8 @@
+{
+    "title": "Taming agentic engineering - Prompts are code, .json/.md files are state",
+    "date": "2025-06-02",
+    "image": "media/hello-computer.jpg",
+    "caption": "Hello, Computer, do my work",
+    "description": "Treating LLMs as shitty general purpose computers we program with natural language. Because throwing shit at the wall wasn't working anymore.",
+    "published": false
+}
