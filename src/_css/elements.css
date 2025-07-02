@@ -137,6 +137,22 @@ article pre code {
     font-style: normal;
 }
 
+/* Ensure code blocks always have bottom margin */
+pre {
+    margin-bottom: 1rem;
+}
+
+/* Fix margin for code blocks in special containers */
+.code-preview + p,
+.code-preview + h1,
+.code-preview + h2,
+.code-preview + h3,
+.code-preview + h4,
+.code-preview + div,
+.code-preview + .code-preview {
+    margin-top: 1rem;
+}
+
 article video {
     width: 100%;
     border-radius: 0.5rem;
