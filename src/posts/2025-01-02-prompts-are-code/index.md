@@ -512,7 +512,7 @@ And now here's the main loop that does the actual porting:
 
 **Step 5** does the actual porting work. The "ultrathink to discern" instruction acknowledges that porting isn't just mechanical translation; it requires judgment about idiomatic differences versus actual functionality changes.
 
-**Steps 6-8** implement more human checkpoints and loop management. The LLM shows its work (via diffs), updates the state only after confirmation, then updates the porting notes with any new observations, and asks permission before continuing to the next type. The state update in step 6 uses `jq` to surgically modify just the `portingState` field - another precise function call that ensures we can resume exactly where we left off. Step 7 captures learnings for future porting decisions, and step 8 completes the loop iteration.
+**Steps 6-8** implement more human checkpoints and program state management. The LLM shows its work (via diffs), then updates the program's persistent state: step 6 writes to `porting-plan.json` to mark the type as done, and step 7 optionally updates `porting-notes.md` with new observations. This is where our program writes its state to disk - crucial for resumability. The state update in step 6 uses `jq` to surgically modify just the `portingState` field, ensuring we can resume exactly where we left off. Step 8 asks permission before the next loop iteration.
 
 This is our complete LLM program: structured initialization, precise function calls, state management, human checkpoints, and deterministic loops. What started as an ad hoc conversation with an AI has become a reproducible, resumable workflow that tackles real-world porting at scale.
 
