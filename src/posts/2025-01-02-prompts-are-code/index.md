@@ -66,7 +66,7 @@ Here's the painful part: between releases, the runtime code changes. We implemen
 
 <img src="media/changeset.png" alt="Git diff showing thousands of lines of code changes">
 
-And no, transpilers won't work for this (trust me, I made money doing compilers.). We need idiomatic ports that preserve the same API surface in a way that feels natural for each language.
+And no, transpilers won't work for this (trust me, bro, I made money doing compilers). We need idiomatic ports that preserve the same API surface in a way that feels natural for each language.
 
 Between releases 4.2 and 4.3-beta, the Java reference implementation  saw significant changes:
 
@@ -79,7 +79,7 @@ Here's how I'd approach this with my manual workflow:
 
 1. Open the changeset in Fork (my git client) and scan through all changed files
 2. Plan the porting order based on the dependency graph: interfaces and enums first (they're usually independent), then try to port dependencies before the classes that use them, hoping to maintain some compilability
-3. Pick a type to port in Java, open a side-by-side diffs, check if the type already exists in the target runtime or needs creation from scratch
+3. Pick a type to port in Java, open a side-by-side diff, check if the type already exists in the target runtime or needs creation from scratch
 4. Port changes line-by-line, method-by-method to the target language
 5. Watch the illusion of order crumble: the dependency graph is cyclic, so there's no perfect porting order that keeps everything compiling (note to self: it would be nice if we had an acyclic type dependency graph)
 6. Can't test individual pieces because a skeletal animation system needs all its parts working in concert
