@@ -1,70 +1,112 @@
-# Blog Writing
-This repository is the blog of Mario Zechner. You will help write blog posts, using the blargh static site generator (https://github.com/badlogic/blargh).
+# mariozechner.at - Personal Blog & Portfolio
 
-## Session start
-When you receive the first message from the user.
-1. Execute `nohup blargh --in src --out html --watch --serve 8080 > /dev/null 2>&1 &`. This starts blargh in watch mode and serves the contents of html/ on localhost:8080.
-2. Execute `open http://localhost:8080`. This opens the browser and shows the locally served static HTML contents. Changes made to src files will auto-reload the current page.
+A minimalist personal blog and portfolio website built with **blargh**, a custom static site generator using JavaScript/EJS templating.
 
-## Important restrictions
-- NEVER use Puppeteer tools (mcp__puppeteer__*) unless explicitly instructed by the user. The user prefers to view the site directly in their browser.
+## Project Structure
 
-## Publishing
-To publish changes to the live site:
-
-### Frontend only
-Execute `./publish.sh` to publish frontend changes only. This builds the static files and deploys them to the server.
-
-### Frontend + Server restart  
-Execute `./publish.sh server` to publish frontend changes AND restart the server with the latest code.
-
-## Writing a new blog entry
-To create a new blog entry
-
-1. Ask the user for the title
-2. Create a folder src/posts/yyyy-mm-dd-short-version-of-title. All subsequent operations happen in that folder.
-3. Create a file meta.json in that folder looking like this
 ```
-{
-    "title": "Blog Post Title",
-    "date": "2025-04-26",
-    "image": "media/header-image.png",
-    "caption": "Caption for the header image",
-    "description": "Brief description of the blog post",
-    "published": false
-}
+.
+├── src/                    # Source files
+│   ├── posts/             # Blog posts (YYYY-MM-DD-title format)
+│   │   └── */             # Each post directory contains:
+│   │       ├── index.md   # Post content in Markdown
+│   │       ├── meta.json  # Post metadata
+│   │       └── media/     # Images, videos, and other assets
+│   ├── _css/              # Modular CSS files
+│   ├── _icons/            # SVG icons
+│   ├── _partials/         # Reusable HTML templates
+│   ├── components.js      # Web components (theme toggle, color band)
+│   ├── index.html         # Homepage template
+│   └── style.css          # Main stylesheet (imports _css files)
+├── html/                  # Generated output (git-ignored)
+├── publish.sh             # Build & deployment script
+└── docker/                # Server-side Docker configuration
 ```
-4. Create an index.md file that MUST start with the following template code and ONLY contain scaffolding:
+
+## Common Tasks
+
+### Add a New Blog Post
+1. Create directory: `src/posts/YYYY-MM-DD-post-title/`
+2. Add `meta.json`:
+   ```json
+   {
+       "title": "Post Title",
+       "date": "YYYY-MM-DD",
+       "image": "media/header.png",
+       "caption": "Header image caption",
+       "description": "SEO description",
+       "published": true
+   }
+   ```
+3. Write content in `index.md` with EJS front matter:
+   ```ejs
+   <%
+   	meta("../../meta.json")
+   	meta()
+   	const path = require('path');
+   	url = url + "/posts/" + path.basename(path.dirname(outputPath)) + "/";
+   %>
+   <%= render("../../_partials/post-header.html", { title, image, url }) %>
+   
+   Your post content here...
+   
+   <%= render("../../_partials/post-footer.html", { title, url }) %>
+   ```
+4. Add media files to `media/` subdirectory
+
+### Development Mode
+```bash
+# Run blargh with watch mode and local server
+nohup blargh --in src --out html --watch --serve 8080 &
+
+# The site will be available at http://localhost:8080
+# Changes to source files will automatically rebuild
 ```
-<%
-	meta("../../meta.json")
-	meta()
-	const path = require('path');
-	url = url + "/posts/" + path.basename(path.dirname(outputPath)) + "/";
-%>
-<%= render("../../_partials/post-header.html", { title, image, url }) %>
 
-**Table of Contents**
-<div class="toc">
-%%toc%%
-</div>
-
-## Introduction
-
-## Conclusion
+### Build for Production
+```bash
+blargh --in src --out html
 ```
-5. Open the specific blog post in the browser using `open http://localhost:8080/posts/yyyy-mm-dd-short-version-of-title/`
 
-IMPORTANT: 
-- The template code at the top is essential for proper rendering and styling. Without it, the blog post will appear bare-bones without the header, styling, or table of contents.
-- Only create the basic scaffolding structure with Introduction and Conclusion headers. Do NOT write any actual content - the user will fill in the content themselves.
+### Deploy to Production
+```bash
+./publish.sh         # Client only
+./publish.sh server  # Client + restart server
+```
 
-## CSS Styling
-The main CSS files are located in `src/_css/`:
-- `elements.css` - Basic HTML element styling (headings, paragraphs, lists, etc.)
-- `utilities.css` - Utility classes for margins, padding, flexbox, etc.
-- `colors.css` - Color variables and themes
-- Other files include code highlighting, fonts, and external libraries
+## Key Features
 
-The CSS files are imported in `src/style.css` and compiled by blargh.
+- **Templating**: EJS-style syntax with `<%= %>` for expressions and `<% %>` for logic
+- **Markdown**: Full support with HTML, code highlighting, and KaTeX math
+- **Media**: Lazy-loaded images and HTML5 video support
+- **RSS**: Auto-generated feed at `/rss.xml`
+- **Themes**: Dark/light mode toggle with localStorage persistence
+- **Responsive**: Max width 720px for optimal readability
 
+## Template Functions
+
+- `meta()` - Include page metadata
+- `render(path, data)` - Render partial templates
+- `metas(path)` - Get metadata for posts
+- `rss(path, channel, items)` - Generate RSS feed
+
+## Styling
+
+- Fira Code font for code blocks
+- Atom One Dark syntax highlighting
+- Custom color palette in `_css/colors.css`
+- Utility classes in `_css/utilities.css`
+
+## Special Markdown Features
+
+- `%%toc%%` - Auto-generate table of contents
+- `<q-l href="..."></q-l>` - Styled external links
+- Standard GitHub Flavored Markdown support
+
+## Writing Guidelines
+
+- NEVER use em-dashes. Start a new sentence, or if you must, use a colon.
+
+## Development Tricks
+
+- Always use the Bash tool to find out the current date

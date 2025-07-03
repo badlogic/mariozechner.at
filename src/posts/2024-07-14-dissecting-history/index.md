@@ -4,7 +4,7 @@
 	const path = require('path');
 	url = url + "/posts/" + path.basename(path.dirname(outputPath)) + "/";
 %>
-<%= render("../../_partials/post-header.html", { title, image, url }) %>
+<%= render("../../_partials/post-header.html", { title, image, url, description, caption, date }) %>
 
 Three years ago, we had a son. As he grows bigger and smarter, I wonder how I can best introduce him to my favorite pastime: programming. Naturally, being the most ["NIH" dad](https://en.wikipedia.org/wiki/Not_invented_here), I will build my own programming environment for kids. I've previously built programming languages. What could go wrong?
 

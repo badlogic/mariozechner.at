@@ -4,7 +4,7 @@
 	const path = require('path');
 	url = url + "/posts/" + path.basename(path.dirname(outputPath)) + "/";
 %>
-<%= render("../../_partials/post-header.html", { title, image, url }) %>
+<%= render("../../_partials/post-header.html", { title, image, url, description, caption, date }) %>
 
 [Christian Cito](https://x.com/chrcit) wrote [2023 Year in Review](https://www.chrcit.com/articles/2023-year-in-review) a while ago. He's an impressive fellow and a member of our group of naive computer kids who thought they could change the world by building grocery price tracking and comparison platforms to counteract price inflation. More on that later.
 

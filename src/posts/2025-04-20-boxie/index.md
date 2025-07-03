@@ -4,7 +4,7 @@
 	const path = require('path');
 	url = url + "/posts/" + path.basename(path.dirname(outputPath)) + "/";
 %>
-<%= render("../../_partials/post-header.html", { title, image, url }) %>
+<%= render("../../_partials/post-header.html", { title, image, url, description, caption, date }) %>
 
 **Table of Contents**
 <div class="toc">
