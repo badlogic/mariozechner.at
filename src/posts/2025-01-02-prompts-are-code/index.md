@@ -516,6 +516,25 @@ And now here's the main loop that does the actual porting:
 
 This is our complete LLM program: structured initialization, precise function calls, state management, human checkpoints, and deterministic loops. What started as an ad hoc conversation with an AI has become a reproducible, resumable workflow that tackles real-world porting at scale.
 
+## Program Execution
+
+Let's see this program in action. The recording below shows Claude Code executing our porting program - one complete cycle from setup through porting a type and updating state:
+
+<script src="https://github.com/asciinema/asciinema-player/releases/download/v3.0.1/asciinema-player.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://github.com/asciinema/asciinema-player/releases/download/v3.0.1/asciinema-player.css" />
+
+<asciinema-player src="media/run.cast" cols="120" rows="40" autoplay="true" preload="true" loop="true"></asciinema-player>
+
+This recording demonstrates the key insight of treating LLMs as computers: **structured program execution**. Watch how Claude Code:
+
+- **Follows the program**: Reads port.md and executes each step methodically
+- **Manages state**: Uses precise jq queries to read and update porting-plan.json
+- **Loads context strategically**: Reads only necessary files when needed
+- **Maintains resumability**: Updates persistent state after each completed type
+- **Implements human checkpoints**: Asks for confirmation before proceeding
+
+Unlike ad hoc prompting where the conversation meanders, this programmatic approach follows a deterministic workflow. The LLM becomes a reliable executor of structured instructions rather than an unpredictable chat partner.
+
 ## Notes
 
 **Sub-agent communication and observability**: Currently with Claude Code, you can spawn sub-agents but have no observability and no way to communicate with them. To make this LLMs-as-computers paradigm more general, tools like Claude Code should allow us to communicate not only with the main agent but also with any sub-agents being spawned. Sub-agents need a way to ask for more input, and we need to observe what they're doing. This means the main agent would have to program the sub-agents: which it already kind of does, but not with the same structured, program-like mindset we use for the main agent. Though I'm not sure this would work well in practice. If our prompt to the main agent also contains the exact workflows for the sub-agents, it might work. If the main agent generates the workflows for the sub-agents on its own, I doubt it would be reliable.
