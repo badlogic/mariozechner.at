@@ -168,7 +168,7 @@ Instead of me manually opening diffs, tracking dependencies, and porting line-by
 
 The final result of this program design can be found in the [spine-port repository](https://github.com/badlogic/spine-port). The program itself is stored in a file called [`port.md`](https://github.com/badlogic/spine-port/blob/main/port.md). When I want to start or continue porting, I start Claude Code in the spine-port directory and tell it to read the `port.md` file in full and execute the workflow. That starts the "program".
 
-In the following sections, we'll walk through each section of this program.
+Writing the `port.md` file was an iterative, collaborative process between me and Claude. In the following sections, we'll walk through each section of this program.
 
 ### Initial Input and State
 
@@ -537,11 +537,15 @@ Unlike ad hoc prompting where the conversation meanders, this programmatic appro
 
 While the LLM cannot handle the full porting process autonomously due to challenges with complex type hierarchies and execution flows, this deterministic workflow dramatically simplifies my work compared to manual porting. The tedious mechanical tasks are now automated, freeing me to focus on the genuinely difficult problems that require human insight.
 
+What previously took me 2-3 weeks, now takes 2-3 days.
+
 ## Future Work
 
-**Sub-agent orchestration**: Current tools like Claude Code spawn sub-agents without observability or communication channels. To scale this programming model, we need structured ways to program sub-agents and monitor their execution. The main agent should define explicit workflows for sub-agents rather than generating them ad hoc, ensuring reliability through the same structured approach we use for the primary workflow.
+As with everything, there's always plenty of room for improvements.
 
 **Testing and debugging**: The deterministic nature of these workflows opens possibilities for traditional software engineering practices. We could test that given specific inputs and state, our programs produce expected outputs. For debugging, we could instrument prompts to write state information at key points, creating execution traces that help identify where workflows diverge from expectations.
+
+**Sub-agent orchestration**: Current tools like Claude Code spawn sub-agents without observability or communication channels. To scale this programming model, we need structured ways to program sub-agents and monitor their execution. The main agent should define explicit workflows for sub-agents rather than generating them ad hoc, ensuring reliability through the same structured approach we use for the primary workflow.
 
 ## Conclusion
 
