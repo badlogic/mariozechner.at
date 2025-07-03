@@ -518,14 +518,14 @@ This is our complete LLM program: structured initialization, precise function ca
 
 ## Program Execution
 
-Let's see this program in action. The recording below shows Claude Code executing our porting program - one complete cycle from setup through porting a type and updating state:
+Let's see this program in action:
 
-<script src="https://github.com/asciinema/asciinema-player/releases/download/v3.0.1/asciinema-player.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://github.com/asciinema/asciinema-player/releases/download/v3.0.1/asciinema-player.css" />
+<video controls>
+    <source src="media/program-execution.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+</video>
 
-<asciinema-player src="media/run.cast" cols="120" rows="40" autoplay="true" preload="true" loop="true"></asciinema-player>
-
-This recording demonstrates the key insight of treating LLMs as computers: **structured program execution**. Watch how Claude Code:
+This recording demonstrates the key insights of treating LLMs as computers:
 
 - **Follows the program**: Reads port.md and executes each step methodically
 - **Manages state**: Uses precise jq queries to read and update porting-plan.json
@@ -535,11 +535,16 @@ This recording demonstrates the key insight of treating LLMs as computers: **str
 
 Unlike ad hoc prompting where the conversation meanders, this programmatic approach follows a deterministic workflow. The LLM becomes a reliable executor of structured instructions rather than an unpredictable chat partner.
 
-## Notes
+While the LLM cannot handle the full porting process autonomously due to challenges with complex type hierarchies and execution flows, this deterministic workflow dramatically simplifies my work compared to manual porting. The tedious mechanical tasks are now automated, freeing me to focus on the genuinely difficult problems that require human insight.
 
-**Sub-agent communication and observability**: Currently with Claude Code, you can spawn sub-agents but have no observability and no way to communicate with them. To make this LLMs-as-computers paradigm more general, tools like Claude Code should allow us to communicate not only with the main agent but also with any sub-agents being spawned. Sub-agents need a way to ask for more input, and we need to observe what they're doing. This means the main agent would have to program the sub-agents: which it already kind of does, but not with the same structured, program-like mindset we use for the main agent. Though I'm not sure this would work well in practice. If our prompt to the main agent also contains the exact workflows for the sub-agents, it might work. If the main agent generates the workflows for the sub-agents on its own, I doubt it would be reliable.
+## Future Work
 
-**Testing and debugging**: By applying this model, we might expand it to include testing and debugging capabilities. Since the workflows we create should be mostly deterministic and outputs are usually in strict formats like JSON or code, it should be possible to implement testing. We could verify that given specific inputs and state, our "program" produces expected outputs. For debugging, traditional debuggers work via instrumentation: inserting calls at specific points in program flow. Similarly, we could instrument our prompts with explicit calls to write out state information or invoke external debugging tools at key workflow points. This would let us trace execution, inspect intermediate state, and identify where workflows diverge from expectations. I haven't tried either approach yet, but the structured nature of this programming model suggests it should be feasible.
+**Sub-agent orchestration**: Current tools like Claude Code spawn sub-agents without observability or communication channels. To scale this programming model, we need structured ways to program sub-agents and monitor their execution. The main agent should define explicit workflows for sub-agents rather than generating them ad hoc, ensuring reliability through the same structured approach we use for the primary workflow.
 
+**Testing and debugging**: The deterministic nature of these workflows opens possibilities for traditional software engineering practices. We could test that given specific inputs and state, our programs produce expected outputs. For debugging, we could instrument prompts to write state information at key points, creating execution traces that help identify where workflows diverge from expectations.
+
+## Conclusion
+
+This mental model has transformed how I work with established codebases using agentic coding tools. By treating LLMs as programmable computers rather than conversational partners, I've found a more reliable approach to complex software tasks. It's not a panacea and won't work for all problems, but it represents a step toward turning AI-assisted coding into an engineering discipline rather than a "throwing shit at the wall" approach.
 
 <%= render("../../_partials/post-footer.html", { title, url }) %>
