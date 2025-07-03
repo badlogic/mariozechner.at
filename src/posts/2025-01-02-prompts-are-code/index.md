@@ -111,16 +111,10 @@ Here's an example of one of the more math-heavy types, `PhysicsConstraint`:
     pointer-events: none;
 }
 
-/* Wrap long lines only in markdown code blocks */
+/* Disable line wrapping for markdown code blocks since port.md is manually wrapped */
 pre code.language-markdown {
-    white-space: pre-wrap;
-    word-break: break-word;
-    overflow-wrap: break-word;
-}
-
-/* For file paths in markdown, try to break at slashes */
-pre code.language-markdown {
-    word-break: break-all;
+    white-space: pre;
+    overflow-x: auto;
 }
 
 /* Normalize spacing after lists */
@@ -176,14 +170,16 @@ The final result of this program design can be found in the [spine-port reposito
 
 In the following sections, we'll walk through each section of this program.
 
-### Setting Up Initial Context
+### Initial Input and State
 
-The `port.md` file starts with a clear description of its purpose and the data structure it works with:
+Every program needs input data and initial state to work with. The `port.md` file starts by defining the data structure that serves as both:
 
 ```markdown
 # Spine Runtimes Porting Program
 
-Collaborative porting of changes between two commits in the Spine runtime reference implementation (Java) to a target runtime. Work tracked in `porting-plan.json` which has the following format:
+Collaborative porting of changes between two commits in the Spine runtime
+reference implementation (Java) to a target runtime. Work tracked in
+`porting-plan.json` which has the following format:
 
 ​```json
 {
@@ -224,25 +220,24 @@ Collaborative porting of changes between two commits in the Spine runtime refere
 
 This data structure is the central state that tracks our porting progress. The `porting-plan.json` file serves as both the initial input and the persistent state for our LLM program. Let's break down what each part means:
 
-**metadata** - Configuration for the porting session:
+**metadata**: Configuration for the porting session:
 - `prevBranch` and `currentBranch`: The git commits we're porting between
 - `spineRuntimesDir`: Where all the runtime implementations live
-- `targetRuntime`: Which runtime we're porting to (e.g., "spine-cpp")
-- `targetRuntimePath` and `targetRuntimeLanguage`: Where to find the target code and what language it's in
+- `targetRuntime`, `targetRuntimePath`, `targetRuntimeLanguage`: Which runtime we're porting to and where to find it
 
-**deletedFiles** - Java files that were removed and need corresponding deletions in the target runtime
+**deletedFiles**: Java files that were removed and need corresponding deletions in the target runtime
 
-**portingOrder** - The heart of the plan. Each entry represents a Java file that changed and contains:
+**portingOrder**: The heart of the plan. Each entry represents a Java file that changed and contains:
 - `javaSourcePath`: The full path to the Java source file
 - `types`: An array of all classes, interfaces, and enums in that file, each with:
   - `name`: The type name (e.g., "Animation")
   - `kind`: Whether it's a class, interface, or enum
   - `startLine` and `endLine`: Where to find it in the Java file
   - `isInner`: Whether it's an inner type
-  - `portingState`: Tracks progress ("pending" or "done")
+  - `portingState`: Tracks progress: "pending" or "done"
   - `candidateFiles`: Where this type likely exists in the target runtime
 
-The `portingState` field is crucial - it's how the LLM tracks what's been done across sessions. When I stop and restart later, the program knows exactly where to pick up.
+The `portingState` field is crucial: it's how the LLM tracks what's been done across sessions. When I stop and restart later, the program knows exactly where to pick up.
 
 But how do we generate all this structured data? Before the LLM can start porting, we need to analyze what changed between the two versions and prepare the data in a format the LLM can efficiently query. I wrote [`generate-porting-plan.js`](https://github.com/badlogic/spine-port/blob/main/generate-porting-plan.js) to automate this preparation:
 
@@ -258,25 +253,268 @@ This script does several things:
 4. **Finds candidate files** in the target runtime where each type likely exists
 5. **Outputs a structured JSON file** that the LLM can read from and write to efficiently via `jq`.
 
-Why pre-generate all this data instead of having the LLM explore the codebase as it goes? Three key reasons:
+Why pre-generate all this data instead of having the LLM explore the codebase as it goes?
 
-**Context efficiency** - Reading files repeatedly burns through context quickly. Each time the LLM needs to check if a type exists or find its methods, that's another tool call and more tokens consumed. With pre-generated JSON, the LLM can answer these questions with a single `jq` query.
+**Determinism**: The same inputs always produce the same plan. LLM exploration might miss files, use wrong search patterns, or get lost in the directory structure. Pre-generation ensures complete, accurate, and reproducible results.
 
-**Speed** - The LLM not having to explore the codebase in an inefficient way speeds up the entire process tremendously. Pre-generating the porting plan JSON takes seconds, whereas having the LLM do this exploration would take multiple orders of magnitude longer.
+**Context efficiency**: The pre-generation saves tokens and turns by not needing the LLM to perform all the steps that `generate-porting-plan.js` does: running git diff, analyzing dependencies, extracting type information, finding candidate files. That's a lot of tool calls and context that would otherwise be wasted.
 
-**Determinism** - The same inputs (git commits and target runtime) always produce the same porting plan. When the LLM explores on its own, it might miss files, search with the wrong patterns, or get lost in the directory structure. Pre-generation ensures we get complete, accurate, and reproducible results every time.
+**Speed**: Generating the plan takes seconds. Having the LLM explore the codebase would take orders of magnitude longer.
 
-The pre-generation step transforms an open-ended exploration problem into a structured data processing task. Instead of "figure out what changed and how to port it," the LLM gets "here's exactly what changed, where it lives, and where it should go."
+This transforms an open-ended exploration problem into structured data processing. Instead of "figure out what changed and how to port it," the LLM gets "here's exactly what changed, where it lives, and where it should go."
 
-No tokens and turns wasted. The context only contains exactly the information we need.
+No tokens and turns wasted. The context contains only the information we need.
 
-### Loading Our Function Library
+### The Function Library
 
-[TO BE CONTINUED - tool descriptions we'll need: file reading, grep, jq, diff generation]
+The next section of `port.md` defines the tools available to our LLM program. Just like traditional programs import libraries, our LLM program needs tools to interact with the world.
+
+```markdown
+## Tools
+
+### VS Claude
+Use the vs-claude MCP server tools for opening files and diffs for the user
+during porting.
+
+​```javascript
+// Open multiple files at once (batch operations)
+mcp__vs-claude__open([
+  {"type": "file", "path": "/abs/path/Animation.java"},    // Java source
+  {"type": "file", "path": "/abs/path/Animation.h"},       // C++ header
+  {"type": "file", "path": "/abs/path/Animation.cpp"}      // C++ source
+]);
+
+// Open single file with line range
+mcp__vs-claude__open({"type": "file", "path": "/abs/path/Animation.java", "startLine": 100, "endLine": 120});
+
+// View git diff for a file
+mcp__vs-claude__open({"type": "gitDiff", "path": "/abs/path/Animation.cpp", "from": "HEAD", "to": "working"});
+​```
+```
+
+**VS Code Integration** keeps the human in the loop. The LLM doesn't just modify files in the background; it opens them in my editor so I can see what's happening. This uses [vs-claude](https://marketplace.visualstudio.com/items?itemName=MarioZechner.vs-claude), an extension I wrote that implements the Model Context Protocol (MCP), turning VS Code into the LLM's display device.
+
+```markdown
+### Progress Tracking
+
+Monitor porting progress using these jq commands:
+
+​```bash
+# Get overall progress percentage
+jq -r '.portingOrder | map(.types[]) | "\(([.[] | select(.portingState == "done")] | length)) types ported out of \(length) total (\(([.[] | select(.portingState == "done")] | length) * 100 / length | floor)% complete)"' porting-plan.json
+
+# Count types by state
+jq -r '.portingOrder | map(.types[]) | group_by(.portingState) | map({state: .[0].portingState, count: length}) | sort_by(.state)' porting-plan.json
+
+# List all completed types
+jq -r '.portingOrder | map(.types[] | select(.portingState == "done") | .name) | sort | join(", ")' porting-plan.json
+
+# Find remaining types to port
+jq -r '.portingOrder | map(.types[] | select(.portingState == "pending") | .name) | length' porting-plan.json
+​```
+```
+
+**Progress Tracking** functions that I can ask the LLM to run at any time. When I want to know how far we've gotten, I tell the LLM to execute one of these queries. They're pre-written and tested, ensuring the LLM uses efficient patterns instead of crafting its own potentially buggy versions.
+
+```markdown
+### Compile Testing
+
+For C++, test compile individual files during porting:
+
+​```bash
+./compile-cpp.js /path/to/spine-cpp/spine-cpp/src/spine/Animation.cpp
+​```
+
+For other languages, we can not compile individual files and should not try to.
+```
+
+**Compile Testing** includes language-specific build commands. Notice the explicit warning about other languages. This prevents the LLM from wasting time trying to compile individual TypeScript or Haxe files, which would fail. It's defensive programming: explicitly state what not to do. Though with our non-deterministic computer, there's always a chance it'll try anyway.
 
 ### The Main Workflow
 
-[TO BE CONTINUED - the actual porting logic with loops, conditionals, and human checkpoints]
+Now we get to the heart of our program: the actual porting logic with its loops, conditionals, and human checkpoints.
+
+```markdown
+## Workflow
+
+Port one type at a time. Ensure the target runtime implementation is functionally
+equivalent to the reference implementation. The APIs must match, bar idiomatic
+differences, including type names, field names, method names, enum names,
+parameter names and so on. Implementations of methods must match EXACTLY, bar
+idiomatic differences, such as differences in collection types.
+
+Follow these steps to port each type:
+
+### 1. Setup (One-time)
+
+DO NOT use the TodoWrite and TodoRead tools for this phase!
+
+1. Read metadata from porting-plan.json:
+   ​```bash
+   jq '.metadata' porting-plan.json
+   ​```
+   - If this fails, abort and tell user to run generate-porting-plan.js
+   - Store these values for later use:
+      - targetRuntime (e.g., "spine-cpp")
+      - targetRuntimePath (e.g., "/path/to/spine-cpp/spine-cpp")
+      - targetRuntimeLanguage (e.g., "cpp")
+```
+
+Like any traditional program, this starts with initialization. The `jq '.metadata'` command is essentially a function call - the program tells the LLM exactly which function to invoke rather than having it figure out the extraction logic itself, saving tokens and turns. Notice the conditional: "If this fails, abort" - defensive programming ensuring the required input exists. The "Store these values" instruction doesn't actually store anything; it tells the LLM what variable names to use when referencing these values extracted from the porting plan metadata later, similar to how variable assignments work. Storage happens implicitly in the LLM's context.
+
+```markdown
+2. In parallel
+   a. Check for conventions file:
+      - Read `${targetRuntime}-conventions.md` (from step 1) in full.
+      - If missing:
+         - Use Task agents in parallel to analyze targetRuntimePath (from step 1)
+         - Document all coding patterns and conventions:
+            * Class/interface/enum definition syntax
+            * Member variable naming (prefixes like m_, _, etc.)
+            * Method naming conventions (camelCase vs snake_case)
+            * Inheritance syntax
+            * File organization (single file vs header/implementation)
+            * Namespace/module/package structure
+            * Memory management (GC, manual, smart pointers)
+            * Error handling (exceptions, error codes, Result types)
+            * Documentation format (Doxygen, JSDoc, etc.)
+            * Type system specifics (generics, templates)
+            * Property/getter/setter patterns
+      - Agents MUST use ripgrep instead of grep!
+      - Save as ${TARGET}-conventions.md
+      - STOP and ask the user to review the generated conventions file
+
+   b. Read `porting-notes.md` in full
+      - If missing create with content:
+      ​```markdown
+      # Porting Notes
+      ​```
+```
+
+The "in parallel" instruction tells the LLM to use multiple tools simultaneously rather than sequentially, speeding up execution.
+
+Step 2a first tries to read the conventions file using **`${targetRuntime}-conventions.md`** - this is like string interpolation, where the LLM inserts the value for the target runtime name that it read from the porting plan. That conventions file captures the coding style and architecture patterns of the target runtime. This documents everything from naming conventions to memory management approaches, ensuring the LLM ports code that fits seamlessly into the existing codebase.
+
+Step 2b sets up the **porting notes file** as a scratch pad for the porting job. This contains observations and edge cases discovered while porting - things like "Java uses `pose` but C++ uses `_applied` in this context" or "don't port toString() methods." It's a running log so we don't forget important discoveries that affect later porting decisions.
+
+If either file doesn't exist, we create it.
+
+Why generate the conventions file as part of the workflow instead of pre-generating it like the porting plan? Pre-generating conventions would require either manual work (time-consuming) or using an LLM with manual review anyway. Generating it inside the program ensures I don't have too many moving parts to juggle, and all instructions aimed at an LLM are contained in a single location: the program.
+
+Here are the actual conventions and porting notes files:
+
+**Conventions (spine-cpp-conventions.md)**
+<div class="code-preview">
+
+```markdown
+<%= fs.readFileSync(path.join(path.dirname(inputPath), "media/spine-cpp-conventions.md"), 'utf8').replace(/```/g, '​```') %>
+```
+
+</div>
+
+**Porting Notes (porting-notes.md)**
+<div class="code-preview">
+
+```markdown
+<%= fs.readFileSync(path.join(path.dirname(inputPath), "media/porting-notes.md"), 'utf8').replace(/```/g, '​```') %>
+```
+
+</div>
+
+At this point, we have exactly what we need in the context and nothing else: `port.md` in full (the program), the metadata from the porting plan JSON, the target runtime conventions in full, and the porting notes in full.
+
+And now here's the main loop that does the actual porting:
+
+```markdown
+### 2. Port Types (Repeat for each)
+
+1. **Find next pending type:**
+   ​```bash
+   # Get next pending type info with candidate files
+   jq -r '.portingOrder[] | {file: .javaSourcePath, types: .types[] | select(.portingState == "pending")} | "\(.file)|\(.types.name)|\(.types.kind)|\(.types.startLine)|\(.types.endLine)|\(.types.candidateFiles | join(","))"' porting-plan.json | head -1
+   ​```
+
+2. **Open files in VS Code via vs-claude (for user review):**
+   - Open Java file and Java file git diff (from prevBranch to currentBranch)
+   - If candidateFiles exists: open all candidate files
+
+3. **Confirm with user:**
+   - Ask: "Port this type? (y/n)"
+   - STOP and wait for confirmation.
+
+4. **Read source files:**
+   - Note: Read the files in parallel if possible
+   - Java: Read the ENTIRE file so it is fully in your context!
+   - Target: If exists, read the ENTIRE file(s) so they are fully in your context!
+   - For large files (>2000 lines): Read in chunks of 1000 lines
+   - Read parent types if needed (check extends/implements)
+   - Goal: Have complete files in context for accurate porting
+
+5. **Port the type:**
+   - Follow conventions from ${targetRuntime}-conventions.md
+   - If target file(s) don't exist, create them and open them for the user via vs-claude
+   - Port incrementally and always ultrathink:
+     * Base on the full content of the files in your context, identify differences and changes that need to be made.
+      * differences can be due to idiomatic differences, or real differences due to new or changed functionality in the reference
+        implementation. Ultrathink to discern which is which.
+     * If changes need to be made:
+       * Structure first (fields, method signatures)
+       * Then method implementations
+       * For C++: Run `./compile-cpp.js` after each method
+   - Use MultiEdit for all changes to one file
+   - Ensure 100% functional parity
+   - Add or update jsdoc, doxygen, etc. based on Javadocs.
+
+6. **Get user confirmation:**
+   - Open a diff of the files you modified, comparing HEAD to working.
+   - Give the user a summary of what you ported
+   - Ask: "Mark as done? (y/n)"
+   - If yes, update status:
+   ​```bash
+   jq --arg file "path/to/file.java" --arg type "TypeName" \
+      '(.portingOrder[] | select(.javaSourcePath == $file) | .types[] | select(.name == $type) | .portingState) = "done"' \
+      porting-plan.json > tmp.json && mv tmp.json porting-plan.json
+   ​```
+
+7. **Update porting-notes.md:**
+   - Add any new patterns or special cases discovered.
+
+8. **STOP and confirm:**
+   - Show what was ported. Ask: "Continue to next type? (y/n)"
+   - Only proceed after confirmation.
+```
+
+**Step 1** queries our state to find the next pending type using another precise `jq` function call. Here's what gets extracted from the porting plan and is now in the context:
+
+```json
+{
+  "javaSourcePath": "/Users/badlogic/workspaces/spine-runtimes/spine-libgdx/spine-libgdx/src/com/esotericsoftware/spine/attachments/AtlasAttachmentLoader.java",
+  "types": [
+    {
+      "name": "AtlasAttachmentLoader",
+      "kind": "class",
+      "startLine": 43,
+      "endLine": 101,
+      "isInner": false,
+      "portingState": "pending",
+      "candidateFiles": [
+        "/Users/badlogic/workspaces/spine-runtimes/spine-cpp/spine-cpp/include/spine/AtlasAttachmentLoader.h",
+        "/Users/badlogic/workspaces/spine-runtimes/spine-cpp/spine-cpp/src/spine/AtlasAttachmentLoader.cpp"
+      ]
+    }
+  ]
+}
+```
+
+**Steps 2-3** implement a human checkpoint: the LLM opens relevant files in VS Code and waits for confirmation before proceeding. This isn't just politeness; it's a safety mechanism ensuring I can abort if something looks wrong, or if I want to port a different type, or if I can immediately see that this type is complete and we should update the porting state and move on to the next type.
+
+**Step 4** is critical: "Read the ENTIRE file so it is fully in your context!" The emphasis prevents the LLM from being lazy and reading only parts of files, which would lead to incomplete ports. After this step, the context contains the complete source files needed for accurate porting.
+
+**Step 5** does the actual porting work. The "ultrathink to discern" instruction acknowledges that porting isn't just mechanical translation; it requires judgment about idiomatic differences versus actual functionality changes.
+
+**Steps 6-8** implement more human checkpoints and loop management. The LLM shows its work (via diffs), updates the state only after confirmation, then updates the porting notes with any new observations, and asks permission before continuing to the next type. The state update in step 6 uses `jq` to surgically modify just the `portingState` field - another precise function call that ensures we can resume exactly where we left off. Step 7 captures learnings for future porting decisions, and step 8 completes the loop iteration.
+
+This is our complete LLM program: structured initialization, precise function calls, state management, human checkpoints, and deterministic loops. What started as an ad hoc conversation with an AI has become a reproducible, resumable workflow that tackles real-world porting at scale.
 
 ## Notes
 
