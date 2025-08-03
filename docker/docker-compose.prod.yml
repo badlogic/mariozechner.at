@@ -1,10 +1,9 @@
 version: "3"
 services:
     web:
-        environment:
-            VIRTUAL_HOST: mariozechner.at,www.mariozechner.at
-            LETSENCRYPT_HOST: mariozechner.at,www.mariozechner.at
-            LETSENCRYPT_EMAIL: contact@mariozechner.at
+        labels:
+            caddy: mariozechner.at, www.mariozechner.at
+            caddy.reverse_proxy: "{{upstreams 80}}"
         networks:
             - reverse_proxy
 networks:
