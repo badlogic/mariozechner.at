@@ -520,7 +520,7 @@ This is our complete LLM program: structured initialization, precise function ca
 
 Let's see this program in action:
 
-<video controls>
+<video controls loading="lazy">
     <source src="media/program-execution.mp4" type="video/mp4">
     Your browser does not support the video tag.
 </video>

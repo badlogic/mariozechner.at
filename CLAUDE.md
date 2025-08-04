@@ -47,17 +47,17 @@ A minimalist personal blog and portfolio website built with **blargh**, a custom
    	url = url + "/posts/" + path.basename(path.dirname(outputPath)) + "/";
    %>
    <%= render("../../_partials/post-header.html", { title, image, url }) %>
-   
+
    Your post content here...
-   
+
    <%= render("../../_partials/post-footer.html", { title, url }) %>
    ```
-4. Add media files to `media/` subdirectory
+4. Add a blank small `header.png` to `media/` subdirectory
 
 ### Development Mode
 ```bash
 # Run blargh with watch mode and local server
-nohup blargh --in src --out html --watch --serve 8080 &
+nohup ./dev.sh
 
 # The site will be available at http://localhost:8080
 # Changes to source files will automatically rebuild
