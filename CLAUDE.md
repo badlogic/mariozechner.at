@@ -61,6 +61,7 @@ nohup ./dev.sh
 
 # The site will be available at http://localhost:8080
 # Changes to source files will automatically rebuild
+# User can see live-updates in browser
 ```
 
 ### Build for Production
@@ -92,7 +93,6 @@ blargh --in src --out html
 
 ## Styling
 
-- Fira Code font for code blocks
 - Atom One Dark syntax highlighting
 - Custom color palette in `_css/colors.css`
 - Utility classes in `_css/utilities.css`
@@ -106,7 +106,4 @@ blargh --in src --out html
 ## Writing Guidelines
 
 - NEVER use em-dashes. Start a new sentence, or if you must, use a colon.
-
-## Development Tricks
-
-- Always use the Bash tool to find out the current date
+- Always add <img> and <video> with lazy loading

@@ -69,7 +69,7 @@ Here's what Claude Code uses Haiku for:
 
 To generate those little whimsical messages you see while you wait for a response for every. token. you. input:
 
-![Haiku messages](media/haiku.jpeg)
+<img src="media/haiku.jpeg" alt="Haiku messages" loading="lazy">
 
 To generate a summary of the conversation for the resume feature (I think):
 
@@ -172,7 +172,7 @@ Luckily for us, the system prompt and tool definitions are part of the Claude Co
 
 As part of Claude Code startup, it checks what the current version is and compares that to its own version. If it's outdated, it just exits.
 
-![Old version error](media/old-version.png)
+<img src="media/old-version.png" alt="Old version error" loading="lazy">
 
 Now expert software engineers would say: "Oh, we can just parse out the system prompt and tool definitions from the Claude Code binary."
 

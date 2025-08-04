@@ -64,7 +64,7 @@ After experimenting with toy projects, I felt ready to apply this approach to a 
 
 Here's the painful part: between releases, the runtime code changes. We implement new features in our reference implementation (spine-libgdx in Java, which powers the editor), then manually port those changes to every other language runtime. It's tedious, error-prone work. Math-heavy code needs exact translation, and after hours of porting, your brain turns to mush. Bugs creep in that are hell to track down.
 
-<img src="media/changeset.png" alt="Git diff showing thousands of lines of code changes">
+<img src="media/changeset.png" alt="Git diff showing thousands of lines of code changes" loading="lazy">
 
 And no, transpilers won't work for this (trust me, bro, I made money doing compilers). We need idiomatic ports that preserve the same API surface in a way that feels natural for each language.
 

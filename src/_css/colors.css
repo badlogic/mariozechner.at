@@ -1,5 +1,5 @@
 :root {
-    --font-family: "Fira Code", "JetBrains Mono", "Berkeley Mono", "Operator Mono", "Dank Mono", "Consolas", "Courier New", "DejaVu Sans Mono", "Liberation Mono", monospace;
+    --font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     --text-color: #111111;
     --dimmed-text-color: #777;
     --background-color: #fff;
