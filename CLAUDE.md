@@ -72,7 +72,7 @@ blargh --in src --out html
 ### Deploy to Production
 ```bash
 ./publish.sh         # Client only
-./publish.sh server  # Client + restart server
+./publish.sh server  # Client + restart server. Only use this if things in docker/ changed
 ```
 
 ## Key Features
@@ -92,7 +92,6 @@ blargh --in src --out html
 - `rss(path, channel, items)` - Generate RSS feed
 
 ## Styling
-
 - Atom One Dark syntax highlighting
 - Custom color palette in `_css/colors.css`
 - Utility classes in `_css/utilities.css`

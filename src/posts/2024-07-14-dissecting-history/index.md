@@ -6,6 +6,11 @@
 %>
 <%= render("../../_partials/post-header.html", { title, image, url, description, caption, date }) %>
 
+**Table of Contents**
+<div class="toc">
+%%toc%%
+</div>
+
 Three years ago, we had a son. As he grows bigger and smarter, I wonder how I can best introduce him to my favorite pastime: programming. Naturally, being the most ["NIH" dad](https://en.wikipedia.org/wiki/Not_invented_here), I will build my own programming environment for kids. I've previously built programming languages. What could go wrong?
 
 There is a lot of research on how to teach programming. However, having conducted user studies in related areas myself and having taught both kids and adults, I feel that the causes and effects within a learning environment are not entirely scientifically quantifiable. What I do know is how I learned to program, and many of my peers have similar stories.

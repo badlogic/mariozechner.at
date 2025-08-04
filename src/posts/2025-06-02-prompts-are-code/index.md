@@ -15,6 +15,11 @@
 %>
 <%= render("../../_partials/post-header.html", { title, image, url, description, caption, date }) %>
 
+**Table of Contents**
+<div class="toc">
+%%toc%%
+</div>
+
 Like most of you, I've been dabbling in what people call "agentic engineering." Truth is, there's not much engineering happening. We're basically throwing shit at the wall and hoping something sticks.
 
 Using LLM coding tools like Claude Code to spin up throwaway greenfield projects or bang out ad hoc scripts? Pretty great experience. But try using them on a big, established codebase, or the-production-app-formerly-known-as-greenfield-project without breaking everything? That's where things get painful.
