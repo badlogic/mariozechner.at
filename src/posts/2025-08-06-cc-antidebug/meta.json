@@ -1,0 +1,8 @@
+{
+    "title": "Patching Claude Code for debugging and /cost support for Max users",
+    "date": "2025-08-06",
+    "image": "media/header.png",
+    "caption": "cc-antidebug patches",
+    "description": "cc-antidebug patches Claude Code to enable Node.js debugger support for SDK-based apps and restores the /cost command functionality for Max plan users",
+    "published": true
+}
