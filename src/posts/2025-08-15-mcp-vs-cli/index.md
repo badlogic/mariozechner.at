@@ -29,7 +29,7 @@ I wanted to quantify the difference by writing an MCP server and a corresponding
 
 ## Building a CLI and MCP server
 
-I started by building a tool that's inherently useful to myself: [terminalcp](https://github.com/badlogic/terminalcp), a (less capable) tmux alternative with an MCP server that lets agents control terminal applications (debuggers, REPLs, vim, htop) like Playwright controls browsers.
+I started by building a tool that's inherently useful to myself: [terminalcp](https://github.com/badlogic/terminalcp/tree/ac9272ed03a40e4d9666ded80667688b16a7a16a), a (less capable) tmux alternative with an MCP server that lets agents control terminal applications (debuggers, REPLs, vim, htop) like Playwright controls browsers.
 
 Here's a quick example of terminalcp in action using the CLI version to debug an executable with lldb and observing the session in a second terminal window:
 
@@ -41,14 +41,14 @@ And here's the terminalcp MCP server version used by Claude Code to debug the sa
 
 Note how I can attach to the lldb session from another terminal instance and co-debug with Claude.
 
-You can bore yourself to death by watching the [making of the v0 of terminalcp](https://www.youtube.com/live/Pd1kP9WJhEo) or check out the [source code](https://github.com/badlogic/terminalcp). Here's a quick rundown:
+You can bore yourself to death by watching the [making of the v0 of terminalcp](https://www.youtube.com/live/Pd1kP9WJhEo) or check out the [source code](https://github.com/badlogic/terminalcp/tree/ac9272ed03a40e4d9666ded80667688b16a7a16a). Here's a quick rundown:
 
-- [TerminalManager](https://github.com/badlogic/terminalcp/blob/main/src/terminal-manager.ts) is the core: uses [node-pty](https://github.com/microsoft/node-pty) to spawn processes in pseudo terminals and [xterm.js](https://xtermjs.org/) to render ANSI sequences.
-- [TerminalServer](https://github.com/badlogic/terminalcp/blob/main/src/terminal-server.ts) runs as a persistent daemon, auto-spawned when needed. Talks to clients via Unix socket (works on Windows too, thanks Node.js).
-- [TerminalClient](https://github.com/badlogic/terminalcp/blob/main/src/terminal-client.ts) handles communication between the MCP/CLI and the server.
-- The [MCP server](https://github.com/badlogic/terminalcp/blob/main/src/mcp-server.ts) just forwards LLM tool calls to the terminal server. Dead simple.
-- [CLI logic](https://github.com/badlogic/terminalcp/blob/main/src/index.ts) I stuffed into index.ts. Parses arguments, handles special keys (up, down, etc.) using tmux-style symbolic key names and control sequences.
-- [AttachClient](https://github.com/badlogic/terminalcp/blob/main/src/attach-client.ts) lets users attach to running sessions as shown in the videos.
+- [TerminalManager](https://github.com/badlogic/terminalcp/blob/ac9272ed03a40e4d9666ded80667688b16a7a16a/src/terminal-manager.ts) is the core: uses [node-pty](https://github.com/microsoft/node-pty) to spawn processes in pseudo terminals and [xterm.js](https://xtermjs.org/) to render ANSI sequences.
+- [TerminalServer](https://github.com/badlogic/terminalcp/blob/ac9272ed03a40e4d9666ded80667688b16a7a16a/src/terminal-server.ts) runs as a persistent daemon, auto-spawned when needed. Talks to clients via Unix socket (works on Windows too, thanks Node.js).
+- [TerminalClient](https://github.com/badlogic/terminalcp/blob/ac9272ed03a40e4d9666ded80667688b16a7a16a/src/terminal-client.ts) handles communication between the MCP/CLI and the server.
+- The [MCP server](https://github.com/badlogic/terminalcp/blob/ac9272ed03a40e4d9666ded80667688b16a7a16a/src/mcp-server.ts) just forwards LLM tool calls to the terminal server. Dead simple.
+- [CLI logic](https://github.com/badlogic/terminalcp/blob/ac9272ed03a40e4d9666ded80667688b16a7a16a/src/index.ts) I stuffed into index.ts. Parses arguments, handles special keys (up, down, etc.) using tmux-style symbolic key names and control sequences.
+- [AttachClient](https://github.com/badlogic/terminalcp/blob/ac9272ed03a40e4d9666ded80667688b16a7a16a/src/attach-client.ts) lets users attach to running sessions as shown in the videos.
 
 I tried to keep terminalcp token-efficient. The server replies with plain text, not JSON (in case of the MCP server, that plain text still gets wrapped in JSON-RPC messages, whoop whoop). The MCP server exposes a single `terminalcp` tool instead of one per command. This is not just voodoo. In an older version of the Claude Code documentation, Anthropic actually mentioned that there's a limit to the number of tools you should expose to the LLM, otherwise it gets confused (I can no longer find that reference). You can also find this [old Claude Sonnet 3.7 cookbook](https://github.com/anthropics/anthropic-cookbook/blob/main/tool_use/parallel_tools_claude_3_7_sonnet.ipynb) where they introduce a batch tool so that Claude can call multiple tools in parallel.
 
@@ -149,9 +149,9 @@ This isn't quite perfect yet. For example, `stdin` could let you specify a patte
 
 My aim wasn't to create a fully scientific evaluation. For that, you should check out [Eugene Yan's blog](https://eugeneyan.com/writing/llm-evaluators/), which has fantastic information. I just aim at getting some basic stats with which I can annoy people at a party.
 
-Here's the bird's eye view: I defined three tasks requiring terminal control (start process, send input, get output) and four tools to test: terminalcp MCP server, terminalcp CLI, tmux, and screen. The [task definitions](https://github.com/badlogic/terminalcp/tree/main/test/eval/tasks) and [tool definitions](https://github.com/badlogic/terminalcp/tree/main/test/eval/tools) are simple markdown files. Tool definitions include some frontmatter that defines how to add them to Claude Code's toolset if necessary, as well as how to clean up after a run that used this tool. These are the inputs to my evaluation framework.
+Here's the bird's eye view: I defined three tasks requiring terminal control (start process, send input, get output) and four tools to test: terminalcp MCP server, terminalcp CLI, tmux, and screen. The [task definitions](https://github.com/badlogic/terminalcp/tree/ac9272ed03a40e4d9666ded80667688b16a7a16a/test/eval/tasks) and [tool definitions](https://github.com/badlogic/terminalcp/tree/ac9272ed03a40e4d9666ded80667688b16a7a16a/test/eval/tools) are simple markdown files. Tool definitions include some frontmatter that defines how to add them to Claude Code's toolset if necessary, as well as how to clean up after a run that used this tool. These are the inputs to my evaluation framework.
 
-The super hacky [evaluation framework](https://github.com/badlogic/terminalcp/tree/main/test/eval) works like this:
+The super hacky [evaluation framework](https://github.com/badlogic/terminalcp/tree/ac9272ed03a40e4d9666ded80667688b16a7a16a/test/eval) works like this:
 
 1. **Run the tests**: For each task and tool combination, the framework spawns a fresh Claude Code instance with a clean config (no custom MCPs, no CLAUDE.md files). Each task/tool combination is run 10 times since LLMs are non-deterministic. The framework combines the task and tool definitions into a single prompt with instructions to output TASK_COMPLETE or TASK_FAILED markers. The Claude Code instance is driven via TerminalManager so the test runner can nudge Claude if it stalls. At the end of each run, it issues `/cost` to capture time, tokens, and cost.
 
@@ -615,36 +615,45 @@ After 120 evaluation runs (3 tasks × 4 tools × 10 repetitions), here's what em
 
 ## Reproducing the Results
 
-You can download the [full evaluation results](media/evaluation-results.zip) if you want to dig into the details. You can take any of the `-prompt.md` files and feed them into Claude Code to reproduce a run. The framework writes out the raw ANSI stream from each run. You can even playback the Claude Code sessions with cat:
+You can download the [full evaluation results](media/evaluation-results.zip) if you want to dig into the details. The framework writes out the raw ANSI stream from each run. You can even playback the Claude Code sessions with cat:
 
 <video src="media/cat.mp4" controls loop loading="lazy"></video>
 
-To reproduce with terminalcp, clone the repo and run from source (the evaluation framework needs the source files). You need to run Claude from the root directory of the clone so the paths resolve. For the MCP version of terminalcp, run Claude with: `--strict-mcp-config --mcp-config mcp.json`
+### Easy mode: Run individual prompts
 
-Where the content of mcp.json is:
-```json
-{
-    "mcpServers": {
-        "terminalcp": {
-            "type": "stdio",
-            "command": "npx",
-            "args": [
-                "tsx",
-                "src/index.ts",
-                "--mcp"
-            ]
-        }
-    }
-}
-```
+Just take any `-prompt.md` file from the evaluation results and feed it into Claude Code. Make sure you have the required tools installed:
+- **terminalcp**: Clone repo, run `npm install`, then run Claude Code in the cloned repo dir
+- **tmux**: Install via package manager (`brew install tmux`, `apt-get install tmux`, etc.)
+- **screen**: Usually pre-installed on Linux/macOS
 
-For the project-analysis task, you'll need to have `GROQ_API_KEY` set in your environment as this test uses GPT-OSS 120B through Groq in OpenCode. If you want to run the tmux prompts, you'll need to install tmux. Screen should be installed on any Linux, BSD, and macOS machine.
+### Full mode: Run the complete evaluation
 
-To run the evaluation harness yourself:
+Clone the repo and run the evaluation framework:
+
 ```bash
+git clone https://github.com/badlogic/terminalcp
+cd terminalcp
+git checkout ac9272ed03a40e4d9666ded80667688b16a7a16a
+npm install
+
+# Run ALL evaluations (3 tasks × 4 tools × 10 repetitions)
 npx tsx test/eval/run.ts
+
+# Or run specific combinations
+npx tsx test/eval/run.ts --agents claude --tasks python-repl --tools tmux --repeat 10
+
+# Generate statistics after runs complete
 npx tsx test/eval/stats.ts
 ```
+
+Available options:
+- `--agents`: Agent to use (for now just: claude)
+- `--tasks`: Task names (debug-lldb, python-repl, project-analysis) or file paths
+- `--tools`: Tool names (terminalcp, terminalcp-cli, tmux, screen) or file paths
+- `--repeat`: Number of repetitions per combination (default: 1)
+- `--parallel`: Number of parallel evaluations (default: 1)
+
+For the debug-lldb task you need to have LLDB installed. For the python-repl task, you need to have Python 3+ installed. For the project-analysis task, you need to install [opencode](https://opencode.ai) and you'll need `GROQ_API_KEY` set in your environment as the task uses GPT-OSS 120B through Groq in opencode.
 
 ## So, MCP or CLI?
 
