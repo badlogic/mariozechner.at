@@ -11,15 +11,15 @@
 %%toc%%
 </div>
 
-[MCP servers](https://modelcontextprotocol.io) (MCPs for short) are all the rage, at least if you follow the thread boys on social media. However, practitioners using agentic coding tools are usually skeptical. Many MCPs flood the context window with unnecessary output or offer dozens of tools, degrading your agent's performance by [poisoning the context](/posts/2025-06-02-prompts-are-code/#toc_0). Many of my peers and I myself usually resort to letting our coding agents directly call CLI tools instead of using MCP servers. But what if we're wrong?
+[MCP servers](https://modelcontextprotocol.io) (MCPs for short) are all the rage. However, practitioners using agentic coding tools are usually skeptical. Many MCPs flood the context window with unnecessary output or offer dozens of tools, degrading your agent's performance by [poisoning the context](/posts/2025-06-02-prompts-are-code/#toc_0). Many practitioners (myself included) resort to letting coding agents directly call CLI tools instead. But what if we're wrong?
 
 ## MCPs as thin wrappers
 
 Just like a lot of meetings could have been emails, a lot of MCPs could have been CLI invocations. For example, there's the [GitHub MCP Server](https://github.com/github/github-mcp-server), which basically just calls into the [GitHub CLI](https://cli.github.com/). There's absolutely no benefit of using that MCP compared to telling your coding agent to use its shell tool to run the GitHub CLI directly. In fact, most often the GitHub MCP Server will lead to much worse results than just letting the agent run the command line tool directly.
 
-Another popular choice is [Context7](https://context7.com/), which is supposed to give your coding agent code snippets for popular libraries so it understands how to use them. I found [some of my open source libraries](https://context7.com/libgdx/libgdx) in there and I can tell you at least for my libraries the snippets are utterly useless. What I instead usually do is have Claude just clone the repository of the dependency, let a sub-agent analyze the repository and spit out a sort of concise user manual markdown file for the task at hand.
+Another popular choice is [Context7](https://context7.com/), which provides code snippets to help agents use popular libraries. I found [some of my own libraries](https://context7.com/libgdx/libgdx) in there and the snippets are utterly useless. What works better is having Claude clone the dependency's repository, then let a sub-agent analyze it and generate a concise user manual for the task at hand.
 
-But it really depends on the MCP and the available CLI tools. For some things, there simply are no CLI tools that would be easy to use, for which an MCP might make sense. Other times the CLI tools might be too verbose and add too many tokens to the context. MCP servers are also the only option for LLM client applications that do not have a built-in bash or shell tool (which of course could be added via an MCP).
+But it depends on the MCP and available CLI tools. Sometimes there are no easy-to-use CLI tools, making MCPs sensible. Other times CLI tools are too verbose. MCP servers are also the only option for LLM clients without a built-in shell tool. And stateful tools are easier to implement as MCPs than CLIs since MCP servers are stateful by default.
 
 I wanted to quantify the difference by writing an MCP server and a corresponding CLI that can be used with Claude Code and for which there are equivalent standard CLI tools Claude encountered during training. I then wrote a hacky evaluation framework to assess:
 - what costs more
@@ -29,7 +29,7 @@ I wanted to quantify the difference by writing an MCP server and a corresponding
 
 ## Building a CLI and MCP server
 
-I started by building a tool that's inherently useful to myself: [terminalcp](https://github.com/badlogic/terminalcp), basically Playwright for terminals. It lets an agent control terminal applications (debuggers, REPLs, vim, htop) like the Playwright MCP lets an agent control browsers. Or framed less clickbait-y: a less capable tmux alternative with an MCP server bolted on top of it.
+I started by building a tool that's inherently useful to myself: [terminalcp](https://github.com/badlogic/terminalcp), a (less capable) tmux alternative with an MCP server that lets agents control terminal applications (debuggers, REPLs, vim, htop) like Playwright controls browsers.
 
 Here's a quick example of terminalcp in action using the CLI version to debug an executable with lldb and observing the session in a second terminal window:
 
@@ -52,77 +52,43 @@ You can bore yourself to death by watching the [making of the v0 of terminalcp](
 
 I tried to keep terminalcp token-efficient. The server replies with plain text, not JSON (in case of the MCP server, that plain text still gets wrapped in JSON-RPC messages, whoop whoop). The MCP server exposes a single `terminalcp` tool instead of one per command. This is not just voodoo. In an older version of the Claude Code documentation, Anthropic actually mentioned that there's a limit to the number of tools you should expose to the LLM, otherwise it gets confused (I can no longer find that reference). You can also find this [old Claude Sonnet 3.7 cookbook](https://github.com/anthropics/anthropic-cookbook/blob/main/tool_use/parallel_tools_claude_3_7_sonnet.ipynb) where they introduce a batch tool so that Claude can call multiple tools in parallel.
 
-Finally, the commands let you pick only the output you need. `stdout` can return just the last N lines of the rendered terminal scrollback buffer. `stream` can strip ANSI codes and return only new output since the last call with `since_last`. Here are all the commands and you can already see how much more verbose the JSON encoding is:
+Finally, the commands let you pick only the output you need. `stdout` can return just the last N lines of the rendered terminal scrollback buffer. `stream` can strip ANSI codes and return only new output since the last call with `since_last`. Here are all the commands, both the MCP tool arguments as JSON and the corresponding CLI invocation:
 
-**start** - spawn a process with optional name and working directory
-```json
+```bash
+# start - spawn a process with optional name and working directory
 {"action": "start", "command": "python3 -i", "name": "repl", "cwd": "/home/user"}
-```
-```bash
 terminalcp start repl "python3 -i"
-```
 
-**stop** - kill one or all processes
-```json
-{"action": "stop", "id": "repl"}  // or just {"action": "stop"} for all
-```
-```bash
+# stop - kill one or all processes
+{"action": "stop", "id": "repl"}  # or just {"action": "stop"} for all
 terminalcp stop repl  # or just terminalcp stop for all
-```
 
-**stdin** - send input to a process
-```json
+# stdin - send input to a process
 {"action": "stdin", "id": "repl", "data": "print('hello')\r"}
-```
-```bash
 terminalcp stdin repl "print('hello')" ::Enter
-```
 
-**stdout** - get rendered terminal screen with optional line limit
-```json
+# stdout - get rendered terminal screen with optional line limit
 {"action": "stdout", "id": "repl", "lines": 50}
-```
-```bash
 terminalcp stdout repl 50
-```
 
-**stream** - get raw output, optionally incremental with `since_last`
-```json
+# stream - get raw output, optionally incremental with since_last
 {"action": "stream", "id": "repl", "since_last": true, "strip_ansi": false}
-```
-```bash
 terminalcp stream repl --since-last --no-strip-ansi
-```
 
-**list** - list all sessions
-```json
+# list - list all sessions
 {"action": "list"}
-```
-```bash
 terminalcp ls
-```
 
-**term-size** - get terminal dimensions
-```json
+# term-size - get terminal dimensions
 {"action": "term-size", "id": "repl"}
-```
-```bash
 # Not exposed in CLI
-```
 
-**version** - check compatibility
-```json
+# version - check compatibility
 {"action": "version"}
-```
-```bash
 terminalcp version
-```
 
-**kill-server** - shut everything down
-```json
+# kill-server - shut everything down
 {"action": "kill-server"}
-```
-```bash
 terminalcp kill-server
 ```
 
@@ -183,30 +149,26 @@ This isn't quite perfect yet. For example, `stdin` could let you specify a patte
 
 My aim wasn't to create a fully scientific evaluation. For that, you should check out [Eugene Yan's blog](https://eugeneyan.com/writing/llm-evaluators/), which has fantastic information. I just aim at getting some basic stats with which I can annoy people at a party.
 
-Here's the bird's eye view of my evaluation: I define three tasks that require the agent to use a tool with which it can start a process, send input, and get output - basically what terminalcp and similar tools support. I then define all the tools we want to test: terminalcp MCP server, terminalcp CLI, tmux, and screen. The [task definitions](https://github.com/badlogic/terminalcp/tree/main/test/eval/tasks) and [tool definitions](https://github.com/badlogic/terminalcp/tree/main/test/eval/tools) are simple markdown files. Tool definitions include some frontmatter that defines how to add them to Claude Code's toolset if necessary, as well as how to clean up after a run that used this tool. These are the inputs to my evaluation framework.
+Here's the bird's eye view: I defined three tasks requiring terminal control (start process, send input, get output) and four tools to test: terminalcp MCP server, terminalcp CLI, tmux, and screen. The [task definitions](https://github.com/badlogic/terminalcp/tree/main/test/eval/tasks) and [tool definitions](https://github.com/badlogic/terminalcp/tree/main/test/eval/tools) are simple markdown files. Tool definitions include some frontmatter that defines how to add them to Claude Code's toolset if necessary, as well as how to clean up after a run that used this tool. These are the inputs to my evaluation framework.
 
 The super hacky [evaluation framework](https://github.com/badlogic/terminalcp/tree/main/test/eval) works like this:
 
-1. **Run the tests**: For each task and tool combination, the framework spawns a fresh Claude Code instance with a clean config. No custom MCPs, no CLAUDE.md files, nothing. Since LLMs are non-deterministic and outputs may vary, each task/tool combination is run 10 times. It combines the task description and tool definition into a single prompt with some glue that tells the agent to output TASK_COMPLETE or TASK_FAILED markers at the end, which can be parsed. The Claude Code instance is driven via the TerminalManager discussed above, so the test runner can nudge Claude to continue if it stalls out. At the end of each run, it issues the `/cost` command to get time taken, token usage, and cost.
+1. **Run the tests**: For each task and tool combination, the framework spawns a fresh Claude Code instance with a clean config (no custom MCPs, no CLAUDE.md files). Each task/tool combination is run 10 times since LLMs are non-deterministic. The framework combines the task and tool definitions into a single prompt with instructions to output TASK_COMPLETE or TASK_FAILED markers. The Claude Code instance is driven via TerminalManager so the test runner can nudge Claude if it stalls. At the end of each run, it issues `/cost` to capture time, tokens, and cost.
 
 2. **Capture everything**: Each run produces multiple output files:
    - The prompt that was sent
    - The terminal scrollback buffer (what you'd see on screen)
    - The raw ANSI stream (with and without escape codes)
 
-3. **Extract statistics**: Once all the runs are complete, a separate script parses the outputs to extract:
-   - Success/failure (looks for TASK_COMPLETE and TASK_FAILED markers)
-   - Total cost in dollars
-   - Wall time duration
-   - Token usage by model (input, output, cache)
+3. **Extract statistics**: Parses outputs for success/failure markers, cost, time, and token usage by model.
 
-4. **Judge with Claude**: The framework uses Claude Code to judge the runs for a specific task and tool combination, reading all the output files and assessing what went well, what failed, and why. It's also instructed to suggest improvements that would make it easier for the agent to perform the task. In a second step, we invoke Claude again and give it all the judgments for the task/tool combinations and ask it to rank the tools for that specific task, along with tool-by-tool analysis, key insights, and recommendations.
+4. **Judge with Claude**: The framework uses Claude Code to judge each task/tool combination, reading outputs and assessing what worked, what failed, and why. It also suggests improvements for the task. In a second pass, Claude ranks all tools for each task with analysis, insights, and recommendations.
 
 The framework can run evaluations in parallel, repeat them multiple times for consistency, and handles cleanup between runs. A full run produces a lot of files.
 
 <img src="media/mdfiles.png" loading="lazy" />
 
-Which is why I use Claude as a judge to give me some initial insights which I can then check by hand.
+Which is why I use Claude as a judge to give me some initial insights I can then use to navigate the files for manual analysis.
 
 Let's have a quick look at the tools and task definitions.
 
@@ -529,17 +491,17 @@ Complete the task using only the tool specified above.
 
 ### Running the evaluation
 
-The evaluation is run through a simple CLI that lets me specify which tasks and tools I want to evaluate and how often I want each combination to be repeated. For example, I can run all tasks with all tools 10 times each, or just test tmux on the Python REPL task 3 times. The framework generates the prompt files for each task/tool combination, then uses TerminalManager to spawn Claude Code and tell it to read the file and follow the instructions. If Claude Code stalls, the framework nudges it to continue. Once the framework detects that Claude is done, it issues the `/cost` command and saves the scrollback buffer and ANSI stream to files.
+The evaluation runs through a simple CLI where I specify which task/tool combinations to test and how many repetitions. The framework generates prompts for each combination, spawns Claude Code via TerminalManager, and monitors execution. If Claude stalls, it gets nudged to continue. Once complete, it captures costs and saves all outputs.
 
 Here's what that looks like:
 
 <video src="media/run.mp4" controls loading="lazy"></video>
 
-Since in this specific evaluation I'm evaluating terminal multiplexers, I can attach to the session that Claude is trying to steer and see what Claude is actually doing.
+Since I'm evaluating terminal multiplexers, I can attach to the session and watch what Claude is doing.
 
 ### Statistics and judgments
 
-In the last step, after all evaluation runs are complete and all the files are written to disk, I run a second CLI command that parses the files, extracts statistics from the `/cost` command output, lets Claude judge the runs for each task/tool combination, and finally creates a ranking for the tools for a specific task as a second judgment.
+After all runs complete, a second CLI command parses the outputs, extracts statistics, and has Claude judge each task/tool combination and rank the tools.
 
 <img src="media/stats.png" loading="lazy" />
 
@@ -615,29 +577,49 @@ You may have noticed that the structure would allow for evaluating other coding 
 
 After 120 evaluation runs (3 tasks × 4 tools × 10 repetitions), here's what emerged:
 
-<%= fs.readFileSync(path.join(path.dirname(inputPath), "media/tables.md"), "utf8") %>
+<div id="evaluation-tables">
+  <div style="text-align: center; padding: 2em;">Loading evaluation results...</div>
+</div>
+
+### Token Usage
+
+<div style="margin: 2em 0; height: 400px;">
+  <canvas id="sonnetTokenChart"></canvas>
+</div>
+
+<div style="margin: 2em 0; height: 400px;">
+  <canvas id="haikuTokenChart"></canvas>
+</div>
+
+<div style="margin: 2em 0; height: 400px;">
+  <canvas id="cacheTokenChart"></canvas>
+</div>
+
+<script>
+<%= fs.readFileSync(path.join(path.dirname(inputPath), "media/_chart.min.js"), "utf8") %>
+</script>
+
+<script>
+<%= fs.readFileSync(path.join(path.dirname(inputPath), "media/evaluation-tables.js"), "utf8") %>
+</script>
 
 ### Key Findings
 
-1. **MCP vs CLI is a wash**: The terminalcp MCP and CLI versions performed nearly identically. The MCP was slightly faster and cheaper, but the difference is marginal.
+1. **MCP vs CLI truly is a wash**: Both terminalcp MCP and CLI versions achieved 100% success rates. The MCP version was 23% faster (51m vs 66m) and 2.5% cheaper (\$19.45 vs \$19.95).
 
-2. **Standard tools struggle**: Screen failed 33% of the time overall. Its archaic interface and the hardcopy bug in v4.0.3 caused Claude to retry operations multiple times. Tmux did better but still failed on one project analysis task.
+2. **Screen completely failed on project analysis**: Screen had 0% success on the project analysis task - it couldn't switch models in OpenCode's TUI. This dropped its overall success rate to 67%.
 
-3. **Token efficiency matters**: The cleaner output from terminalcp (both MCP and CLI) led to lower costs. Screen's verbose output and retry loops made it the most expensive option.
+3. **MCP's hidden advantage: no security checks**: The lower Haiku token usage for terminalcp MCP (35k vs 1.3-2M) reveals that CLI tools trigger Claude Code's [malicious command detection](https://mariozechner.at/posts/2025-08-03-cchistory/#toc_1) on every bash invocation. MCP bypasses this overhead entirely. It also means fewer round trips to Anthropic's servers.
 
-4. **Training data helps, but not enough**: Despite tmux and screen being in Claude's training data, the in-context instructions for terminalcp were sufficient to achieve better performance.
+4. **Task complexity determines the winner**: For simpler tasks (LLDB debugging, Python REPL), tmux actually beats terminalcp on cost by 10-22%. But for complex tasks requiring more back-and-forth (project analysis), terminalcp's cleaner output gives it a 39% cost advantage over tmux. Overall totals are close: terminalcp at \$19-\$20, tmux at \$22.
 
-Here's what Claude's self-judgment had to say about screen's performance on the project analysis task:
+## Reproducing the Results
 
-> "The agent struggled significantly with screen's output capture. Multiple attempts to get clean output failed, leading to repeated retries and eventual timeout. The hardcopy workaround didn't work reliably, and the agent got stuck in a loop trying to capture the model's response."
+You can download the [full evaluation results](media/evaluation-results.zip) if you want to dig into the details. You can take any of the `-prompt.md` files and feed them into Claude Code to reproduce a run. The framework writes out the raw ANSI stream from each run. You can even playback the Claude Code sessions with cat:
 
-And about terminalcp MCP:
+<video src="media/cat.mp4" controls loop loading="lazy"></video>
 
-> "Clean, efficient execution. The agent immediately understood the tool's interface and completed the task with minimal back-and-forth. The structured JSON responses made it easy to parse output and detect completion."
-
-You can download the [full evaluation results](media/evaluation-results.zip) if you want to dig into the details. You can take any of the `-prompt.md` files and feed them into Claude Code to reproduce a run. 
-
-To try it with terminalcp, you'll need to clone the repo and run from source since terminalcp isn't published to npm yet. You need to run Claude from the root directory of the clone so the paths resolve. For the MCP version of terminalcp, run Claude with: `--strict-mcp-config --mcp-config mcp.json`
+To reproduce with terminalcp, clone the repo and run from source (the evaluation framework needs the source files). You need to run Claude from the root directory of the clone so the paths resolve. For the MCP version of terminalcp, run Claude with: `--strict-mcp-config --mcp-config mcp.json`
 
 Where the content of mcp.json is:
 ```json
@@ -658,7 +640,7 @@ Where the content of mcp.json is:
 
 For the project-analysis task, you'll need to have `GROQ_API_KEY` set in your environment as this test uses GPT-OSS 120B through Groq in OpenCode. If you want to run the tmux prompts, you'll need to install tmux. Screen should be installed on any Linux, BSD, and macOS machine.
 
-You can also try to run the evaluation harness yourself:
+To run the evaluation harness yourself:
 ```bash
 npx tsx test/eval/run.ts
 npx tsx test/eval/stats.ts

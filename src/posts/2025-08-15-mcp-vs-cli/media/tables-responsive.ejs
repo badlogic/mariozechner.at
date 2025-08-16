@@ -1,0 +1,368 @@
+<%
+// Import required modules
+const fs = require('fs');
+const path = require('path');
+
+// Read evaluation data
+const evalData = JSON.parse(fs.readFileSync(path.join(path.dirname(inputPath), "evaluation-summary.json"), "utf8"));
+
+// Tools and tasks
+const tools = ['terminalcp', 'terminalcp-cli', 'tmux', 'screen'];
+const tasks = ['debug-lldb', 'project-analysis', 'python-repl'];
+const toolNames = {
+  'terminalcp': 'terminalcp (MCP)',
+  'terminalcp-cli': 'terminalcp (CLI)',
+  'tmux': 'tmux',
+  'screen': 'screen'
+};
+const taskNames = {
+  'debug-lldb': 'Debug (LLDB)',
+  'project-analysis': 'Project Analysis',
+  'python-repl': 'Python REPL'
+};
+
+// Calculate all metrics
+const metrics = {};
+tools.forEach(tool => {
+  metrics[tool] = {
+    success: {},
+    cost: {},
+    time: {}
+  };
+  
+  let totalSuccess = 0, totalRuns = 0;
+  let totalCost = 0, totalTime = 0;
+  
+  tasks.forEach(task => {
+    const runs = evalData['claude-code'][task]?.[tool]?.runs || [];
+    const successful = runs.filter(r => r.success).length;
+    const total = runs.length;
+    
+    metrics[tool].success[task] = {
+      count: successful,
+      total: total,
+      rate: total > 0 ? (successful / total * 100).toFixed(0) : 0
+    };
+    
+    totalSuccess += successful;
+    totalRuns += total;
+    
+    // Calculate costs
+    const taskCost = runs.reduce((sum, r) => sum + (r.totalCost || 0), 0);
+    metrics[tool].cost[task] = taskCost;
+    totalCost += taskCost;
+    
+    // Calculate time
+    const parseDuration = (dur) => {
+      if (!dur) return 0;
+      let seconds = 0;
+      const match = dur.match(/(\d+)m\s*([\d.]+)s/);
+      if (match) {
+        seconds = parseInt(match[1]) * 60 + parseFloat(match[2]);
+      } else if (dur.includes('s')) {
+        seconds = parseFloat(dur.replace('s', ''));
+      }
+      return seconds;
+    };
+    
+    const taskTime = runs.reduce((sum, r) => sum + parseDuration(r.totalDurationWall), 0);
+    metrics[tool].time[task] = taskTime;
+    totalTime += taskTime;
+  });
+  
+  metrics[tool].overallSuccess = totalRuns > 0 ? (totalSuccess / totalRuns * 100).toFixed(0) : 0;
+  metrics[tool].totalCost = totalCost;
+  metrics[tool].totalTime = totalTime;
+});
+
+// Format time
+const formatTime = (seconds) => {
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
+};
+%>
+
+<style>
+.eval-metrics {
+  margin: 2em 0;
+}
+
+.metric-cards {
+  display: grid;
+  gap: 1.5em;
+  margin-bottom: 2em;
+}
+
+@media (min-width: 768px) {
+  .metric-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.metric-card {
+  border: 1px solid var(--color-border, #ddd);
+  border-radius: 8px;
+  padding: 1.5em;
+  background: var(--color-bg-secondary, #f9f9f9);
+}
+
+.metric-card h4 {
+  margin: 0 0 1em 0;
+  font-size: 1.1em;
+  color: var(--color-primary, #333);
+}
+
+.metric-grid {
+  display: grid;
+  gap: 0.5em;
+}
+
+.metric-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  padding: 0.5em;
+  background: var(--color-bg, white);
+  border-radius: 4px;
+}
+
+.metric-label {
+  font-weight: 500;
+}
+
+.metric-value {
+  font-family: monospace;
+  text-align: right;
+}
+
+.success-100 { color: #16a34a; font-weight: 600; }
+.success-0 { color: #dc2626; font-weight: 600; }
+.overall-metric {
+  margin-top: 1em;
+  padding-top: 1em;
+  border-top: 1px solid var(--color-border, #ddd);
+}
+
+.tool-comparison {
+  overflow-x: auto;
+  margin: 2em 0;
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9em;
+}
+
+.comparison-table th,
+.comparison-table td {
+  padding: 0.75em;
+  text-align: left;
+  border-bottom: 1px solid var(--color-border, #ddd);
+}
+
+.comparison-table th {
+  background: var(--color-bg-secondary, #f9f9f9);
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+}
+
+.comparison-table .number {
+  text-align: right;
+  font-family: monospace;
+}
+
+@media (max-width: 640px) {
+  .comparison-table {
+    font-size: 0.85em;
+  }
+  
+  .comparison-table th,
+  .comparison-table td {
+    padding: 0.5em;
+  }
+  
+  /* Hide task names on mobile, show abbreviations */
+  .task-full { display: none; }
+  .task-abbr { display: inline; }
+}
+
+@media (min-width: 641px) {
+  .task-full { display: inline; }
+  .task-abbr { display: none; }
+}
+
+.best-value {
+  color: #16a34a;
+  font-weight: 600;
+}
+
+.worst-value {
+  color: #dc2626;
+}
+</style>
+
+<div class="eval-metrics">
+
+<h3>Performance by Tool</h3>
+
+<div class="metric-cards">
+<% tools.forEach(tool => { %>
+  <div class="metric-card">
+    <h4><%= toolNames[tool] %></h4>
+    <div class="metric-grid">
+      <% tasks.forEach(task => { 
+        const success = metrics[tool].success[task];
+        const successClass = success.rate == 100 ? 'success-100' : success.rate == 0 ? 'success-0' : '';
+      %>
+      <div class="metric-row">
+        <span class="metric-label"><%= taskNames[task] %></span>
+        <span class="metric-value <%= successClass %>"><%= success.count %>/<%= success.total %> (<%= success.rate %>%)</span>
+      </div>
+      <% }); %>
+      <div class="metric-row overall-metric">
+        <span class="metric-label"><strong>Overall Success</strong></span>
+        <span class="metric-value <%= metrics[tool].overallSuccess == 100 ? 'success-100' : metrics[tool].overallSuccess < 70 ? 'success-0' : '' %>">
+          <strong><%= metrics[tool].overallSuccess %>%</strong>
+        </span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">Total Cost</span>
+        <span class="metric-value">$<%= metrics[tool].totalCost.toFixed(2) %></span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">Total Time</span>
+        <span class="metric-value"><%= formatTime(metrics[tool].totalTime) %></span>
+      </div>
+    </div>
+  </div>
+<% }); %>
+</div>
+
+<h3>Task Comparison</h3>
+
+<div class="tool-comparison">
+  <table class="comparison-table">
+    <thead>
+      <tr>
+        <th>Metric</th>
+        <% tools.forEach(tool => { %>
+        <th><%= toolNames[tool] %></th>
+        <% }); %>
+      </tr>
+    </thead>
+    <tbody>
+      <% tasks.forEach(task => { %>
+      <tr>
+        <td colspan="5" style="background: var(--color-bg-secondary, #f9f9f9); font-weight: 600;">
+          <%= taskNames[task] %>
+        </td>
+      </tr>
+      <tr>
+        <td style="padding-left: 2em;">Success Rate</td>
+        <% 
+        // Find best and worst values for this metric
+        const rates = tools.map(t => parseInt(metrics[t].success[task].rate));
+        const maxRate = Math.max(...rates);
+        const minRate = Math.min(...rates);
+        
+        tools.forEach(tool => { 
+          const rate = parseInt(metrics[tool].success[task].rate);
+          const valueClass = rate === maxRate && rate === 100 ? 'best-value' : 
+                             rate === minRate && rate === 0 ? 'worst-value' : '';
+        %>
+        <td class="number <%= valueClass %>"><%= metrics[tool].success[task].rate %>%</td>
+        <% }); %>
+      </tr>
+      <tr>
+        <td style="padding-left: 2em;">Avg Cost</td>
+        <% 
+        const costs = tools.map(t => {
+          const runs = evalData['claude-code'][task]?.[t]?.runs || [];
+          return runs.length > 0 ? metrics[t].cost[task] / runs.length : 0;
+        });
+        const minCost = Math.min(...costs.filter(c => c > 0));
+        const maxCost = Math.max(...costs);
+        
+        tools.forEach(tool => { 
+          const runs = evalData['claude-code'][task]?.[tool]?.runs || [];
+          const avgCost = runs.length > 0 ? metrics[tool].cost[task] / runs.length : 0;
+          const valueClass = avgCost === minCost ? 'best-value' : 
+                             avgCost === maxCost ? 'worst-value' : '';
+        %>
+        <td class="number <%= valueClass %>">$<%= avgCost.toFixed(3) %></td>
+        <% }); %>
+      </tr>
+      <tr>
+        <td style="padding-left: 2em;">Avg Time</td>
+        <% 
+        const times = tools.map(t => {
+          const runs = evalData['claude-code'][task]?.[t]?.runs || [];
+          return runs.length > 0 ? metrics[t].time[task] / runs.length : 0;
+        });
+        const minTime = Math.min(...times.filter(t => t > 0));
+        const maxTime = Math.max(...times);
+        
+        tools.forEach(tool => { 
+          const runs = evalData['claude-code'][task]?.[tool]?.runs || [];
+          const avgTime = runs.length > 0 ? metrics[tool].time[task] / runs.length : 0;
+          const valueClass = avgTime === minTime ? 'best-value' : 
+                             avgTime === maxTime ? 'worst-value' : '';
+        %>
+        <td class="number <%= valueClass %>"><%= formatTime(avgTime) %></td>
+        <% }); %>
+      </tr>
+      <% }); %>
+      
+      <tr style="border-top: 2px solid var(--color-border, #ddd);">
+        <td><strong>Overall Success</strong></td>
+        <% 
+        const overallRates = tools.map(t => parseInt(metrics[t].overallSuccess));
+        const maxOverall = Math.max(...overallRates);
+        const minOverall = Math.min(...overallRates);
+        
+        tools.forEach(tool => { 
+          const rate = parseInt(metrics[tool].overallSuccess);
+          const valueClass = rate === maxOverall && rate === 100 ? 'best-value' : 
+                             rate === minOverall && rate < 70 ? 'worst-value' : '';
+        %>
+        <td class="number <%= valueClass %>"><strong><%= metrics[tool].overallSuccess %>%</strong></td>
+        <% }); %>
+      </tr>
+      <tr>
+        <td><strong>Total Cost</strong></td>
+        <% 
+        const totalCosts = tools.map(t => metrics[t].totalCost);
+        const minTotalCost = Math.min(...totalCosts);
+        const maxTotalCost = Math.max(...totalCosts);
+        
+        tools.forEach(tool => { 
+          const cost = metrics[tool].totalCost;
+          const valueClass = cost === minTotalCost ? 'best-value' : 
+                             cost === maxTotalCost ? 'worst-value' : '';
+        %>
+        <td class="number <%= valueClass %>"><strong>$<%= cost.toFixed(2) %></strong></td>
+        <% }); %>
+      </tr>
+      <tr>
+        <td><strong>Total Time</strong></td>
+        <% 
+        const totalTimes = tools.map(t => metrics[t].totalTime);
+        const minTotalTime = Math.min(...totalTimes);
+        const maxTotalTime = Math.max(...totalTimes);
+        
+        tools.forEach(tool => { 
+          const time = metrics[tool].totalTime;
+          const valueClass = time === minTotalTime ? 'best-value' : 
+                             time === maxTotalTime ? 'worst-value' : '';
+        %>
+        <td class="number <%= valueClass %>"><strong><%= formatTime(time) %></strong></td>
+        <% }); %>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</div>

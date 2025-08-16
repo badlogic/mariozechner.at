@@ -26,8 +26,9 @@ A minimalist personal blog and portfolio website built with **blargh**, a custom
 ## Common Tasks
 
 ### Add a New Blog Post
-1. Create directory: `src/posts/YYYY-MM-DD-post-title/`
-2. Add `meta.json`:
+1. Check today's date first: `date +%Y-%m-%d`
+2. Create directory: `src/posts/YYYY-MM-DD-post-title/` (use short slugs)
+3. Add `meta.json`:
    ```json
    {
        "title": "Post Title",
@@ -38,7 +39,7 @@ A minimalist personal blog and portfolio website built with **blargh**, a custom
        "published": true
    }
    ```
-3. Write content in `index.md` with EJS front matter:
+4. Write content in `index.md` with EJS front matter:
    ```ejs
    <%
    	meta("../../meta.json")
@@ -49,15 +50,19 @@ A minimalist personal blog and portfolio website built with **blargh**, a custom
    <%= render("../../_partials/post-header.html", { title, image, url }) %>
 
    Your post content here...
+   
+   <div class="toc">
+   %%toc%%
+   </div>
 
    <%= render("../../_partials/post-footer.html", { title, url }) %>
    ```
-4. Add a blank small `header.png` to `media/` subdirectory
+5. Add header image (png or jpg) to `media/` subdirectory
 
 ### Development Mode
 ```bash
 # Run blargh with watch mode and local server
-nohup ./dev.sh
+./dev.sh
 
 # The site will be available at http://localhost:8080
 # Changes to source files will automatically rebuild
@@ -98,7 +103,7 @@ blargh --in src --out html
 
 ## Special Markdown Features
 
-- `%%toc%%` - Auto-generate table of contents
+- `%%toc%%` - Auto-generate table of contents (wrap in `<div class="toc">%%toc%%</div>`)
 - `<q-l href="..."></q-l>` - Styled external links
 - Standard GitHub Flavored Markdown support
 
