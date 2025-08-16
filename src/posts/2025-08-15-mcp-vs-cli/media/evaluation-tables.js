@@ -101,7 +101,6 @@ function buildEvaluationTables(evalData) {
     white-space: nowrap;
   }
   .eval-table th {
-    background: var(--color-bg-secondary, #f9f9f9);
     font-weight: 600;
     position: sticky;
     left: 0;
@@ -111,12 +110,10 @@ function buildEvaluationTables(evalData) {
   .eval-table td:first-child {
     position: sticky;
     left: 0;
-    background: var(--color-bg, white);
     z-index: 2;
     min-width: 120px;
   }
   .eval-table th:first-child {
-    background: var(--color-bg-secondary, #f9f9f9);
     z-index: 3;
   }
   .eval-table td {
