@@ -15,7 +15,7 @@
 
 ## MCPs as thin wrappers
 
-Just like a lot of meetings could have been emails, a lot of MCPs could have been CLI invocations. For example, there's the [GitHub MCP Server](https://github.com/github/github-mcp-server), which basically just calls into the [GitHub CLI](https://cli.github.com/). There's absolutely no benefit of using that MCP compared to telling your coding agent to use its shell tool to run the GitHub CLI directly. In fact, most often the GitHub MCP Server will lead to much worse results than just letting the agent run the command line tool directly.
+Just like a lot of meetings could have been emails, a lot of MCPs could have been CLI invocations. For example, there's the [GitHub MCP Server](https://github.com/github/github-mcp-server), which reimplements functionality that's already available in the [GitHub CLI](https://cli.github.com/). There's little benefit of using that MCP compared to telling your coding agent to use its shell tool to run the GitHub CLI directly. In fact, most often the GitHub MCP Server will lead to much worse results than just letting the agent run the command line tool directly.
 
 Another popular choice is [Context7](https://context7.com/), which provides code snippets to help agents use popular libraries. I found [some of my own libraries](https://context7.com/libgdx/libgdx) in there and the snippets are utterly useless. What works better is having Claude clone the dependency's repository, then let a sub-agent analyze it and generate a concise user manual for the task at hand.
 
