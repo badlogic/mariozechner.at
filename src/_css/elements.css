@@ -149,12 +149,12 @@ article h1, article h2, article h3, article h4 {
 
 article pre {
     margin-bottom: 1.5rem;
-    border-radius: 0.5rem;;
+    border-radius: 0.5rem;
 }
 
 article code {
     border: 1px solid var(--border-color);
-    border-radius: 0.5rem;
+    border-radius: 0.25rem;
     padding: 0 0.25em;
     font-style: italic;
     font-size: 14px;
@@ -163,6 +163,7 @@ article code {
 
 article pre code {
     font-style: normal;
+    border-radius: 0.5rem;
 }
 
 article video {
