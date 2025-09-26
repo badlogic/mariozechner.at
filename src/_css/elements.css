@@ -39,10 +39,16 @@ h4 {
 h1, h2, h3, h4 {
     font-family: var(--font-sans);
     font-weight: 800;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto;
 }
 
 p {
     margin-bottom: 1.5rem;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto;
 }
 
 a {
@@ -80,8 +86,7 @@ li > p {
 }
 
 .post-list > a > div > :last-child{
-    text-decoration: underline;
-    text-decoration-color: var(--border-color);
+    color: var(--link-color);
 }
 
 article {
@@ -160,21 +165,16 @@ article pre code {
     font-style: normal;
 }
 
-/* Fix margin for code blocks in special containers */
-.code-preview + p,
-.code-preview + h1,
-.code-preview + h2,
-.code-preview + h3,
-.code-preview + h4,
-.code-preview + div,
-.code-preview + .code-preview {
-    margin-top: 1rem;
-}
-
 article video {
-    width: 100%;
+    max-width: 100%;
+    max-height: 70vh;
+    width: auto;
+    height: auto;
     border-radius: 0.5rem;
     margin-bottom: 1.5rem;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 article p > video {
@@ -183,6 +183,12 @@ article p > video {
 
 .katex-display {
     margin-top: 0;
+}
+
+.toc-header {
+    margin-bottom: 0.5rem;
+    font-size: 1.25rem; /* 20px */
+    line-height: 1.75rem; /* 28px */
 }
 
 .toc {

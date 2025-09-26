@@ -4,7 +4,7 @@
 
     <color-band class="w-full mt-4 mb-6" style="height: 80px;"></color-band>
 
-    <h4 class="mb-6">Musings <a href="/rss.xml" class="text-sm"><svg style="width: 18px" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rss-icon lucide-rss"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg></a></h4>
+    <h4 class="mb-6">Musings <a href="/rss.xml" class="text-sm"><svg style="width: 18px; color: var(--link-color);" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rss-icon lucide-rss"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg></a></h4>
     <%
         const posts = metas("./posts").filter((p) => p.meta.published);
         posts.sort((a, b) => b.meta.date.localeCompare(a.meta.date));
@@ -77,10 +77,10 @@
     <h4 class="mt-8 mb-6">Get in touch</h4>
     <div class="flex flex-col">
         <div class="flex gap-2 mb-3">
-            <a href="https://bsky.app/badlogic"><i class="icon w-8 h-8"><%=render("./_icons/bluesky-line.svg")%></i></a>
-            <a href="https://mastodon.gamedev.place/@badlogic"><i class="icon w-8 h-8"><%=render("./_icons/mastodon-line.svg")%></i></a>
-            <a href="https://twitter.com/badlogicgames"><i class="icon w-8 h-8"><%=render("./_icons/twitter-line.svg")%></i></a>
-            <a href="https://github.com/badlogic"><i class="icon w-8 h-8"><%=render("./_icons/github-line.svg")%></i></a>
+            <a href="https://bsky.app/badlogic"><i class="icon w-8 h-8" style="color: var(--link-color);"><%=render("./_icons/bluesky-line.svg")%></i></a>
+            <a href="https://mastodon.gamedev.place/@badlogic"><i class="icon w-8 h-8" style="color: var(--link-color);"><%=render("./_icons/mastodon-line.svg")%></i></a>
+            <a href="https://twitter.com/badlogicgames"><i class="icon w-8 h-8" style="color: var(--link-color);"><%=render("./_icons/twitter-line.svg")%></i></a>
+            <a href="https://github.com/badlogic"><i class="icon w-8 h-8" style="color: var(--link-color);"><%=render("./_icons/github-line.svg")%></i></a>
         </div>
         <a href="mailto:contact@mariozechner.at">contact@mariozechner.at</a>
         <span>Glacisstraße 63</span>

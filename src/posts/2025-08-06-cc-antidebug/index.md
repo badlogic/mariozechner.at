@@ -6,6 +6,7 @@
 %>
 <%= render("../../_partials/post-header.html", { title, image, url }) %>
 
+<h1 class="toc-header">Table of contents</h1>
 <div class="toc">
 %%toc%%
 </div>

@@ -14,7 +14,7 @@ pre code {
 }
 </style>
 
-**Table of Contents**
+<h1 class="toc-header">Table of contents</h1>
 <div class="toc">
 %%toc%%
 </div>
@@ -243,7 +243,7 @@ And from the department of context pollution, they stopped adding the entire pro
 
 ```diff
 - directoryStructure: Below is a snapshot of this project's file structure at the start of the conversation. This snapshot will NOT update during the conversation. It skips over .gitignore patterns.
-- 
+-
 - - /tmp/claude-history-1754177024949-t0hb8d/
 -   - CLAUDE.md
 -   - anthropic-ai-claude-code-1.0.0.tgz

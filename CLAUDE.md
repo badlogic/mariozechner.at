@@ -49,15 +49,29 @@ A minimalist personal blog and portfolio website built with **blargh**, a custom
    %>
    <%= render("../../_partials/post-header.html", { title, image, url }) %>
 
-   Your post content here...
-   
+   <h1 class="toc-header">Table of contents</h1>
    <div class="toc">
    %%toc%%
    </div>
 
+   Your post content here...
+
    <%= render("../../_partials/post-footer.html", { title, url }) %>
    ```
 5. Add header image (png or jpg) to `media/` subdirectory
+
+### Figures and videos
+If you are asked to add an image with caption, use:
+
+<figure>
+<img src="...">
+<figcaption></figcaption>
+</figure>
+
+If you are asked to add a video, you must put the closing tag on its own line:
+
+<video src="...">
+</video>
 
 ### Development Mode
 ```bash

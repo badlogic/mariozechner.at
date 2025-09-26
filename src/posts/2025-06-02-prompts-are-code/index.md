@@ -15,7 +15,7 @@
 %>
 <%= render("../../_partials/post-header.html", { title, image, url, description, caption, date }) %>
 
-**Table of Contents**
+<h1 class="toc-header">Table of contents</h1>
 <div class="toc">
 %%toc%%
 </div>
@@ -133,6 +133,17 @@ ol ol:last-child,
 ul ol:last-child,
 ol ul:last-child {
     margin-bottom: 0;
+}
+
+/* Fix margin for code blocks in special containers */
+.code-preview + p,
+.code-preview + h1,
+.code-preview + h2,
+.code-preview + h3,
+.code-preview + h4,
+.code-preview + div,
+.code-preview + .code-preview {
+    margin-top: 1rem;
 }
 </style>
 
