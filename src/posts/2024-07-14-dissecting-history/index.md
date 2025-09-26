@@ -37,8 +37,10 @@ Within a year, I could afford a mouse and a double-speed CD-ROM drive. Installin
 
 ## Leveling up
 
+<figure>
 <img src="media/gorilla.jpg">
 <figcaption>GORILLA.BAS, wherein we learend, that bananas can explode.</figcaption>
+</figure>
 
 The first year of owning a PC opened up an infinite number of new worlds to me. PC games were fantastic in their diversity and quality. Sometimes, they even managed to convey great stories. There were jaw-droppers like DOOM and Duke Nukem that hit you with intense action, story be damned. There were zen-like experiences with Myst or Lost Eden. The absurd humor of Day of the Tentacle or Sam and Max would make you laugh out loud. Privateer let you explore the galaxy on your own terms, while Master of Orion had you burn it all down. Slowly but surely, two questions formed in my curious mind: How did they do this? How can I do this?
 
@@ -56,13 +58,17 @@ C:\GAMES\QBASIC.EXE /RUN NIBBLES.BAS
 
 Running this magic spell resulted in <u>instant gratification</u>. The command would launch the game [Nibbles](https://www.dosgamesarchive.com/play/nibbles/), an early variant of "Snake," which we all enjoyed on our Nokia phones.
 
+<figure>
 ![Nibbles](media/nibbles.jpg)
 <figcaption>Poor Sammy.</figcaption>
+</figure>
 
 After defeating enough Sammies, I pressed `CTRL + BREAK`, as instructed, and found myself in one of the most iconic programming tools of the nineties: QBasic.
 
+<figure>
 ![QBasic](media/nibbles-code.jpg)
 <figcaption>Glory. I had the German version.</figcaption>
+</figure>
 
 The program <u>felt immediately familiar</u>. The `File` and `Edit` menu items, the editing area, and scrollbars were the same as in `EDIT.EXE`, the text editor I used to modify `AUTOEXEC.BAT` and `CONFIG.SYS`. Other parts of the program were more mysterious.
 
@@ -80,13 +86,15 @@ LOOP WHILE StillWantsToPlay
 
 Of course, nothing really made sense at this point. I did as Microsoft suggested, moved my cursor on top of `LOOP`, and pressed `F1`.
 
-<video controls loop src="media/f1.mp4" type="video/mp4"></video>
+<video controls loop src="media/f1.mp4" type="video/mp4">
+</video>
 
 QBasic came with a <u>full-blown contextual help system</u>. Every keyword and command from the standard library had its own help page. The help pages included examples and were <u>worded in a very beginner-friendly way</u>. When viewing the help for a token, QBasic didn't just throw you into a separate full-screen; it kept the editor on screen, which meant there was <u>no context switching</u>.
 
 All the examples given on the help pages were <u>tiny, self-contained programs</u> that you could copy and paste into a blank `.BAS` file, run, and modify.
 
-<video controls loop src="media/examples.mp4" type="video/mp4"></video>
+<video controls loop src="media/examples.mp4" type="video/mp4">
+</video>
 
 I remember spending two nights playing with `LINE`, then discovering `CIRCLE` and friends. The simplicity of the examples and the <u>lack of ceremony</u> to get them running made for <u>fast and instantly rewarding exploration</u>.
 
@@ -96,15 +104,18 @@ Instead of an accompanying website, the <u>tutorial text was part of the source 
 
 Due to my prior PC experience, I was already a somewhat proficient keyboard user. Still, syntax errors were common. QBasic's syntax was line-based. Every time you hit `ENTER`, the completed line would be checked by the parser, and you would get <u>immediate feedback on any syntax errors</u>.
 
-<video controls loop src="media/syntaxerror.mp4" type="video/mp4"></video>
+<video controls loop src="media/syntaxerror.mp4" type="video/mp4">
+</video>
 
 As my knowledge grew, so did my programs. With bigger programs came bugs that were hard to reason about just by looking at the code. QBasic included a <u>capable debugger</u> that allowed setting breakpoints and evaluating expressions when the program was paused. QuickBasic, QBasic's big brother, let you create up to eight watchpoints with arbitrary expressions and set conditional breakpoints. You could also modify the running program. All this was packaged in the simplest possible UI. The following video shows QuickBasic instead of QBasic.
 
-<video controls loop src="media/debugger.mp4" type="video/mp4"></video>
+<video controls loop src="media/debugger.mp4" type="video/mp4">
+</video>
 
 Another crucial aspect of creating bigger programs was <u>code navigation</u>. QBasic had an interesting solution: a single `.BAS` file constituted a module. All code outside a procedure was module-level code. When opening a .BAS file, QBasic would only show the module-level code. Procedures were shown on their own screen. QBasic also had some rudimentary <u>search and refactoring functionality</u> in the form of text replacement.
 
-<video controls loop src="media/navigation.mp4" type="video/mp4"></video>
+<video controls loop src="media/navigation.mp4" type="video/mp4">
+</video>
 
 Six months after opening QBasic for the first time, I became proficient enough to write little text adventures and simple graphical games. Whenever a friend came over, I'd proudly show off my creations. My friends, used to higher-quality games on their GameBoy, SNES, and other devices, were hard to impress. Why couldn't they see the brilliance of my little oeuvres?
 
@@ -121,15 +132,19 @@ She asked me to bring some of my programs to prove I actually knew how to code. 
 
 Invigorated, I hit this new site called [AltaVista](https://en.wikipedia.org/wiki/AltaVista) I had heard about. A big improvement on the old site directories I used to frequent! My head exploded when the first search result for "qbasic games" showed a seemingly unending list of websites and forums, chock-full of source code, programming tips, and most importantly, people.
 
+<figure>
 <img src="media/qb45-site.jpg">
 <figcaption>My 3dLibQB is still second place! The ZIP file is corrupted, you can extract it with jar xzf 3dLibQB.zip.</figcaption>
+</figure>
 
 Feeling proficient enough with my English skills, I signed up for what appeared to be the biggest of all the forums, qb45.com. (This is a partial copy of the old site; sadly, both the download section and the forums no longer contain much from that time). I also submitted my best code for others to enjoy and dissect.
 
 I had finally found a place of like-minded people and a wealth of new information that let me break through my knowledge ceiling. <u>Sharing and getting feedback on code</u> was a fantastic way to improve and learn new concepts. After a while, I started <u>helping others</u> on the forum, which in turn helped me better organize my own thoughts. I also had the good fortune of becoming friends with insanely talented individuals like [Ali Mosavian](https://twitter.com/alimosavian) and Andre Victor (who would later create [FreeBASIC](https://en.wikipedia.org/wiki/FreeBASIC)). Ali introduced me to the wonderful world of assembly programming, an entirely new Pandora's box to keep me up at night.
 
+<figure>
 <img src="media/rtm.jpg">
 <figcaption>Avert your eyes, for I have brought affine texture mapping.</figcaption>
+</figure>
 
 The <u>internet community</u> surrounding QBasic and MS-DOS game programming was thriving at the end of the 90s. There was a seemingly unending influx of newcomers, eager to join the ranks of the old guard. And the old guard, even those now working with different technologies for their new projects, still stuck around to show beginners the ropes. People were <u>encouraged to write about their findings</u>, which led to an immense archive of knowledge. You can still find many of these articles on [Phat Code](http://www.phatcode.net/articles.php).
 

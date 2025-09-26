@@ -33,11 +33,13 @@ I started by building a tool that's inherently useful to myself: [terminalcp](ht
 
 Here's a quick example of terminalcp in action using the CLI version to debug an executable with lldb and observing the session in a second terminal window:
 
-<video src="media/terminalcp.mp4" controls loop loading="lazy"></video>
+<video src="media/terminalcp.mp4" controls loop loading="lazy">
+</video>
 
 And here's the terminalcp MCP server version used by Claude Code to debug the same executable with lldb:
 
-<video src="media/terminalcp-mcp.mp4" controls loop loading="lazy"></video>
+<video src="media/terminalcp-mcp.mp4" controls loop loading="lazy">
+</video>
 
 Note how I can attach to the lldb session from another terminal instance and co-debug with Claude.
 
@@ -495,7 +497,8 @@ The evaluation runs through a simple CLI where I specify which task/tool combina
 
 Here's what that looks like:
 
-<video src="media/run.mp4" controls loading="lazy"></video>
+<video src="media/run.mp4" controls loading="lazy">
+</video>
 
 Since I'm evaluating terminal multiplexers, I can attach to the session and watch what Claude is doing.
 
@@ -617,7 +620,8 @@ After 120 evaluation runs (3 tasks × 4 tools × 10 repetitions), here's what em
 
 You can download the [full evaluation results](media/evaluation-results.zip) if you want to dig into the details. The framework writes out the raw ANSI stream from each run. You can even playback the Claude Code sessions with cat:
 
-<video src="media/cat.mp4" controls loop loading="lazy"></video>
+<video src="media/cat.mp4" controls loop loading="lazy">
+</video>
 
 ### Easy mode: Run individual prompts
 

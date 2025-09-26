@@ -284,7 +284,8 @@ int main(int argc, char **argv) {
 
 If we run `test` followed by `macinject`, we get:
 
-<video src="media/read-write.mp4" controls loop></video>
+<video src="media/read-write.mp4" controls loop>
+</video>
 
 Look, mom, I'm a hacker now.
 
@@ -548,7 +549,8 @@ int main(int argc, char **argv) {
 
 And here it is in action.
 
-<video src="media/action.mp4" controls loop></video>
+<video src="media/action.mp4" controls loop>
+</video>
 
 I first run `test`, the test program, followed by `macinject`, the injection program. It will first modify the value in `data` and wait for 4 seconds. The test program will print the new value `456`.
 

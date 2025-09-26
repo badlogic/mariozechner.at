@@ -15,7 +15,8 @@ At the end of July 2024, I embarked on a journey to learn electronics so I could
 
 Fast forward a few months, and I've learned enough electronics to build my son's own audio player. Here's the preliminary result:
 
-<video src="./media/boxie_320.mp4" controls style="width:320px;height:auto;display:block;margin:0 auto;" loading="lazy"></video>
+<video src="./media/boxie_320.mp4" controls style="width:320px;height:auto;display:block;margin:0 auto;" loading="lazy">
+</video>
 
 It's been in "prod" since January 2025. It's his daily driver, be it at the breakfast table or when going for stroll in his buggy. Yes, the volume control is backwards. Easy to fix in software.
 
@@ -70,7 +71,8 @@ Studying existing designs is also a fantastic way to learn, just as with softwar
 
 My final recommendation is to get away from Arduino as soon as you possibly can. It's a great way to learn, but eventually, you'll need to go one level deeper. That opens up a whole new world of possibilities. Like porting DOOM to the ESP32-S3 and have it run at 44FPS.
 
-<video src="./media/doom_fixed.mp4" controls style="width:100%;height:auto;display:block;margin:0 auto;" loading="lazy"></video>
+<video src="./media/doom_fixed.mp4" controls style="width:100%;height:auto;display:block;margin:0 auto;" loading="lazy">
+</video>
 
 Eventually, you'll write your own Arduino like framework to handle all the low level stuff, like communicating with SPI displays, driving audio or neopixels, etc. My entry into this is [mcugdx](https://github.com/badlogic/mcugdx/), a simple C-API on top of [ESP-IDF](https://github.com/espressif/esp-idf) that can already do a lot (on ESP32-S3 at least). You can also find the above DOOM port in the [mcugdx examples](https://github.com/badlogic/mcugdx/tree/main/examples/doom). I don't currently give support or documentation. If you know your way around ESP-IDF, you should be able to figure it out, given the examples and the sdkconfig files found in the repository.
 
@@ -104,7 +106,8 @@ Since I use an ESP32-S3 as the brain, I opted for micro SD cards as the medium t
 
 To elicit that Game Boy cartridge feel and to make inserting and removing the cartridge easy and sturdy, I designed a custom PCB that holds and exposes the micro SD card's pins, and a 3D printed cover onto which I could stick the label. You can view the end result in this instructional video for my SO, so she can assemble cartridges as well:
 
-<video src="./media/cartridge_320.mp4" controls style="width:320px;height:auto;display:block;margin:0 auto;" loading="lazy"></video>
+<video src="./media/cartridge_320.mp4" controls style="width:320px;height:auto;display:block;margin:0 auto;" loading="lazy">
+</video>
 
 The PCB is a trivial 2 layer board. A micro SD card socket holds the card. Each of the pins is exposed to its corresponding big pad at the bottom of the PCB. Four M2 screw holes let me screw on the 3D printed cover.
 
@@ -146,7 +149,8 @@ I used battery springs, which are sturdy enough to handle a 3 year old's enthusi
 
 The result is easy to assemble, easy to repair, and (so far) indestructible. Here's the first cartridge insertion test:
 
-<video src="./media/firsttry_320.mp4" controls style="width:320px;height:auto;display:block;margin:0 auto;" loading="lazy"></video>
+<video src="./media/firsttry_320.mp4" controls style="width:320px;height:auto;display:block;margin:0 auto;" loading="lazy">
+</video>
 
 The device's internals were still on a breadboard at this point, as I hadn't figured out the enclosure design yet.
 
@@ -162,7 +166,8 @@ The MAX98357A is a mono amplifier delivering up to 3W into a 4 Ohm speaker at 5V
 Given the amp specs, I went on a hunt for a good speaker. I ordered a few spec compliant speakers from Amazon and discovered the art of speaker enclosure design.
 
 <video src="./media/speaker-1_320.mp4" controls style="width:100%;height:auto;display:block;margin:0 auto; margin-bottom: 1em;" loading="lazy"></video>
-<video src="./media/speaker-2_320.mp4" controls style="width:100%;height:auto;display:block;margin:0 auto;" loading="lazy"></video>
+<video src="./media/speaker-2_320.mp4" controls style="width:100%;height:auto;display:block;margin:0 auto;" loading="lazy">
+</video>
 
 I settled on a Visaton FR 7/4, which offers good bandwidth and better sound quality than the Tonie Box speaker.
 
@@ -291,7 +296,8 @@ The bottom is pretty unremarkable. It features a bay for the 3 AAA NiMH batterie
 
 When a cartridge is inserted, the rod is pushed down, which pushes a switch that connects the battery to the ESP32-S3 board. It's a silly looking mechanism, but it has a few benefits. In the first iteration, I positioned the switch next to the cartridge slot. However, getting the position right was tricky. Also, routing the power wire around the magnet of the speaker led to interesting issues I was unable to debug or fix.
 
-<video src="./media/broken_320.mp4" controls style="width:320px;height:auto;display:block;margin:0 auto;" loading="lazy"></video>
+<video src="./media/broken_320.mp4" controls style="width:320px;height:auto;display:block;margin:0 auto;" loading="lazy">
+</video>
 
 The rod solution just works.
 
@@ -435,7 +441,8 @@ I then designed and 3D printed a mount that attaches to the PSA1 arm, houses the
 
 <img src="./media/microscope-4.png" style="width: 100%;" loading="lazy">
 
-<video src="./media/microscope_320.mp4" controls style="width:100%;height:auto;display:block;margin:0 auto;" loading="lazy"></video>
+<video src="./media/microscope_320.mp4" controls style="width:100%;height:auto;display:block;margin:0 auto;" loading="lazy">
+</video>
 
 Note: The final version uses a different fastening mechanism with a screw and wing nut, but this demonstrates the concept.
 

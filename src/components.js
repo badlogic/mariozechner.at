@@ -21,13 +21,13 @@ class ThemeToggle extends HTMLElement {
         this.innerHTML = "";
         const elements = dom(/*html*/ `
         <i class="icon" style="width: 20px;">${
-            localStorage.getItem("theme") == "dark" ? this.darkIcon : this.lightIcon
+            localStorage.getItem("theme") === "dark" ? this.darkIcon : this.lightIcon
         }</i>
       `);
         this.append(...elements);
 
         elements[0].addEventListener("click", () => {
-            localStorage.setItem("theme", localStorage.getItem("theme") == "dark" ? "light" : "dark");
+            localStorage.setItem("theme", localStorage.getItem("theme") === "dark" ? "light" : "dark");
             document.documentElement.setAttribute("data-theme", localStorage.getItem("theme"));
             this.render();
         });
@@ -102,7 +102,7 @@ class QuoteLink extends HTMLElement {
         return ["href"];
     }
 
-    attributeChangedCallback(name, oldValue, newValue) {
+    attributeChangedCallback(name, _oldValue, newValue) {
         if (name === "href") {
             this.href = newValue;
             this.render();
@@ -116,7 +116,7 @@ class QuoteLink extends HTMLElement {
 
     render() {
         this.innerHTML = `
-        <a href="${this.href}" class="inline-flex items-baseline" style="font-size: 12px; transform: translateY(-6px);">
+        <a href="${this.href}" class="inline-flex items-baseline" style="color: var(--link-color); font-size: 12px; transform: translateY(-6px);">
           <span>[</span>
           <i class="icon" style="width: 12px;">${this.quotesIcon}</i>
           <span>]</span>

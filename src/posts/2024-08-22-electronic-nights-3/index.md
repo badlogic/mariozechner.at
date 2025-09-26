@@ -243,7 +243,8 @@ In `loop()`, for each LED pin, I first set the voltages to LOW for all pins, tur
 
 Once the `for` loop is completed, we'll give control back to the `main()` function, which will call `loop()` again. The sequence of LEDs lighting up and shutting off will continue indefinitely. Here's the result.
 
-<video src="media/circuit-6.mp4" controls loop></video>
+<video src="media/circuit-6.mp4" controls loop>
+</video>
 
 It does what it's supposed to do, but it also has a problem: we can't do anything else while `delay()` blocks the CPU. That includes reading button states, our next goal. Let's fix that.
 
@@ -465,7 +466,8 @@ LedAnimation<num_leds> animation(led_pins, frames);
 
 With a few more frames added, I've got my own shitty [KITT](https://en.wikipedia.org/wiki/KITT). Fantastic.
 
-<video src="media/circuit-7.mp4" controls loop></video>
+<video src="media/circuit-7.mp4" controls loop>
+</video>
 
 Let's read some button states!
 
@@ -565,7 +567,8 @@ void loop() {
 
 Then press `CMD + P` and select `Serial Plotter: Open Pane` from the command palette, select the serial port, and press start.
 
-<video src="media/serial-plotter.mp4" controls loop></video>
+<video src="media/serial-plotter.mp4" controls loop>
+</video>
 
 You can find the source code on [GitHub](https://github.com/badlogic/serial-plotter). You can also install it from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=badlogicgames.serial-plotter).
 

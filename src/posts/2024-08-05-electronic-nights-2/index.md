@@ -34,7 +34,8 @@ I also found Ben Eater's [Digital Electronics Tutorial](https://youtube.com/play
 
 I attached an LED to a 9V battery. Here is the result:
 
-<video controls loop src="media/leddead.mp4"></video>
+<video controls loop src="media/leddead.mp4">
+</video>
 
 The LED is burnt out. Why? Let’s break it down with some high-school-level physics. I'll highlight some important things to remember in **bold**.
 
@@ -347,8 +348,10 @@ Ohm's law, the resistor model, the LED model, and series circuit rules let me an
 
 So what if I stick all the LEDs on the board in parallel?
 
+<figure>
 <img src="media/circuit-13.jpg" class="mx-auto">
 <figcaption>Yeah, maybe not the best way to wire this. I'm still learning.</figcaption>
+</figure>
 
 All LEDs have full brightness! What's going on? Here's the schematic view.
 

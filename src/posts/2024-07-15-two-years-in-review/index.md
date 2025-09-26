@@ -186,8 +186,10 @@ The app gathered prices daily, so slowly, we could build up historical data. I a
 
 Then a wild anonymous Twitter user appeared in my DMs and handed me full daily price data for all products starting in 2017 for the two biggest grocery chains. I spent a night plugging it into my system. And well.
 
+<figure>
 <img loading="lazy" src="media/heisse-3.png">
 <figcaption>Daily average price difference across all products relative to 1st of January 2017, for Austria's two biggest grocery chains.</figcaption>
+</figure>
 
 That sure was interesting. I started building out analytics tools to better understand the chains' pricing policies. I won't bore you with the details; you can read up on some of my findings [here](https://docs.google.com/document/d/1NYpX-xhZa9B8hRyLYTdZJ-4VzlF4fsvkvYL1l-SmoCI/edit?usp=drive_web&ouid=102416766951447222370). Here are just a few gems.
 
@@ -195,13 +197,17 @@ Discount store-branded products almost all cost the same across chains. Funnily 
 
 One said, "There is extreme competition in this segment and products obviously do NOT cost the same!" The other said, "Yeah, d'oh, it's the cheapest segment, of course everything costs the same." Interestingly enough, it is also this price segment which saw the biggest price increases over the past 2 years.
 
+<figure>
 <img loading="lazy" src="media/heisse-4.png">
 <figcaption>Daily average price difference across discount store-branded products relative to 1st of January 2017, for Austria's two biggest grocery chains.</figcaption>
+</figure>
 
 Prices of these discount store-branded products change on the same day or within a handful of days to the same exact price. Not downwards. Upwards.
 
+<figure>
 <img loading="lazy" src="media/heisse-5.png">
 <figcaption>Prices for 15 discount store-branded eggs for the two biggest chains over time.</figcaption>
+</figure>
 
 The same products cost less in Germany, sometimes significantly so. Chains explain this away with differences in VAT (7% vs. 10% for groceries, 19% vs. 20% for other products) and higher transport costs through the Alps. Yes, really.
 
@@ -255,8 +261,10 @@ We also expressed this fact on social media. All of us got invitations the follo
 
 On the 26th of September 2023, our little gang of price comparison site owners met up in real life for the first time. At the ministry of digital and economic affairs.
 
+<figure>
 <img loading="lazy" src="media/gang.jpeg">
 <figcaption>The gang. Not in the picture: me.</figcaption>
+</figure>
 
 We didn't learn anything new in this meeting. But they managed to misspell our names and/or websites on the little cards they put on the meeting table.
 
@@ -379,7 +387,8 @@ Interestingly enough, the amount of money funneled towards Good Guys, who wrote 
 
 For shits and giggles, [I rebuilt "AMS Berufsinfomat"](https://x.com/badlogicgames/status/1743063107138736507). I took the same data as AMS Berufsinfomat from a bunch of AMS websites, like [Berufs Kompass](https://www.berufskompass.at/berufskompass/), and built a trivial [retrieval augmented generation (RAG)](https://en.wikipedia.org/wiki/Retrieval-augmented_generation) system. Then I compared its output to that of AMS Berufsinfomat. You be the judge.
 
-<video controls loop src="media/ams-7.mp4"></video>
+<video controls loop src="media/ams-7.mp4">
+</video>
 
 This took all of two nights. It also wasn't just a quick demo. It is a production system, that is actually used as a support request answering machine, serving many more requests than AMS Berufsinfomat will ever serve. And it doesn't require hundreds of thousands of euros in infrastructure spending. It runs on a potato that costs €30 a month.
 
@@ -584,7 +593,8 @@ The EU parliament elections prompted me to do some light data sciencing.
 
 The first tool is more of an experiment really. It lets you visually explore the EU election programs of all parties.
 
-<video controls loop src="media/wahlomat-2.mp4"></video>
+<video controls loop src="media/wahlomat-2.mp4">
+</video>
 
 I've described the whole process on [Twitter](https://x.com/badlogicgames/status/1791948524092789108).
 
@@ -630,7 +640,8 @@ It's a nice article, presenting both the data and statements by derstandard.at. 
 I built a Chrome extension that switches [Brian's Twitter display name](https://twitter.com/BrianCSchmidt)
 to "Meta Boy". It's an inside joke.
 
-<video controls loop autoplay src="media/chrome-1.mp4"></video>
+<video controls loop autoplay src="media/chrome-1.mp4">
+</video>
 
 [derstandard.at](https://derstandard.at) called me a "hobby programmer" in an article once.
 
@@ -638,7 +649,8 @@ to "Meta Boy". It's an inside joke.
 
 So I built a Chrome extension that would prefix profession names in headlines on [derstandard.at](https://derstandard.at) with "Hobby-", because why not.
 
-<video controls loop src="media/chrome-3.mp4"></video>
+<video controls loop src="media/chrome-3.mp4">
+</video>
 
 ## KärntenGPT
 The state of Carinthia is known to be at the forefront of technology. In early 2024, they held a press conference detailing their plans on establishing "Kärtner Künstliche Intelligenz." What sounded like a joke initially was [actually a pretty well-thought-out plan of action](https://threadreaderapp.com/thread/1772941999215128979.html), with caveats.

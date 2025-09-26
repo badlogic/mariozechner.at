@@ -2,9 +2,9 @@
 
 <%= render("./_partials/header.html", { title, description, url }) %>
 
-    <color-band class="w-full mt-4 mb-4" style="height: 80px;"></color-band>
+    <color-band class="w-full mt-4 mb-6" style="height: 80px;"></color-band>
 
-    <h4 class="mb-4 font-medium">Musings <a href="/rss.xml" class="text-sm">(RSS)</a></h4>
+    <h4 class="mb-6">Musings <a href="/rss.xml" class="text-sm"><svg style="width: 18px" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rss-icon lucide-rss"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg></a></h4>
     <%
         const posts = metas("./posts").filter((p) => p.meta.published);
         posts.sort((a, b) => b.meta.date.localeCompare(a.meta.date));
@@ -24,10 +24,9 @@
         })
         rss("./rss.xml", channel, items);
     %>
-    <div class="flex flex-col gap-4">
+    <div class="post-list flex flex-col gap-4">
         <% for (const post of posts) { %>
             <a href="/posts/<%=post.directory%>/" class="flex gap-4 items-center">
-                <!--<img src="/posts/<%=post.directory%>/<%=post.meta.image%>" style="width: 160px; height: 120px; border-radius: 0.5rem;">-->
                 <div class="flex row gap-4 items-baseline">
                     <span class="text-sm text-muted italic whitespace-nowrap"><%=post.meta.date%></span>
                     <span><%=post.meta.title%></span>
@@ -36,7 +35,7 @@
         <% } %>
     </div>
 
-    <h4 class="mt-8 mb-4 font-medium">Who I am</h4>
+    <h4 class="mt-8 mb-6">Who I am</h4>
     <p>
         I'm an independent software developer, coach, and angel investor with over 15 years of experience in academia
         <q-l href="https://scholar.google.at/citations?user=6hFnJ00AAAAJ&hl=en"></q-l>, startups
@@ -67,15 +66,15 @@
         <q-l href="https://www.wired.com/story/heisse-preise-food-prices/"></q-l><q-l href="https://heisse-preise.io/media.html"></q-l>.
     </p>
 
-    <h4 class="mt-8 mb-4 font-medium">What I offer</h4>
-    <ul>
+    <h4 class="mt-8 mb-6">What I offer</h4>
+    <ul class="mb-6">
         <li>Pro-bono mentoring of young entrepreneurs on technical and business aspects</li>
         <li>Technical workshops <q-l href="https://github.com/badlogic/genai-workshop/tree/main"></q-l></li>
         <li>Independent consulting on compelling projects</li>
     </ul>
     <div>Pricing is tailored to meet individual or organizational needs.</div>
 
-    <h4 class="mt-8 mb-4 font-bold">Get in touch</h4>
+    <h4 class="mt-8 mb-6">Get in touch</h4>
     <div class="flex flex-col">
         <div class="flex gap-2 mb-3">
             <a href="https://bsky.app/badlogic"><i class="icon w-8 h-8"><%=render("./_icons/bluesky-line.svg")%></i></a>
