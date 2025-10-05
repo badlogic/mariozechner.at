@@ -13,7 +13,7 @@
 
 Thursday I had a wisdom tooth extraction and I still feel unwell. Thank you for asking. Before this unfortunate event, I worked on a little browser extension that lets me navigate the web in the browser together with an LLM, which is hosted in the browser extension's side panel. Here you can see it in action. Check out the rest of my YouTube channel, there are more demonstrations there.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/kc8YL3P4LUc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="margin: 0 auto 1.5rem auto; display: block; border-radius: 8px;"></iframe>
+<iframe src="https://www.youtube.com/embed/kc8YL3P4LUc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="width: 100%; aspect-ratio: 16/9; margin: 0 auto 1.5rem auto; display: block; border-radius: 8px; border: 1px solid var(--border-color);"></iframe>
 
 The LLM has a tool that can inject any sort of JavaScript into the active page to get its contents, manipulate it, click on buttons, and so on and so forth. One nice use case, for example, is to let it use Google directly instead of something like <a href="https://exa.ai/">Exa</a>, navigate the web, and collect information for me, then spit it out as a nicely formatted markdown file. Not only do I get the markdown file, but I also have full observability of what exactly it read and can follow its traces in the browser history.
 
