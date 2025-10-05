@@ -1,0 +1,8 @@
+{
+    "title": "Infinite Footguns: Writing a JavaScript Interpreter in JavaScript",
+    "date": "2025-10-05",
+    "image": "media/footgun.webp",
+    "caption": "Me, coding",
+    "description": "Building a JavaScript AST interpreter in JavaScript: scope isolation, ES5 implementation, and all the footguns along the way.",
+    "published": true
+}
