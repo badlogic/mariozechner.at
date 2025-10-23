@@ -89,6 +89,12 @@ li > p {
     color: var(--link-color);
 }
 
+.media-links a {
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-color: var(--border-color);
+}
+
 article {
     display: flex;
     flex-direction: column;
