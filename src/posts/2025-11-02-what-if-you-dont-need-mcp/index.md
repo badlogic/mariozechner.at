@@ -519,7 +519,7 @@ alias cl="PATH=$PATH:/Users/badlogic/agent-tools/browser-tools:<other-tool-dirs>
 
 This way all of the scripts are available to sessions of Claude, but don't pollute my normal environment. I also prefix each script with the full tool name, e.g. `browser-tools-start.js`, to eliminate name collisions. I also add a single sentence to the README telling the agent that all the scripts are globally available. This way, the agent doesn't have to change its working directory just to call a tool script, saving a few tokens here and there, and reducing the chances of the agent getting confused by the constant working directory changes.
 
-Finally, I add the agent tools directory as a working directory to Claude Code via `/add-dir`, so I can use `@README.md` to reference a specific tool's README file and get it into the agent's context. I prefer this to Anthropic's skill auto-discovery, which I found to not work reliably in practice.
+Finally, I add the agent tools directory as a working directory to Claude Code via `/add-dir`, so I can use `@README.md` to reference a specific tool's README file and get it into the agent's context. I prefer this to Anthropic's skill auto-discovery, which I found to not work reliably in practice. It also means I save a few more tokens: Claude Code injects all the frontmatter of all skills it can find into the system prompt (or first user message, I forgot, see https://cchistory.mariozechner.at)
 
 ## In Conclusion
 
