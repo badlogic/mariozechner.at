@@ -301,7 +301,7 @@ This will take a screenshot of the current viewport of the active tab, write it 
 
 So how does this compare to the MCP servers I mentioned above? Well, to start, I can pull in the README whenever I need it and don't pay for it in every session. This is very similar to Anthropic's recently introduced skills capabilities. Except it's even more ad hoc and works with any coding agent. All I need to do is instruct my agent to read the README file.
 
-Side note: many folks including myself have used this kind of setup before Anthropic released their skills system. You can see something similar in my ["Prompts are Code" blog post](/posts/2025-06-02-prompts-are-code/) or my little [sitegeist.ai](https://sitegeist.ai). [Armin](https://lucumr.pocoo.org/2025/8/18/code-mcps/) has also touched on the power of Bash and code compared to MCPs previously.
+Side note: many folks including myself have used this kind of setup before Anthropic released their skills system. You can see something similar in my ["Prompts are Code" blog post](/posts/2025-06-02-prompts-are-code/) or my little [sitegeist.ai](https://sitegeist.ai). [Armin](https://lucumr.pocoo.org/2025/8/18/code-mcps/) has also touched on the power of Bash and code compared to MCPs previously. Anthropic's skills add progressive disclosure (love it) and they make them available to a non-technical audience across almost all their products (also love it).
 
 Speaking of the README, instead of pulling in 13,000 to 18,000 tokens like the MCP servers mentioned above, this README has a whopping 225 tokens. This efficiency comes from the fact that models know how to write code and use Bash. I'm conserving context space by relying heavily on their existing knowledge.
 
@@ -510,12 +510,23 @@ Final token tally:
 
 <img src="media/scrape-tokens.png" loading="lazy">
 
+## Making This Reusable Across Agents
+Here's how I've set things up so I can use this with Claude Code and other agents. I have a folder `agent-tools` in my home directory. I then clone the repositories of individual tools, like the browser tools repository above, into that folder. Then I set up an alias:
+
+```bash
+alias cl="PATH=$PATH:/Users/badlogic/agent-tools/browser-tools:<other-tool-dirs> && claude --dangerously-skip-permissions"
+```
+
+This way all of the scripts are available to sessions of Claude, but don't pollute my normal environment. I also prefix each script with the full tool name, e.g. `browser-tools-start.js`, to eliminate name collisions. I also add a single sentence to the README telling the agent that all the scripts are globally available. This way, the agent doesn't have to change its working directory just to call a tool script, saving a few tokens here and there, and reducing the chances of the agent getting confused by the constant working directory changes.
+
+Finally, I add the agent tools directory as a working directory to Claude Code via `/add-dir`, so I can use `@README.md` to reference a specific tool's README file and get it into the agent's context. I prefer this to Anthropic's skill auto-discovery, which I found to not work reliably in practice.
+
 ## In Conclusion
 
 Building these tools is ridiculously easy, gives you all the freedom you need, and makes you, your agent, and your token usage efficient. You can find the browser tools on [GitHub](https://github.com/badlogic/browser-tools).
 
 This general principle can apply to any kind of harness that has some kind of code execution environment. Think outside the MCP box and you'll find that this is much more powerful than the more rigid structure you have to follow with MCP.
 
-With great power comes great responsibility though. You will have to come up with a structure for how you build and maintain those tools yourself. Anthropic's skill system can be one way to do it, though that's less transferable to other agents.
+With great power comes great responsibility though. You will have to come up with a structure for how you build and maintain those tools yourself. Anthropic's skill system can be one way to do it, though that's less transferable to other agents. Or you follow my setup above.
 
 <%= render("../../_partials/post-footer.html", { title, url }) %>
