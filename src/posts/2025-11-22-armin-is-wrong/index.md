@@ -126,6 +126,8 @@ In short, local-first is still a useful lens, but only on your side of the wire.
 
 All of this also circles back to the messages abstraction. I do not think messages are the problem here, and I doubt they are going away. The models are literally trained on a chat template, and the thing you actually keep in your local canonical state is a list of messages, tool calls, and file references. Under a local-first lens that list is your document. Everything else on the provider side, from prefix caches and thinking traces to session stores and VMs, is derived scratchpad state. Throwing out the messages abstraction in favour of some "purer" token or state API would not fix any of the hidden state issues with closed SaaS LLM providers. It would just move the complexity around. The only place local-first really applies is how you store and replay your own messages and data, not how the provider arranges its internal guts.
 
+Bonus point: if you apply local-first on your end, you'll also have an easier time moving between providers.
+
 ## In conclusion
 
 I have too much disposable time after laying the boy to bed and I think Armin is wrong on the internet.
