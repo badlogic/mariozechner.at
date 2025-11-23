@@ -13,7 +13,7 @@
 
 *I consider Armin a friend, so the following is me just rambling at him like I would over a coffee in real life. I most likely just misunderstood his blog post. <a href="https://lucumr.pocoo.org/2025/11/22/llm-apis/" style="color: #2196F3;">Read his post first to make any sense of mine.</a> Here's a shitty TL;DR: He claims LLM APIs are secretly a state synchronization problem because providers support prefix caching and hide state from you, and proposes we look at local-first/CRDT-style solutions.*
 
-I'm gonna wall of text you. Think of me as one of your [slightly demented, contrarian HN-style blog post bot reviewers](https://lucumr.pocoo.org/2025/1/30/how-i-ai/).
+Armin, I'm gonna wall of text you. Think of me as one of your [slightly demented, contrarian HN-style blog post bot reviewers](https://lucumr.pocoo.org/2025/1/30/how-i-ai/).
 
 ## The reality of messages
 
