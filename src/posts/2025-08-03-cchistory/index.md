@@ -128,7 +128,7 @@ Or to generate a title for your terminal based on what topic you're currently ta
 
 Or to check if a bash command that Claude tries to execute on your disk has some form of injection with which it tries to escape the sandbox:
 
-<div style="max-height: 400px; overflow-y: auto; margin-bottom: 1.5em;">
+<div class="code-preview">
 
 ```json
 {

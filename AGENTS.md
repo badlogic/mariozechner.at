@@ -60,6 +60,19 @@ A minimalist personal blog and portfolio website built with **blargh**, a custom
    ```
 5. Add header image (png or jpg) to `media/` subdirectory
 
+### Code blocks with height limit
+For long code blocks, wrap them in a scrollable container with fade effect:
+
+```html
+<div class="code-preview">
+
+```typescript
+// your code here
+```
+
+</div>
+```
+
 ### Figures and videos
 If you are asked to add an image with caption, use:
 

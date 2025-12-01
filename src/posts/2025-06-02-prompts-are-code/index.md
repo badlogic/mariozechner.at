@@ -97,25 +97,6 @@ What makes this tractable is that we maintain the same API surface across all ru
 Here's an example of one of the more math-heavy types, `PhysicsConstraint`:
 
 <style>
-.code-preview {
-    max-height: 400px;
-    overflow-y: auto;
-    position: relative;
-}
-.code-preview pre {
-    margin: 0;
-}
-.code-preview::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 60px;
-    background: linear-gradient(to bottom, transparent, var(--color-background));
-    pointer-events: none;
-}
-
 /* Disable line wrapping for markdown code blocks since port.md is manually wrapped */
 pre code.language-markdown {
     white-space: pre;
@@ -133,17 +114,6 @@ ol ol:last-child,
 ul ol:last-child,
 ol ul:last-child {
     margin-bottom: 0;
-}
-
-/* Fix margin for code blocks in special containers */
-.code-preview + p,
-.code-preview + h1,
-.code-preview + h2,
-.code-preview + h3,
-.code-preview + h4,
-.code-preview + div,
-.code-preview + .code-preview {
-    margin-top: 1rem;
 }
 </style>
 

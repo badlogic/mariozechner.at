@@ -627,3 +627,26 @@
 .whitespace-nowrap {
   white-space: nowrap;
 }
+
+/* Code preview with scrollable height and fade */
+.code-preview {
+  max-height: 400px;
+  overflow-y: auto;
+  position: relative;
+  margin-bottom: 1.5em;
+  border-radius: 8px;
+}
+.code-preview pre {
+  margin: 0;
+  border-radius: 8px;
+}
+.code-preview::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(to bottom, transparent, var(--color-background));
+  pointer-events: none;
+}
