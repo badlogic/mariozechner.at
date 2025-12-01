@@ -118,10 +118,18 @@ blargh --in src --out html
 ## Special Markdown Features
 
 - `%%toc%%` - Auto-generate table of contents (wrap in `<div class="toc">%%toc%%</div>`)
-- `<q-l href="..."></q-l>` - Styled external links
+- `<q-l href="..."></q-l>` - Styled external links, only used on landing page!
 - Standard GitHub Flavored Markdown support
 
 ## Writing Guidelines
 
 - NEVER use em-dashes. Start a new sentence, or if you must, use a colon.
 - Always add <img> and <video> with lazy loading
+
+## Dictation Workflow
+
+When user dictates paragraphs:
+- Fix grammar and spelling only
+- Do NOT change tone or content
+- If user asks for options or to "tighten it up": output suggestions in chat first, wait for confirmation before applying
+- Apply directly to file only after confirmation

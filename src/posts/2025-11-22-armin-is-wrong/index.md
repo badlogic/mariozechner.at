@@ -100,7 +100,7 @@ Armin also brings up the Responses API:
 
 > "One of the ways OpenAI tried to address this problem was to introduce the Responses API, which maintains the conversational history on the server"
 
-While that's not quite the reason why OpenAI introduced the Responses API [according to themselves](https://developers.openai.com/blog/responses-api/), I concur fully with Armin's critique of the implementation. It's not great. And the documentation is severely lacking, especially concerning edge cases like network splits. Which is probably why you can set `store: false`, where you are in charge of managing the full observable state again, just like with completions (with the thinking blob caveat). Also worth noting: if `store: true`, OpenAI can train on your data unless you're part of their Zero Data Retention program. So there's that.
+While that's not quite the reason why OpenAI introduced the Responses API [according to themselves](https://developers.openai.com/blog/responses-api/), I concur fully with Armin's critique of the implementation. It's not great. And the documentation is severely lacking, especially concerning edge cases like network splits. Which is probably why you can set `store: false`, where you are in charge of managing the full observable state again, just like with completions (with the thinking blob caveat).
 
 But is the Responses API a sync problem? The server is authoritative. If something goes wrong, you query the state... well, you would, if the API provided that functionality. Since it doesn't, you can either rely on thoughts and prayers, or do a full restart.
 
