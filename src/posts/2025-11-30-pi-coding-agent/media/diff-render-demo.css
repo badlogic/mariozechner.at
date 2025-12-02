@@ -1,0 +1,41 @@
+.diff-render-demo {
+    font-family: monospace;
+    background: #0d0d0d;
+    border-radius: 0.5em;
+    margin: 0 0 1.5rem 0;
+}
+.diff-render-terminal {
+    background: #0d0d0d;
+    border-radius: 0.5em 0.5em 0 0;
+    padding: 1em;
+    height: 15em;
+    overflow: hidden;
+}
+.diff-render-line {
+    height: 1.25em;
+    line-height: 1.25em;
+    white-space: pre;
+    color: #ccc;
+    position: relative;
+}
+.diff-render-line.changed {
+    background: rgba(255, 200, 0, 0.2);
+    animation: flash 0.3s ease-out;
+}
+.diff-render-line.unchanged {
+    color: #666;
+}
+@keyframes flash {
+    0% { background: rgba(255, 200, 0, 0.5); }
+    100% { background: rgba(255, 200, 0, 0.2); }
+}
+.diff-render-info {
+    color: #888;
+    font-size: 0.75em;
+    padding: 0.5em 1em;
+    border-top: 1px solid #333;
+}
+.diff-render-playbtn {
+    cursor: pointer;
+    margin-right: 0.75em;
+}

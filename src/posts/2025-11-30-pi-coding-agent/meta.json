@@ -1,8 +1,8 @@
 {
-  "title": "pi - An opinionated and radically minimal coding agent harness",
+  "title": "What I learned building an opinionated and minimal coding agent harness",
   "date": "2025-11-30",
   "image": "media/header.png",
   "caption": "It's not much, but it's mine",
-  "description": "Discover pi-coding-agent, a radically simple and opinionated coding assistant that prioritizes developer control and multi-model flexibility over complex frameworks.",
+  "description": "Lessons I learned while building my own coding agent from scratch.",
   "published": true
 }

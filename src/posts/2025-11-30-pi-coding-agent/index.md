@@ -17,24 +17,26 @@ I preferred Claude Code for most of my work. It was the first thing I tried back
 
 I've also built a bunch of agents over the years, of various complexity. For example, [Sitegeist](https://sitegeist.ai), my little browser-use agent, is essentially a coding agent that lives inside the browser. In all that work, I learned that context engineering is paramount. Exactly controlling what goes into the model's context yields better outputs, especially when it's writing code. Existing harnesses make this extremely hard or impossible by injecting stuff behind your back that isn't even surfaced in the UI.
 
-Speaking of surfacing things, I want to inspect every aspect of my interactions with the model. Basically no harness allows that. I also want a cleanly documented session format I can post-process automatically, and a simple way to build alternative UIs on top of the agent core. While some of this is possible with existing harnesses, the APIs smell like organic evolution. These solutions had to learn bitter lessons along the way and keep dragging around the resulting baggage, which shows in the developer experience. I'm not blaming anyone for this. If tons of people use your shit and you need some sort of backwards compatibility, that's the price you pay.
+Speaking of surfacing things, I want to inspect every aspect of my interactions with the model. Basically no harness allows that. I also want a cleanly documented session format I can post-process automatically, and a simple way to build alternative UIs on top of the agent core. While some of this is possible with existing harnesses, the APIs smell like organic evolution. These solutions accumulated baggage along the way, which shows in the developer experience. I'm not blaming anyone for this. If tons of people use your shit and you need some sort of backwards compatibility, that's the price you pay.
 
 I've also dabbled in self-hosting, both locally and on [DataCrunch](https://datacrunch.io). While some harnesses like opencode support self-hosted models, it usually doesn't work well. Mostly because they rely on libraries like the [Vercel AI SDK](https://sdk.vercel.ai/), which doesn't play nice with self-hosted models for some reason, specifically when it comes to tool calling.
 
-So what's an old guy yelling at Claudes going to do? He's going to write his own coding agent harness and give it a name that's entirely un-Google-able, so there will never be any users, which means there will also never be any issues on the GitHub issue tracker. How hard can it be?
+So what's an old guy yelling at Claudes going to do? He's going to write his own coding agent harness and give it a name that's entirely un-Google-able, so there will never be any users. Which means there will also never be any issues on the GitHub issue tracker. How hard can it be?
 
 To make this work, I needed to build:
 
 - **[pi-ai](https://github.com/badlogic/pi-mono/tree/main/packages/ai)**: A unified LLM API with multi-provider support (Anthropic, OpenAI, Google, xAI, Groq, Cerebras, OpenRouter, and any OpenAI-compatible endpoint), streaming, tool calling with TypeBox schemas, thinking/reasoning support, seamless cross-provider context handoffs, and token and cost tracking.
-- **[pi-tui](https://github.com/badlogic/pi-mono/tree/main/packages/tui)**: A minimal terminal UI framework with differential rendering, synchronized output for flicker-free updates, and components like editors with autocomplete and markdown rendering.
-- **[pi-agent](https://github.com/badlogic/pi-mono/tree/main/packages/agent)**: An agent loop that handles tool execution, validation, and event streaming.
+- **[pi-agent-core](https://github.com/badlogic/pi-mono/tree/main/packages/agent)**: An agent loop that handles tool execution, validation, and event streaming.
+- **[pi-tui](https://github.com/badlogic/pi-mono/tree/main/packages/tui)**: A minimal terminal UI framework with differential rendering, synchronized output for (almost) flicker-free updates, and components like editors with autocomplete and markdown rendering.
 - **[pi-coding-agent](https://github.com/badlogic/pi-mono/tree/main/packages/coding-agent)**: The actual CLI that wires it all together with session management, custom tools, themes, and project context files.
 
 My philosophy in all of this was: if I don't need it, it won't be built. And I don't need a lot of things.
 
-## pi-ai
+## pi-ai and pi-agent-core
 
 I'm not going to bore you with the API specifics of this package. You can read it all in the [README.md](https://github.com/badlogic/pi-mono/blob/main/packages/ai/README.md). Instead, I want to document the problems I ran into while creating a unified LLM API and how I resolved them. I'm not claiming my solutions are the best, but they've been working pretty well throughout various agentic and non-agentic LLM projects.
+
+### There. Are. Four. Ligh... APIs
 
 There's really only four APIs you need to speak to talk to pretty much any LLM provider: [OpenAI's Completions API](https://platform.openai.com/docs/api-reference/chat/create), their newer [Responses API](https://platform.openai.com/docs/api-reference/responses), [Anthropic's Messages API](https://docs.anthropic.com/en/api/messages), and [Google's Generative AI API](https://ai.google.dev/api).
 
@@ -51,6 +53,12 @@ For example, in [openai-completions.ts](https://github.com/badlogic/pi-mono/blob
 To ensure all features actually work across the gazillion of providers, pi-ai has a pretty extensive test suite covering image inputs, reasoning traces, tool calling, and other features you'd expect from an LLM API. Tests run across all supported providers and popular models. While this is a good effort, it still won't guarantee that new models and providers will just work out of the box.
 
 Another big difference is how providers report tokens and cache reads/writes. Anthropic has the sanest approach, but generally it's the Wild West. Some report token counts at the start of the SSE stream, others only at the end, making accurate cost tracking impossible if a request is aborted. To add insult to injury, you can't provide a unique ID to later correlate with their billing APIs and figure out which of your users consumed how many tokens. So pi-ai does token and cache tracking on a best-effort basis. Good enough for personal use, but not for accurate billing if you have end users consuming tokens through your service.
+
+Special shout out to Google who to this date seem to not support tool call streaming which is extremely Google.
+
+pi-ai also works in the browser, which is useful for building web-based interfaces. Some providers make this especially easy by supporting CORS, specifically Anthropic and xAI.
+
+### Context handoff
 
 Context handoff between providers was a feature pi-ai was designed for from the start. Since each provider has their own way of tracking tool calls and thinking traces, this can only be a best-effort thing. For example, if you switch from Anthropic to OpenAI mid-session, Anthropic thinking traces are converted to content blocks inside assistant messages, delimited by `<thinking></thinking>` tags. This may or may not be sensible, because the thinking traces returned by Anthropic and OpenAI don't actually represent what's happening behind the scenes.
 
@@ -96,6 +104,8 @@ const continuation = await complete(claude, restored);
 ```
 
 </div>
+
+### We live in a multi-model world
 
 Speaking of models, I wanted a typesafe way of specifying them in the `getModel` call. For that I needed a model registry that I could turn into TypeScript types. I'm parsing data from both [OpenRouter](https://openrouter.ai/) and [models.dev](https://models.dev/) (created by the opencode folks, thanks for that, it's super useful) into [models.generated.ts](https://github.com/badlogic/pi-mono/blob/main/packages/ai/src/models.generated.ts). This includes token costs and capabilities like image inputs and thinking support.
 
@@ -154,6 +164,8 @@ if (response.stopReason === 'aborted') {
 }
 ```
 
+### Structured split tool results
+
 Another abstraction I haven't seen in any unified LLM API is splitting tool results into a portion handed to the LLM and a portion for UI display. The LLM portion is generally just text or JSON, which doesn't necessarily contain all the information you'd want to show in a UI. pi-ai's tool implementation allows returning both content blocks for the LLM and separate content blocks for UI rendering. Tools can also return attachments like images that get attached in the native format of the respective provider. Tool arguments are automatically validated using [TypeBox](https://github.com/sinclairzx81/typebox) schemas and [AJV](https://ajv.js.org/), with detailed error messages when validation fails:
 
 <div class="code-preview">
@@ -203,24 +215,263 @@ What's still lacking is tool result streaming. Imagine a bash tool where you wan
 
 Partial JSON parsing during tool call streaming is essential for good UX. As the LLM streams tool call arguments, pi-ai progressively parses them so you can show partial results in the UI before the call completes. For example, you can display a diff streaming in as the agent rewrites a file.
 
-pi-ai also works in the browser, which is useful for building web-based interfaces.
+### Minimal agent scaffold
 
 Finally, pi-ai provides an [agent loop](https://github.com/badlogic/pi-mono/blob/main/packages/ai/src/agent/agent-loop.ts) that handles the full orchestration: processing user messages, executing tool calls, feeding results back to the LLM, and repeating until the model produces a response without tool calls. The loop also supports message queuing via a callback: after each turn, it asks for queued messages and injects them before the next assistant response. The loop emits events for everything, making it easy to build reactive UIs.
 
-On top of the agent loop, [pi-agent-core](https://github.com/badlogic/pi-mono/tree/main/packages/agent) provides an `Agent` class with additional creature comforts: state management, simplified event subscriptions, the actual queue storage with two modes (one-at-a-time or all-at-once), attachment handling (images, documents), and a transport abstraction that lets you run the agent either directly or through a proxy.
+The agent loop doesn't let you specify max steps or similar knobs you'd find in other unified LLM APIs. I never found a use case for that, so why add it? The loop just loops until the agent says it's done. On top of the loop, however, [pi-agent-core](https://github.com/badlogic/pi-mono/tree/main/packages/agent) provides an `Agent` class with actually useful stuff: state management, simplified event subscriptions, message queuing with two modes (one-at-a-time or all-at-once), attachment handling (images, documents), and a transport abstraction that lets you run the agent either directly or through a proxy.
+
+
 
 Am I happy with pi-ai? For the most part, yes. Like any unifying API, it can never be perfect due to leaky abstractions. But it's been used in seven different production projects and has served me extremely well.
 
-Why build this instead of using the Vercel AI SDK? [Armin's blog post](https://lucumr.pocoo.org/2025/11/21/agents-are-hard/) mirrors my experience. Building on top of the provider SDKs directly gives me full control and lets me design the APIs exactly as I want, with a much smaller surface area.
+Why build this instead of using the Vercel AI SDK? [Armin's blog post](https://lucumr.pocoo.org/2025/11/21/agents-are-hard/) mirrors my experience. Building on top of the provider SDKs directly gives me full control and lets me design the APIs exactly as I want, with a much smaller surface area. Armin's blog gives you a more in-depth treatise on the reasons for building your own. Go read that.
+
+## pi-tui
+
+I grew up in the DOS era, so terminal user interfaces are what I grew up with. From the fancy setup programs for Doom to Borland products, TUIs were with me until the end of the 90s. And boy was I fucking happy when I eventually switched to a GUI operating system. While TUIs are mostly portable and easily streamable, they also suck at information density. Having said all that, I thought starting with a terminal user interface for pi makes the most sense. I could strap on a GUI later whenever I felt like I needed to.
+
+### Two kinds of TUIs
+
+Writing a terminal user interface is not rocket science per se. You just have to pick your poison. There's basically two ways to do it. One is to take ownership of the terminal viewport (the portion of the terminal contents you can actually see) and treat it like a pixel buffer. Instead of pixels you have cells that contain characters with background color, foreground color, and styling like italic and bold. I call these full screen TUIs. Amp and opencode use this approach.
+
+The drawback is that you lose the scrollback buffer, which means you have to implement custom search. You also lose scrolling, which means you have to simulate scrolling within the viewport yourself. While this is not hard to implement, it means you have to re-implement all the functionality your terminal emulator already provides. Mouse scrolling specifically always feels kind of off in such TUIs.
+
+The second approach is to just write to the terminal like any CLI program, appending content to the scrollback buffer, only occasionally moving the "rendering cursor" back up a little within the visible viewport to redraw things like animated spinners or a text edit field. It's not exactly that simple, but you get the idea. This is what Claude Code, Codex, and Droid do.
+
+Coding agents have this nice property that they're basically a chat interface. The user writes a prompt, followed by replies from the agent and tool calls and their results. Everything is nicely linear, which lends itself well to working with the "native" terminal emulator. You get to use all the built-in functionality like natural scrolling and search within the scrollback buffer. It also limits what your TUI can do to some degree, which I find charming because constraints make for minimal programs that just do what they're supposed to do without superfluous fluff. This is the direction I picked for pi-tui.
+
+### Retained mode UI
+
+If you've done any GUI programming, you've probably heard of retained mode vs immediate mode. In a retained mode UI, you build up a tree of components that persist across frames. Each component knows how to render itself and can cache its output if nothing changed. In an immediate mode UI, you redraw everything from scratch each frame (though in practice, immediate mode UIs also do caching, otherwise they'd fall apart).
+
+pi-tui uses a simple retained mode approach. A `Component` is just an object with a `render(width)` method that returns an array of strings (lines that fit the viewport horizontally, with ANSI escape codes for colors and styling) and an optional `handleInput(data)` method for keyboard input. A `Container` holds a list of components arranged vertically and collects all their rendered lines. The `TUI` class is itself a container that orchestrates everything.
+
+When the TUI needs to update the screen, it asks each component to render. Components can cache their output: an assistant message that's fully streamed doesn't need to re-parse markdown and re-render ANSI sequences every time. It just returns the cached lines. Containers collect lines from all children. The TUI gathers all these lines and compares them to the lines it previously rendered for the previous component tree. It keeps a backbuffer of sorts, remembering what was written to the scrollback buffer.
+
+Then it only redraws what changed, using a method I call differential rendering. I'm very bad with names, and this likely has an official name.
+
+### Differential rendering
+
+Here's a simplified demo that illustrates what exactly gets redrawn.
+
+<%
+const demoPath = require('path').dirname(inputPath) + '/media/';
+const demoCss = require('fs').readFileSync(demoPath + 'diff-render-demo.css', 'utf8');
+const demoJs = require('fs').readFileSync(demoPath + 'diff-render-demo.js', 'utf8');
+%>
+
+<style><%= demoCss %></style>
+
+<div class="diff-render-demo">
+    <div class="diff-render-terminal" id="diff-terminal"></div>
+    <div class="diff-render-info" id="diff-info"></div>
+</div>
+
+<script><%= demoJs %></script>
+
+The algorithm is simple:
+
+1. **First render**: Just output all lines to the terminal
+2. **Width changed**: Clear screen completely and re-render everything (soft wrapping changes)
+3. **Normal update**: Find the first line that differs from what's on screen, move the cursor to that line, and re-render from there to the end
+
+There's one catch: if the first changed line is above the visible viewport (the user scrolled up), we have to do a full clear and re-render. The terminal doesn't let you write to the scrollback buffer above the viewport.
+
+To prevent flicker during updates, pi-tui wraps all rendering in synchronized output escape sequences (`CSI ?2026h` and `CSI ?2026l`). This tells the terminal to buffer all the output and display it atomically. Most modern terminals support this.
+
+How well does it work and how much does it flicker? In any capable terminal like Ghostty or iTerm2, this works brilliantly and you never see any flicker. In less fortunate terminal implementations like VS Code's built-in terminal, you will get some flicker depending on the time of day, your display size, your window size, and so on. Given that I'm very accustomed to Claude Code, I haven't spent any more time optimizing this. I'm happy with the little flicker I get in VS Code. I wouldn't feel at home otherwise. And it still flickers less than Claude Code.
+
+How wasteful is this approach? We store an entire scrollback buffer worth of previously rendered lines, and we re-render lines every time the TUI is asked to render itself. That's alleviated with the caching I described above, so the re-rendering isn't a big deal. We still have to compare a lot of lines with each other. Realistically, on computers younger than 25 years, this is not a big deal, both in terms of performance and memory use (a few hundred kilobytes for very large sessions). Thanks V8. What I get in return is a dead simple programming model that lets me iterate quickly.
+
+## pi-coding-agent
+
+I don't need to explain what features you should expect from a coding agent harness. pi comes with most creature comforts you're used to from other tools:
+
+- Runs on Windows, Linux, and macOS (or anything with a Node.js runtime and a terminal)
+
+- Multi-provider support with mid-session model switching
+- Session management with continue, resume, and branching
+- Project context files (AGENTS.md) loaded hierarchically from global to project-specific
+- Slash commands for common operations
+- Custom slash commands as markdown templates with argument support
+- OAuth authentication for Claude Pro/Max subscriptions
+- Custom model and provider configuration via JSON
+- Customizable themes with live reload
+- Editor with fuzzy file search, path completion, drag & drop, and multi-line paste
+- Message queuing while the agent is working
+- Image support for vision-capable models
+- HTML export of sessions
+- Headless operation via JSON streaming and RPC mode
+- Full cost and token tracking
+
+If you want the full rundown, read the [README](https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/README.md). What's more interesting is where pi deviates from other harnesses in philosophy and implementation.
+
+### Minimal system prompt
+
+Here's the system prompt:
+
+<style>
+.system-prompt pre code { white-space: pre-wrap !important; }
+.system-prompt pre { white-space: pre-wrap !important; }
+</style>
+<div class="system-prompt">
+
+```markdown
+You are an expert coding assistant. You help users with coding tasks by reading files, executing commands, editing code, and writing new files.
+
+Available tools:
+- read: Read file contents
+- bash: Execute bash commands
+- edit: Make surgical edits to files
+- write: Create or overwrite files
+
+Guidelines:
+- Use bash for file operations like ls, grep, find
+- Use read to examine files before editing
+- Use edit for precise changes (old text must match exactly)
+- Use write only for new files or complete rewrites
+- When summarizing your actions, output plain text directly - do NOT use cat or bash to display what you did
+- Be concise in your responses
+- Show file paths clearly when working with files
+
+Documentation:
+- Your own documentation (including custom model setup and theme creation) is at: /path/to/README.md
+- Read it when users ask about features, configuration, or setup, and especially if the user asks you to add a custom model or provider, or create a custom theme.
+```
+
+</div>
+
+That's it. The only thing that gets injected at the bottom is your AGENTS.md file. Both the global one that applies to all your sessions and the project-specific one stored in your project directory. This is where you can customize pi to your liking. You can even replace the full system prompt if you want to. Compared to, for example, [Claude Code's system prompt](https://cchistory.mariozechner.at), [Codex's system prompt](https://github.com/openai/codex/blob/main/codex-rs/core/prompt.md), or [opencode's model-specific prompts](https://github.com/sst/opencode/tree/dev/packages/opencode/src/session/prompt) (the Claude one is a [cut-down version](https://github.com/sst/opencode/blob/dev/packages/opencode/src/session/prompt/anthropic.txt) of the [original Claude Code prompt](https://github.com/sst/opencode/blob/dev/packages/opencode/src/session/prompt/anthropic-20250930.txt) they copied).
+
+You might think this is crazy. In all likelihood, the models have some training on their native coding harness. So using the native system prompt or something close to it like opencode would be most ideal. But it turns out that all the frontier models have been RL-trained up the wazoo, so they inherently understand what a coding agent is. There does not appear to be a need for 10,000 tokens of system prompt, as we'll find out later in the benchmark section, and as I've anecdotally found out by exclusively using pi for the past few weeks. Amp, while copying some parts of the native system prompts, seems to also do just fine with their own prompt.
+
+### Minimal toolset
+
+Here are the tool definitions:
+
+```text
+read
+  Read the contents of a file. Supports text files and images (jpg, png,
+  gif, webp). Images are sent as attachments. For text files, defaults to
+  first 2000 lines. Use offset/limit for large files.
+  - path: Path to the file to read (relative or absolute)
+  - offset: Line number to start reading from (1-indexed)
+  - limit: Maximum number of lines to read
+
+write
+  Write content to a file. Creates the file if it doesn't exist, overwrites
+  if it does. Automatically creates parent directories.
+  - path: Path to the file to write (relative or absolute)
+  - content: Content to write to the file
+
+edit
+  Edit a file by replacing exact text. The oldText must match exactly
+  (including whitespace). Use this for precise, surgical edits.
+  - path: Path to the file to edit (relative or absolute)
+  - oldText: Exact text to find and replace (must match exactly)
+  - newText: New text to replace the old text with
+
+bash
+  Execute a bash command in the current working directory. Returns stdout
+  and stderr. Optionally provide a timeout in seconds.
+  - command: Bash command to execute
+  - timeout: Timeout in seconds (optional, no default timeout)
+```
+
+There are additional read-only tools (grep, find, ls) if you want to restrict the agent from modifying files or running arbitrary commands. By default these are disabled, so the agent only gets the four tools above.
+
+As it turns out, these four tools are all you need for an effective coding agent. Models know how to use bash and have been trained on the read, write, and edit tools with similar input schemas. Compare this to [Claude Code's tool definitions](https://cchistory.mariozechner.at) or [opencode's tool definitions](https://github.com/sst/opencode/tree/dev/packages/opencode/src/tool) (which are clearly derived from Claude Code's, same structure, same examples, same git commit flow). Notably, [Codex's tool definitions](https://github.com/openai/codex/blob/main/codex-rs/core/src/tools/spec.rs) are similarly minimal to pi's.
+
+pi's system prompt and tool definitions together come in below 1000 tokens.
+
+### YOLO by default
+
+pi runs in full YOLO mode and assumes you know what you're doing. It has unrestricted access to your filesystem and can execute any command without permission checks or safety rails. No permission prompts for file operations or commands. No [pre-checking of bash commands by Haiku](/posts/2025-08-03-cchistory/#haiku-this-haiku-that) for malicious content. Full filesystem access. Can execute any command with your user privileges.
+
+If you look at the security measures in other coding agents, they're mostly security theater. As soon as your agent can write code and run code, it's pretty much game over. The only way you could prevent exfiltration of data would be to cut off all network access for the execution environment the agent runs in, which makes the agent mostly useless. An alternative is allow-listing domains, but this can also be worked around through other means.
+
+Simon Willison has [written extensively](https://simonwillison.net/2023/Apr/25/dual-llm-pattern/) about this problem. His "dual LLM" pattern attempts to address confused deputy attacks and data exfiltration, but even he admits "this solution is pretty bad" and introduces enormous implementation complexity. The core issue remains: if an LLM has access to tools that can read private data and make network requests, you're playing whack-a-mole with attack vectors.
+
+Since we cannot solve this trifecta of capabilities (read data, execute code, network access), pi just gives in. Everybody is running in YOLO mode anyways to get any productive work done, so why not make it the default and only option?
+
+By default, pi has no web search or fetch tool. However, it can use `curl` or read files from disk, both of which provide ample surface area for prompt injection attacks. Malicious content in files or command outputs can influence behavior. If you're uncomfortable with full access, run pi inside a container or use a different tool if you need (faux) guardrails.
+
+### No built-in to-dos
+
+pi does not and will not support built-in to-dos. In my experience, to-do lists generally confuse models more than they help. They add state that the model has to track and update, which introduces more opportunities for things to go wrong.
+
+If you need task tracking, make it externally stateful by writing to a file:
+
+```markdown
+# TODO.md
+
+- [x] Implement user authentication
+- [x] Add database migrations
+- [ ] Write API documentation
+- [ ] Add rate limiting
+```
+
+The agent can read and update this file as needed. Using checkboxes keeps track of what's done and what remains. Simple, visible, and under your control.
+
+### No plan mode
+
+pi does not and will not have a built-in plan mode. Telling the agent to think through a problem together with you, without modifying files or executing commands, is generally sufficient.
+
+If you need persistent planning across sessions, write it to a file:
+
+```markdown
+# PLAN.md
+
+## Goal
+Refactor authentication system to support OAuth
+
+## Approach
+1. Research OAuth 2.0 flows
+2. Design token storage schema
+3. Implement authorization server endpoints
+4. Update client-side login flow
+5. Add tests
+
+## Current Step
+Working on step 3 - authorization endpoints
+```
+
+The agent can read, update, and reference the plan as it works. Unlike ephemeral planning modes that only exist within a session, file-based plans can be shared across sessions, and can be versioned with your code.
+
+Funnily enough, Claude Code now has a [Plan Mode](https://code.claude.com/docs/en/common-workflows#use-plan-mode-for-safe-code-analysis) that's essentially read-only analysis, and it will eventually write a markdown file to disk. And you can basically not use plan mode without approving a shit ton of command invocations, because without that, planning is basically impossible.
+
+The difference with pi is that I have full observability of everything. I get to see which sources the agent actually looked at and which ones it totally missed. In Claude Code, the orchestrating Claude instance usually spawns a sub-agent and you have zero visibility into what that sub-agent does. I get to see the markdown file immediately. I can edit it collaboratively with the agent. In short, I need observability for planning and I don't get that with Claude Code's plan mode.
+
+If you must restrict the agent during planning, you can specify which tools it has access to via the CLI:
+
+```bash
+pi --tools read,grep,find,ls
+```
+
+This gives you read-only mode for exploration and planning without the agent modifying anything or being able to run bash commands. You won't be happy with that though.
+
+## Benchmarks
 
 <!--
-TODO: Continue with pi-tui and pi-coding-agent sections.
+TODO: Write benchmarks section with Terminal-Bench 2.0 results.
 
-Relevant files for next session:
-- ../pi-mono/packages/tui/README.md
-- ../pi-mono/packages/tui/src/
-- ../pi-mono/packages/coding-agent/README.md
-- ../pi-mono/packages/coding-agent/src/
+Reference: https://github.com/laude-institute/terminal-bench
+Mario will add benchmark screenshots of pi with Claude Opus 4.5 on Terminal-Bench 2.0.
+
+TODO: No MCP support section
+- pi rejects MCP in favor of CLI tools + README.md files
+- Reference existing blog posts: /posts/2025-08-15-mcp-vs-cli/ and /posts/2025-11-02-what-if-you-dont-need-mcp/
+- README section: "MCP & Adding Your Own Tools"
+
+TODO: No sub-agents section
+- Context transfer between agents is poor
+- You're the orchestrator, run multiple pi sessions in different terminals
+- README section: "Sub-Agents"
+
+TODO: No background bash section
+- Use tmux or tterminal-cp instead
+- README section: "Background Bash"
 -->
 
 <%= render("../../_partials/post-footer.html", { title, url }) %>
