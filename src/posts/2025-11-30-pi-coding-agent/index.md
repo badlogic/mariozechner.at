@@ -166,7 +166,7 @@ if (response.stopReason === 'aborted') {
 
 ### Structured split tool results
 
-Another abstraction I haven't seen in any unified LLM API is splitting tool results into a portion handed to the LLM and a portion for UI display. The LLM portion is generally just text or JSON, which doesn't necessarily contain all the information you'd want to show in a UI. pi-ai's tool implementation allows returning both content blocks for the LLM and separate content blocks for UI rendering. Tools can also return attachments like images that get attached in the native format of the respective provider. Tool arguments are automatically validated using [TypeBox](https://github.com/sinclairzx81/typebox) schemas and [AJV](https://ajv.js.org/), with detailed error messages when validation fails:
+Another abstraction I haven't seen in any unified LLM API is splitting tool results into a portion handed to the LLM and a portion for UI display. The LLM portion is generally just text or JSON, which doesn't necessarily contain all the information you'd want to show in a UI. It also sucks hard to parse textual tool outputs and restructure them for display in a UI. pi-ai's tool implementation allows returning both content blocks for the LLM and separate content blocks for UI rendering. Tools can also return attachments like images that get attached in the native format of the respective provider. Tool arguments are automatically validated using [TypeBox](https://github.com/sinclairzx81/typebox) schemas and [AJV](https://ajv.js.org/), with detailed error messages when validation fails:
 
 <div class="code-preview">
 
@@ -451,27 +451,114 @@ pi --tools read,grep,find,ls
 
 This gives you read-only mode for exploration and planning without the agent modifying anything or being able to run bash commands. You won't be happy with that though.
 
+### No MCP support
+
+pi does not and will not support MCP. I've [written about this extensively](/posts/2025-11-02-what-if-you-dont-need-mcp/), but the TL;DR is: MCP servers are overkill for most use cases, and they come with significant context overhead.
+
+Popular MCP servers like Playwright MCP (21 tools, 13.7k tokens) or Chrome DevTools MCP (26 tools, 18k tokens) dump their entire tool descriptions into your context on every session. That's 7-9% of your context window gone before you even start working. Many of these tools you'll never use in a given session.
+
+The alternative is simple: build CLI tools with README files. The agent reads the README when it needs the tool, pays the token cost only when necessary (progressive disclosure), and can use bash to invoke the tool. This approach is composable (pipe outputs, chain commands), easy to extend (just add another script), and token-efficient.
+
+Here's how I add web search to pi:
+
+<video src="media/websearch.mp4" controls loading="lazy">
+</video>
+
+I maintain a collection of these tools at [github.com/badlogic/agent-tools](https://github.com/badlogic/agent-tools). Each tool is a simple CLI with a README that the agent reads on demand.
+
+If you absolutely must use MCP servers, look into [Peter Steinberger's](https://x.com/steipete) [mcporter](https://github.com/steipete/mcporter) tool that wraps MCP servers as CLI tools.
+
+### No background bash
+
+pi's bash tool runs commands synchronously. There's no built-in way to start a dev server, run tests in the background, or interact with a REPL while the command is still running.
+
+This is intentional. Background process management adds complexity: you need process tracking, output buffering, cleanup on exit, and ways to send input to running processes. Claude Code handles some of this with their background bash feature, but it has poor observability (a common theme with Claude Code) and forces the agent to track running instances without providing a tool to query them. In earlier Claude Code versions, the agent forgot about all its background processes after context compaction and had no way to query them, so you had to manually kill them. This has since been fixed.
+
+Use [tmux](https://github.com/tmux/tmux) instead. Here's pi debugging a crashing C program in LLDB:
+
+<video src="media/tmux.mp4" controls loading="lazy">
+</video>
+
+How's that for observability? The same approach works for long-running dev servers, watching log output, and similar use cases. And if you wanted to, you could hop into that LLDB session above via tmux and co-debug with the agent. Tmux also gives you a CLI argument to list all active sessions. How nice.
+
+There's simply no need for background bash. Claude Code can use tmux too, you know. Bash is all you need.
+
+### No sub-agents
+
+pi does not have a dedicated sub-agent tool. When Claude Code needs to do something complex, it often spawns a sub-agent to handle part of the task. You have zero visibility into what that sub-agent does. It's a black box within a black box. Context transfer between agents is also poor: the orchestrating agent has to summarize what the sub-agent did, losing detail in the process. And if the sub-agent makes a mistake, debugging is painful because you can't see the full conversation.
+
+If you need pi to spawn itself, just ask it to run itself via bash. You could even have it spawn itself inside a tmux session for full observability and the ability to interact with that sub-agent directly.
+
+<img src="media/subagent.jpeg" loading="lazy">
+
+But more importantly: fix your workflow, at least the ones that are all about context gathering. People use sub-agents within a session thinking they're saving context space, which is true. But that's the wrong way to think about sub-agents. Using a sub-agent mid-session for context gathering is a sign you didn't plan ahead. If you need to gather context, do that first in its own session. Create an artifact that you can later use in a fresh session to give your agent all the context it needs without polluting its context window with tool outputs. That artifact can be useful for the next feature too, and you get full observability and steerability, which is important during context gathering.
+
+Because despite popular belief, models are still poor at finding all the context needed for implementing a new feature or fixing a bug. I attribute this to models being trained to only read parts of files rather than full files, so they're hesitant to read everything. Which means they miss important context and can't see what they need to properly complete the task.
+
+Just look at the [pi-mono issue tracker](https://github.com/badlogic/pi-mono/issues) and the pull requests. Many get closed or revised because the agents couldn't fully grasp what's needed. That's not the fault of the contributors, which I truly appreciate because even incomplete PRs help me move faster. It just means we trust our agents too much.
+
+I'm not dismissing sub-agents entirely. There are valid use cases. My most common one is code review: I tell pi to spawn itself with a code review prompt (via a custom slash command) and it gets the outputs.
+
+```markdown
+---
+description: Run a code review sub-agent
+---
+Spawn yourself as a sub-agent via bash to do a code review: $@
+
+Use `pi --print` with appropriate arguments. If the user specifies a model,
+use `--provider` and `--model` accordingly.
+
+Pass a prompt to the sub-agent asking it to review the code for:
+- Bugs and logic errors
+- Security issues
+- Error handling gaps
+
+Do not read the code yourself. Let the sub-agent do that.
+
+Report the sub-agent's findings.
+```
+
+And here's how I use this to review a pull request on GitHub:
+
+<video src="media/subagent.mp4" controls loading="lazy">
+</video>
+
+With a simple prompt, I can select what specific thing I want to review and what model to use. I could even set thinking levels if I wanted to. I can also save out the full review session to a file and hop into that in another pi session if I wanted. Or I can say this is an ephemeral session and it shouldn't be saved to disk. All of that gets translated into a prompt that the main agent reads and based on which it executes itself again via bash. And while I don't get full observability into the inner workings of the sub-agent, I get full observability on its output. Something other harnesses don't really provide, which makes no sense to me.
+
+Of course, this is a bit of a simulated use case. In reality, I would just spawn a new pi session and ask it to review the pull request, possibly pull it into a branch locally. After I see its initial review, I give my own review and then we work on it together until it's good. That's the workflow I use to not merge garbage code.
+
+Spawning multiple sub-agents to implement various features in parallel is an anti-pattern in my book and doesn't work, unless you don't care if your codebase devolves into a pile of garbage.
+
 ## Benchmarks
 
-<!--
-TODO: Write benchmarks section with Terminal-Bench 2.0 results.
+I make a lot of grandiose claims, but do I have numerical proof that all the contrarian things I say above actually work? I have my lived experience, but that's hard to transport in a blog post and you'd just have to believe me. So I created a [Terminal-Bench 2.0](https://github.com/laude-institute/terminal-bench) test run for pi with Claude Opus 4.5 and let it compete against Codex, Cursor, Windsurf, and other coding harnesses with their respective native models.
 
-Reference: https://github.com/laude-institute/terminal-bench
-Mario will add benchmark screenshots of pi with Claude Opus 4.5 on Terminal-Bench 2.0.
+I performed a complete run with five trials per task, which makes the results eligible for submission to the leaderboard. I also started a second run that only runs during CET because I found that error rates (and consequently benchmark results) get worse once PST goes online. Here are the results for the first run:
 
-TODO: No MCP support section
-- pi rejects MCP in favor of CLI tools + README.md files
-- Reference existing blog posts: /posts/2025-08-15-mcp-vs-cli/ and /posts/2025-11-02-what-if-you-dont-need-mcp/
-- README section: "MCP & Adding Your Own Tools"
+<img src="media/terminal-bench.png" loading="lazy">
 
-TODO: No sub-agents section
-- Context transfer between agents is poor
-- You're the orchestrator, run multiple pi sessions in different terminals
-- README section: "Sub-Agents"
+And here's pi's placement on the current leaderboard as of December 2nd, 2025:
 
-TODO: No background bash section
-- Use tmux or tterminal-cp instead
-- README section: "Background Bash"
--->
+<img src="media/results.jpeg" loading="lazy">
+
+And here's the [results.json](https://gist.github.com/badlogic/f45e8f6e481e5ab7d3a50659da84edaa) file I've submitted to the Terminal-Bench folks for inclusion in the leaderboard. The bench runner for pi can be found in [this repository](https://github.com/badlogic/pi-terminal-bench) if you want to reproduce the results. I suggest you use your Claude plan instead of pay-as-you-go.
+
+Finally, here's a little glimpse into the CET-only run:
+
+<img src="media/results2.png" loading="lazy">
+
+This is going to take another day or so to complete. I will update this blog post once that is done.
+
+Also note the ranking of [Terminus 2](https://github.com/laude-institute/terminal-bench/tree/main/terminal_bench/agents/terminus_2) on the leaderboard. Terminus 2 is the Terminal-Bench team's own minimal agent that just gives the model a tmux session. The model sends commands as text to tmux and parses the terminal output itself. No fancy tools, no file operations, just raw terminal interaction. And it's holding its own against agents with far more sophisticated tooling and works with a diverse set of models. More evidence that a minimal approach can do just as well.
+
+## In summary
+
+Benchmark results are hilarious, but the real proof is in the pudding. And my pudding is my day-to-day work. Twitter is full of context engineering posts and blogs, but I feel like none of the harnesses we currently have actually let you do context engineering. pi is my attempt to build myself a tool where I'm in control as much as possible.
+
+I'm pretty happy with where pi is. There are a few more features I'd like to add, like [compaction](https://github.com/badlogic/pi-mono/issues/92) or [tool result streaming](https://github.com/badlogic/pi-mono/issues/44), but I don't think there's much more I'll personally need.
+
+That said, I welcome contributions. But as with all my open source projects, I tend to be dictatorial. A lesson I've learned the hard way over the years with my bigger projects. If I close an issue or PR you've sent in, no hard feelings. I will also do my best to give you reasons why. I just want to keep this focused and maintainable. If pi doesn't fit your needs, I implore you to fork it. I truly mean it. And if you create something that even better fits my needs, I'll happily join your efforts.
+
+I think some of the learnings above transfer to other harnesses as well. Let me know how that goes for you.
 
 <%= render("../../_partials/post-footer.html", { title, url }) %>
