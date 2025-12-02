@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+rm -rf html
 blargh --in src --out html
 host=slayer.marioslab.io
 host_dir=/home/badlogic/mariozechner.at
