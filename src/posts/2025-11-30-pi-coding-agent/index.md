@@ -533,7 +533,7 @@ Spawning multiple sub-agents to implement various features in parallel is an ant
 
 ## Benchmarks
 
-I make a lot of grandiose claims, but do I have numerical proof that all the contrarian things I say above actually work? I have my lived experience, but that's hard to transport in a blog post and you'd just have to believe me. Obviously, we all know benchmarks aren't representative of real-world performance, but it's the best I can provide you as a sort of proof that not everything I say is complete bullshit. So I created a [Terminal-Bench 2.0](https://github.com/laude-institute/terminal-bench) test run for pi with Claude Opus 4.5 and let it compete against Codex, Cursor, Windsurf, and other coding harnesses with their respective native models.
+I make a lot of grandiose claims, but do I have numerical proof that all the contrarian things I say above actually work? I have my lived experience, but that's hard to transport in a blog post and you'd just have to believe me. So I created a [Terminal-Bench 2.0](https://github.com/laude-institute/terminal-bench) test run for pi with Claude Opus 4.5 and let it compete against Codex, Cursor, Windsurf, and other coding harnesses with their respective native models. Obviously, we all know benchmarks aren't representative of real-world performance, but it's the best I can provide you as a sort of proof that not everything I say is complete bullshit.
 
 I performed a complete run with five trials per task, which makes the results eligible for submission to the leaderboard. I also started a second run that only runs during CET because I found that error rates (and consequently benchmark results) get worse once PST goes online. Here are the results for the first run:
 
