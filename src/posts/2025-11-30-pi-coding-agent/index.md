@@ -555,7 +555,7 @@ Also note the ranking of [Terminus 2](https://github.com/laude-institute/termina
 
 ## In summary
 
-Benchmark results are hilarious, but the real proof is in the pudding. And my pudding is my day-to-day work. Twitter is full of context engineering posts and blogs, but I feel like none of the harnesses we currently have actually let you do context engineering. pi is my attempt to build myself a tool where I'm in control as much as possible.
+Benchmark results are hilarious, but the real proof is in the pudding. And my pudding is my day-to-day work, where pi has been performing admirably. Twitter is full of context engineering posts and blogs, but I feel like none of the harnesses we currently have actually let you do context engineering. pi is my attempt to build myself a tool where I'm in control as much as possible.
 
 I'm pretty happy with where pi is. There are a few more features I'd like to add, like [compaction](https://github.com/badlogic/pi-mono/issues/92) or [tool result streaming](https://github.com/badlogic/pi-mono/issues/44), but I don't think there's much more I'll personally need. Missing compaction hasn't been a problem for me personally. For some reason, I'm able to cram [hundreds of exchanges](media/long-session.html) between me and the agent into a single session compared to Claude Code.
 
