@@ -487,7 +487,7 @@ There's simply no need for background bash. Claude Code can use tmux too, you kn
 
 ### No sub-agents
 
-pi does not have a dedicated sub-agent tool. When Claude Code needs to do something complex, it often spawns a sub-agent to handle part of the task. You have zero visibility into what that sub-agent does. It's a black box within a black box. Context transfer between agents is also poor: the orchestrating agent has to summarize what the sub-agent did, losing detail in the process. And if the sub-agent makes a mistake, debugging is painful because you can't see the full conversation.
+pi does not have a dedicated sub-agent tool. When Claude Code needs to do something complex, it often spawns a sub-agent to handle part of the task. You have zero visibility into what that sub-agent does. It's a black box within a black box. Context transfer between agents is also poor: the orchestrating agent decides what the sub-agent is passed as initial context, and you have little control over that. If the sub-agent makes a mistake, debugging is painful because you can't see the full conversation.
 
 If you need pi to spawn itself, just ask it to run itself via bash. You could even have it spawn itself inside a tmux session for full observability and the ability to interact with that sub-agent directly.
 
