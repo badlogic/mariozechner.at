@@ -13,7 +13,7 @@
 
 It's been one and a half years since I did a [year in review](/posts/2024-07-15-two-years-in-review/), which actually covered two years. As 2025 comes to a close, I figured I want to get an overview of what I did this year with my life outside of family and business. As usual, it was a mix of technical stuff, hacktivism, and general bullshittery. I figured I'd just write it all out in a hopefully concise way. For me, to have a memory of what happened. For you, to possibly find interesting bits and pieces that are useful to you as well.
 
-If you have a look at the header image, you will see a bit of a gap for March and February. Reason being: I have become old. I suppose that's the most interesting observation about this year for me. My body is falling apart slowly. I spent some time in the hospital and then needed quite a bit of time to recover, which meant I didn't have the energy outside of family stuff to do anything really. That explains the gap in my GitHub contributions.
+If you have a look at the header image, you will see a bit of a gap for February and March. Reason being: I have become old. I suppose that's the most interesting observation about this year for me. My body is falling apart slowly. I spent some time in the hospital and then needed quite a bit of time to recover, which meant I didn't have the energy outside of family stuff to do anything really. That explains the gap in my GitHub contributions.
 
 Anyways, with all of that out of the way, here we go. Let's start with the one project I'm most proud of.
 
@@ -307,85 +307,140 @@ For the [final investigation](https://bsky.app/profile/mariozechner.at/post/3m4s
 
 This correlates nicely with RTR (Austrian Regulatory Authority) public funding. OE24's parent company received €287,000 in 2024 for "KI Bilderkennung/Datenbanken/Korrektur/Creation." Heute got €140,876 for "KI-gestützter Journalismus." Austrian taxpayers funded these AI deployments, yet none of the publications disclose LLM usage to readers.
 
-As a byproduct, I now have a scraper for all major Austrian news websites. I'm working on turning that into a media monitoring tool and a public search engine across all news articles published in the past 30 days.
+As a byproduct, I now have a scraper for all major Austrian news websites. I'm working on turning that into a media monitoring tool and a public search engine across all news articles published in the past 30 days. Here's a [demo tracking Mahrer coverage](https://bsky.app/profile/mariozechner.at/post/3m5ivisnc2k25) across publications after a ZIB 2 interview:
+
+<figure>
+<video src="media/mahrer-tracker.mp4" controls loading="lazy">
+</video>
+<figcaption>Searching Austrian news sites for Mahrer coverage</figcaption>
+</figure>
 
 For shits and giggles, Jenia and I had Claude write up a [full methodology paper](https://sink.mariozechner.at/api/share/1094cc9dbc6e11c26ac8e94826101de0/file/llm-detection-paper.html) with all the charts and details if you want to dig deeper.
 
 ### fobizz School AI Tools
 
-TODO: Sophie Scholl chatbot investigation.
+<figure>
+<img src="media/fobizz-sophie-scholl.jpg" loading="lazy">
+</figure>
 
-### Government Chatbots
+LLMs in schools and universities are reality now. Whether that's good or bad is yet to be seen. Political decision makers love nothing more than stuffing AI tools into schools, pretending they increase some made-up metric. I truly hate that. I believe when used appropriately, LLMs can actually help with learning. But the things I see in the wild are just mindless GPT wrappers that actually hinder learning.
 
-TODO: Kremsi, Feldi, Tirol bot testing.
+One of these tools is called [fobizz](https://fobizz.com/), and you should definitely watch this [38C3 talk](https://media.ccc.de/v/38c3-chatbots-im-schulunterricht) by Rainer Mühlhoff and Marte Henningsen. They investigated fobizz's automated homework correction tool and found it produces essentially random grades. They also interviewed teachers about AI in classrooms and discuss how dystopian it is to fix social problems in education with tech tools. Multiple German states have bought licenses for all their teachers from fobizz, and some Austrian schools use it too. The talk is in German, but well worth your time.
+
+I went through fobizz's own training course for teachers and [documented what I found](https://bsky.app/profile/mariozechner.at/post/3leos7f64qk2a). The training videos use AI-generated voiceover pretending to be a real person. Tools like quiz generators and lesson planners have prominent PDF download buttons, encouraging teachers to use the output directly without verification. There are almost no warnings about checking LLM output for correctness.
+
+They claim "highest security standards, TÜV certified" for GDPR compliance, but also tell users "please don't enter sensitive data." Their transcription tool scrapes YouTube and Vimeo videos, which violates both platforms' terms of service. They suggest teachers use random custom GPTs from unknown creators.
+
+The cherry on top: historical figure roleplay chatbots. Including a Sophie Scholl bot. When asked "Welches Unrecht ist dir widerfahren?" (What injustice happened to you?), the bot replied "Mir persönlich ist kein Unrecht widerfahren" (No injustice happened to me personally). Sophie Scholl was executed by the Nazis. This is what schools are paying for with taxpayer money.
+
+From April 2024 to September 2025, 114 Austrian schools participated in an AI tools pilot project with "scientific accompaniment" by KF Uni Graz. The [final report](https://static.uni-graz.at/fileadmin/_files/_administrative_sites/_idea-lab/Dateien/2025_07_KI-Pilotierung_Steckbriefe_KI-Tools_final.pdf) is basically a glorified link collection. I [went through it](https://bsky.app/profile/mariozechner.at/post/3m534dduugc2z) and found they unreflectively recommend fobizz (including the Sophie Scholl bot), list Perplexity as providing "fact-based answers," and include tools like LaLeTu that collect children's full PII (name, birthday, native language, gender) plus audio recordings and send them to their servers. No real evaluation of any of these tools, no guidance for teachers on how to assess them in practice. Schools are left to figure it out on their own.
+
+### Facial Recognition Hiring Paper
+
+The Economist published an article about a paper claiming facial analysis can predict personality traits for hiring decisions. The article read like the author was getting off on the idea of this being used in production. I [read the actual paper](https://bsky.app/profile/mariozechner.at/post/3m4zphtreas2x) and it's methodological garbage.
+
+The paper tries to establish a connection between facial features and personality traits by citing genetics research. But the cited papers only say personality traits are partially genetic. They do NOT say you can infer personality traits from facial features. The authors then build on a method from a previous paper that was already [torn apart in Cell](https://www.cell.com/patterns/fulltext/S2666-3899(22)00178-4) as "the reanimation of pseudoscience in machine learning."
+
+The data comes from Revelio, a company that generates much of its data using AI. The salary data is model-generated. The "race" classification is based on names and locations, plus image recognition. They use a model trained on self-reported personality traits, which any psychologist will tell you is unreliable.
+
+The paper even admits its predictive power is weak (low R²), but claims the method is "new." The robustness checks are laughable: they tested "calm" versus "happy" facial expressions on 28 women and 37 men, all with identical lighting and hairstyles. No variation in any real-world conditions.
+
+The paper asks whether it's "ethical to screen out individuals whose faces predict less desirable personalities." This isn't a challenging question because the method doesn't work. The challenging question is why pseudoscience like this gets media coverage in outlets like The Economist. This is phrenology with a fresh coat of AI paint.
 
 ### Other Investigations
 
-TODO: Clinara medical transcription, StoryOne book generator (FAZ AI slop), Facial recognition hiring paper debunk.
+**Government Chatbots**: I used Sitegeist to [find and test chatbots on Austrian government websites](https://bsky.app/profile/mariozechner.at/post/3m3dhbgt6fk23). Kremsi (Kremsmünster) is built by schorn.ai and trivially jailbreakable. Its privacy policy claims EU-only data processing, but it's actually hosted on Vercel in the US. It won a Verwaltungspreis. Feldi (Feldkirchen) is built by AI Concierge, the same company behind the [AMS Berufsinfomaten](/posts/2024-07-15-two-years-in-review/#ams-berufsinfomat). KLARA (Klagenfurt) uses the same platform. The Telfer Copilot (Telfs) is hosted on Azure Ireland and can actually read Gemeinderatsprotokolle, which is genuinely useful. I did a [YouTube livestream](https://www.youtube.com/watch?v=5_ag33W9XpY) showing the whole process.
 
-## Workshops and Talks
+**Clinara Medical Transcription**: Someone posted about Clinara, an Austrian startup selling AI transcription for doctors. I [tested it](https://bsky.app/profile/mariozechner.at/post/3m24pjolrrk2s) by reading a Standard article in Hochdeutsch and analyzed the word error rate. Whisper-based transcription has around 5-10% word error rate, meaning roughly 5-10 words per 100 are wrong. For medical documentation, that's concerning. Bonus: their web app sends the system prompt from the client side, so I could use their server as a free GPT API endpoint.
 
-TODO:
-- GenAI Workshop (YouTube live stream, also for companies including Profil)
-- Agentic Coding workshop (for software companies)
-- CC Anonymous Vienna talk (Hacking Claude Code)
-- LLM Meetup Graz (Hacking Claude Code)
-- GrazJS talk (Sitegeist/browser AI)
+<video src="media/clinara-free-gpt.mp4" controls>
+</video>
+
+**StoryOne Book Generator**: The FAZ published a puff piece about StoryOne, an Austrian startup claiming to revolutionize non-fiction book writing with AI. I [did a self-test](https://bsky.app/profile/mariozechner.at/post/3m5twk7aqvc2p): gave it one of my blog posts and had it generate a "fact-based" book. The result was 75 pages (18 of them blank "for layout"), no actual fact enrichment despite their "neurosymbolic AI" claims, just hallucinated LinkedIn slop. All parties involved should be ashamed, including the FAZ.
 
 ## Other Notable Projects
 
-TODO: Parliament Watch, Carinthian Honors Dashboard, Coalition Protocol leaks, armin-is-wrong blog post.
+**[Parliament Watch](https://mariozechner.at/projects/parliament-watch/)**: [@alltagsprolet.at](https://bsky.app/profile/alltagsprolet.at) asked me if I could build something to track who's absent from parliament sessions. "Give me 10 minutes," I said. It took 2 hours. The site scrapes stenographic protocols and shows absence rankings by party and individual MPs.
 
-## Small tools and utilities
-I mass produce mass garbage. Here's a list of public tools and utilities I built this year. Most of them are half-baked, barely documented, and will probably break if you look at them wrong.
+<figure>
+<img src="media/parliament-watch.png" loading="lazy">
+</figure>
 
-**pi coding agent** (see also [blog post](/posts/2025-11-30-pi-coding-agent/)):
-- [pi-mono](https://github.com/badlogic/pi-mono) - The main agent toolkit: CLI, unified LLM API, TUI & web UI, Slack bot
-- [pi-skills](https://github.com/badlogic/pi-skills) - Skills for pi (compatible with Claude Code and Codex CLI)
-- [pi-terminal-bench](https://github.com/badlogic/pi-terminal-bench) - Harbor adapter for Terminal-Bench evaluations
-- [pi-rewind-hook](https://github.com/badlogic/pi-rewind-hook) - Hook for rewinding file changes during coding sessions
-- [pi-guis](https://github.com/badlogic/pi-guis) - GUI experiments for pi
-- [pi](https://github.com/badlogic/pi) - CLI for managing vLLM deployments on GPU pods
+**[Carinthian Honors Dashboard](https://sink.mariozechner.at/api/share/f4c54876571284e55eab198586dd74ae/file/ehrungen_dashboard.html)**: Kathrin Stainer-Hämmerle posted that Carinthia awards about 50 state honors per year but claims they can't determine how many go to women. Armin Wolf suggested someone count them manually. I used Sitegeist to scrape 3 years of honors data and had an LLM classify gender from names. [Built a dashboard](https://bsky.app/profile/mariozechner.at/post/3m6esdeg2yk2i) in a few hours.
 
-**LLM/Agent tooling** (see also blog posts: [Prompts are Code](/posts/2025-06-02-prompts-are-code/), [JailJS](/posts/2025-10-05-jailjs/), [MCP vs CLI](/posts/2025-08-15-mcp-vs-cli/), [What if you don't need MCP](/posts/2025-11-02-what-if-you-dont-need-mcp/)):
-- [lemmy](https://github.com/badlogic/lemmy) - Wrapper around tool-using LLMs for agentic workflows
-- [lsp-cli](https://github.com/badlogic/lsp-cli) - Extract symbol information from codebases using LSP
-- [agent-tools](https://github.com/badlogic/agent-tools) - CLI tools for coding agents
-- [jailjs](https://github.com/badlogic/jailjs) - JavaScript AST interpreter for sandboxed execution
-- [browser-tools](https://github.com/badlogic/browser-tools) - Chrome DevTools Protocol automation
+<figure>
+<img src="media/carinthian-honors.png" loading="lazy">
+</figure>
 
-**Google CLI tools:**
-- [gmcli](https://github.com/badlogic/gmcli) - Minimal Gmail CLI
-- [gccli](https://github.com/badlogic/gccli) - Minimal Google Calendar CLI
-- [gdcli](https://github.com/badlogic/gdcli) - Minimal Google Drive CLI
+**Coalition Protocol Leaks**: In February, someone leaked the FPÖ/ÖVP coalition negotiation protocol. I [hosted the 223-page PDF](https://bsky.app/profile/mariozechner.at/post/3lhrewtjzpc23) so people could read it themselves. Then a little bird also sent me the ÖVP/SPÖ/NEOS protocol from the failed negotiations. [Made both available](https://bsky.app/profile/mariozechner.at/post/3lhrlonws2c23) and archived them on the Wayback Machine. Martin Thür asked if anyone could find identical formulations between the two documents. I suggested using LLMs to compare thematically similar chapters.
 
-**TUI/UI libraries:**
-- [tui](https://github.com/badlogic/tui) - Terminal UI framework with differential rendering
-- [babbletui](https://github.com/badlogic/babbletui) - Minimal TUI library for chat interfaces
-- [mini-lit](https://github.com/badlogic/mini-lit) - Lit-based component library with CVA styling
+The reaction from the journalist bubble was interesting. I got quite a few DMs congratulating me on actually leaking the thing. Others were upset because it torpedoed their own reporting. I even got a call from a prominent Austrian journalist who wanted me to expose my sources. That was fun.
 
-**Dev utilities:**
-- [hotserve](https://github.com/badlogic/hotserve) - Minimal hot-reload development server
-- [create-app](https://github.com/badlogic/create-app) - CLI for creating deployable apps with Caddy + Docker
-- [proxy](https://github.com/badlogic/proxy) - Simple HTTP proxy server with CORS support
-- [vs-claude](https://github.com/badlogic/vs-claude) - VS Code extension for Claude Code integration
-- [rsync-win](https://github.com/badlogic/rsync-win) - Rsync for Windows with additional flags
+**WaveMind**: I started scraping Austrian audio news sources and transcribing them with AI. It [began with Falter Radio](https://bsky.app/profile/mariozechner.at/post/3lf7rzwxxh22j), where I transcribed all 437 episodes going back to 2023. Then I added [Ö1 Journale](https://bsky.app/profile/mariozechner.at/post/3lekgfzvpuk2e), ORF TV news, Dunkelkammer, and some other podcasts. Everything is searchable on transcript level, behind closed doors. Closed doors because I don't want to get sued by the biggest Austrian broadcaster. I did give access to a couple of journalists. They found it mildly useful.
 
-**Austrian civic stuff:**
-- [parlament-watch](https://github.com/badlogic/parlament-watch) - Track Austrian parliament attendance
-- [carinthian-honors](https://github.com/badlogic/carinthian-honors) - Gender analysis of Carinthian state honors
-- [news-scraper](https://github.com/badlogic/news-scraper) - Scraper for Austrian newspapers
+<figure>
+<img src="media/wavemind.png" loading="lazy">
+</figure>
 
-**Random:**
-- [tuner](https://github.com/badlogic/tuner) - Free guitar tuner, no tracking, no ads
-- [walker](https://github.com/badlogic/walker) - macOS reminder to walk every 45 minutes
-- [chatoly](https://github.com/badlogic/chatoly) - YouTube chat overlay for macOS that stays on top
-- [maketalk](https://github.com/badlogic/maketalk) - CLI for creating video presentations with title cards
-- [speech-trainer](https://github.com/badlogic/speech-trainer) - Speech training web app for kids
-- [cremer-archive](https://github.com/badlogic/cremer-archive) - Archive of Matthias Cremer's photo blog
-- [ssid-logger](https://github.com/badlogic/ssid-logger) - Android app logging Wi-Fi SSID changes
-- [web-recap](https://github.com/badlogic/web-recap) - Turn browser history into AI-ready insights
-- [talks](https://github.com/badlogic/talks) - Source code for my talks
-- [prefix-reduction](https://github.com/badlogic/prefix-reduction) - Linguistic analysis of Austrian dialect verb prefixes (with @steedl)
+**[Cremer Archive](https://github.com/badlogic/cremer-archive)**: Matthias Cremer has a [photo blog on Der Standard](https://www.derstandard.at/inland/cremersphotoblog) documenting Austrian politics through images. I [scraped and archived the whole thing](https://bsky.app/profile/mariozechner.at/post/3lg4pimopms2h). This was a nice little project, and Matthias sent me his book as a thank you. That made my day.
+
+<figure>
+<img src="media/cremer-archive.jpg" loading="lazy">
+</figure>
+
+## Talks
+
+<figure>
+<img src="media/vienna-tech-soiree.png" loading="lazy">
+<figcaption>Vienna Tech Soirée panel discussion</figcaption>
+</figure>
+
+2025 was the year I resumed giving talks. From 2010 to 2016 I was on the conference circuit a lot, both for my open source work and my money-making work. Then I stopped. Really enjoyed getting back into it.
+
+It started with an invitation to [Vienna Tech Soirée](https://lu.ma/vienna-tech-soiree) where I was asked to jump in for a deeply sick Peter Steinberger. It was a panel discussion with [Armin Ronacher](https://bsky.app/profile/mitsuhiko.at) of Flask and Sentry fame, and [Nicolay Gerold](https://x.com/nicolaygerold) who's working on [AMP](https://ampcode.com/). The panel's topic was "How to vibe code to a billion dollars." Funnily enough, none of us panelists actually agreed that's a thing yet. The [full panel discussion](https://www.youtube.com/watch?v=4AEf-gcfoZY) is available on YouTube if you want to see me make an ass of myself.
+
+It was an enjoyable experience with great organization from Andreas Klinger and others. After the panel, I had a lot of interesting discussions with people I'd only known from the internet up until that point.
+
+Peter then set up the first [Claude Code Anonymous meetup in Vienna](https://lu.ma/q50cmcb2), where I turned my Hacking Claude Code blog posts into a five-minute talk. The event was hosted at [Felix Krause's](https://x.com/KrauseFx) Context offices. Everything was last minute and makeshift and I loved it. Again, I met a few people I'd so far only known from the internet, as well as old friends like Christian Cito, my partner in crime in scraping grocers.
+
+I gave the same talk at the [LLMs in Real Software meetup in Graz](https://www.meetup.com/llms-in-real-software-meetup-group-graz/events/308103318/). Again, I met a lot of people I'd previously only known from the internet and some old co-workers from what feels like a previous life.
+
+The final talk I gave this year was about JailJS and Sitegeist at the GrazJS meetup in the halls of Dynatrace. Never in my life would I have expected to talk at a JavaScript meetup, but there we are.
+
+Giving talks requires working on projects that are actually interesting to people. I'm not quite sure yet if I can repeat that next year. This year's been a wild frenzy exploring all the AI and agentic coding tooling space. So there was a lot to talk about. I feel like as the year comes to a close, there's much less happening in the space. At least not a lot that's truly innovative. And I'm kinda out of ideas. We'll see.
+
+## Workshops
+
+<figure>
+<img src="media/genai-workshop.png" loading="lazy">
+<figcaption>GenAI Workshop demo system</figcaption>
+</figure>
+
+2025 was also the year where I did a lot more workshops. In 2024 I created a workshop on how to integrate LLMs into your programs. This year I created a generative AI workshop for normies, explaining the ins and outs of LLMs, chat interfaces, and so on. The goal is always to instill an understanding of what's actually happening inside the black box. That means the workshop is actually a deep dive into the mechanics of LLMs and their harnesses. Attendees learn how an LLM is actually processing the PDFs they upload, how vision works and what limitations there are, and so on. It's basically a demystification and reality check that should help attendees be more effective when using these tools and understanding their failure modes.
+
+[All the course materials](https://genai.mariozechner.at/) are basically interactive demos that attendees can use. It's on the web, but you can only read the materials. You can't execute the demos unless I give you a key. This is actually built on top of pi, using a lot of the pi code. It even includes artifacts and MCP support. I also did a [2.5 hour live stream](https://www.youtube.com/live/pyiR7vi6Xow) of the workshop in German.
+
+<figure>
+<img src="media/profil-workshop.jpg" loading="lazy">
+<figcaption>Profil and Kurier celebrate Christmas like the good Austrians they are</figcaption>
+</figure>
+
+[Max Müller](https://bsky.app/profile/did:plc:dhp4zwp6mn7r3jpu35tdlkt4), a journalist from Profil (Austrian weekly), asked me if I wanted to give this workshop in their sacred halls. And so I did. It was immensely informative working through this material together with investigative journalists and getting an insight into their day-to-day work. Thanks Max for this opportunity. I learned a lot from you.
+
+In December, I also created an agentic coding workshop, which is partially based on the more general GenAI workshop, paired with lots of little demos and do's and don'ts without being prescriptive. It's basically my experience over the past year condensed into 3-4 hours. I do not claim to have the silver bullet, but I try to communicate what has and hasn't worked for me. I've deployed the workshop at one local software company so far. The response was pretty great.
+
+Here's to more workshops in 2026.
+
+## In Conclusion
+
+As usual, this year in review is pretty long in the tooth. Trust me when I tell you there would be a lot more to stuff this with.
+
+My biggest learning this year is that I truly enjoy meeting my peers in real life. For 2026, I hope I can join more gatherings and meet more interesting people.
+
+In terms of learning, I'm really happy where my electronics knowledge is at. I'm dangerous enough to build things that can kill me, so that's great. As for software engineering, I believe I'm keeping up pretty well with the agentic coding sphere, though I try not to drink too much of the Kool-Aid and stay grounded in reality.
+
+Did my productivity increase via LLMs? I don't actually know. Compared to "two years in review", you will see that there isn't really that much more projects going on. The difference might be that the projects I've worked on this year have more technical depth. Without coding agents, I might not have started these kinds of projects just because of a lack of time to do it all by hand.
+
+But again, that's just the vibe. And I think that's the general theme for this year. It's all just vibes.
 
 <%= render("../../_partials/post-footer.html", { title, url }) %>
