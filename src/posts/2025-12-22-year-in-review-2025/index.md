@@ -155,19 +155,173 @@ Despite that, it was an extremely fun experiment. The three of us had a great ti
 
 ### Sitegeist and Cellgeist
 
-TODO: Sitegeist (browser AI agent), Cellgeist (Excel AI add-in). Also discuss JailJS here.
+<figure>
+<video src="media/sitegeist-cookies.mp4" controls loading="lazy">
+</video>
+<figcaption>Sitegeist using Google to search cookie recipes, then creating a calculator (real-time)</figcaption>
+</figure>
 
-### GEWI Data Pipeline Tutorials
+<figure>
+<video src="media/sitegeist-chrome.mp4" controls loading="lazy">
+</video>
+<figcaption>Claude for Chrome trying to do the same</figcaption>
+</figure>
 
-TODO: Teaching Steph ([@steedl.bsky.social](https://bsky.app/profile/steedl.bsky.social)) to use Claude Code for linguistics research. YouTube video series (German). Reproducible data transformation, analysis, and visualization pipelines from Excel data. [YouTube playlist](https://youtu.be/YcK37Fy24uw), [GitHub repo](https://github.com/badlogic/prefix-reduction).
+<figure>
+<video src="media/sitegeist-cookies-atlas.mp4" controls loading="lazy">
+</video>
+<figcaption>OpenAI Atlas also failing</figcaption>
+</figure>
+
+Sometime in October I started working on a browser extension called [Sitegeist](https://sitegeist.ai). Its purpose is twofold. For one, it's a deep research agent that allows me to research companies and persons or find information on the web on specific topics by directly using Google and interacting with websites.
+
+It's also a great scraping companion for one-off scrapes for which I don't want to write a program myself. You can also use it for shopping if that's your thing, which is the use case Google and all the others always demo. I think that's a complete waste of the technology. There are better uses for browser agents.
+
+The benefit over something like Chrome DevTools Protocol or Playwright is that I get a full trace of the research process, so I can verify the research more easily. Sitegeist has full session management so you can go back and continue a research session if you want. It also has multi-provider, multi-model support, so you can use any kind of model. Empirically the Claude models have performed the best so far.
+
+Sitegeist also comes with artifacts, which you might know from Anthropic's web UI or OpenAI's Canvas feature. Sitegeist can create in-memory HTML, Markdown, Excel, PowerPoint, Word docs, and so on, which I can also download. This lets Sitegeist create interactive dashboards containing the research results, which I can iterate on.
+
+For better automation of sites you visit regularly, Sitegeist comes with a skills system where Sitegeist just writes itself a bunch of JavaScript that gets executed on a page to do something. For example, write a new email in Gmail, add a calendar entry on Google Calendar, interact with Google Sheets, and so forth.
+
+Under the hood, Sitegeist does a bunch of interesting things to interact with websites. The basic gist is that it writes JavaScript that gets executed in the context of the website. The naive version of this is just slamming a script tag into the website with the code the model generated. The problem is that depending on the site's content security policy, that may or may not work. For most popular sites it doesn't work at all. The alternative is to use [user scripts](https://developer.chrome.com/docs/extensions/reference/api/userScripts), an extension API that allows you to inject JavaScript into a page without CSP restrictions. The nuclear option is directly using the debugger. With the debugger, the model actually has access to everything in the website, including HTTP-only cookies. I use this functionality a lot to write scrapers for websites with paywalls.
+
+Of course, with great power comes great exfiltratability via prompt injection. It's surprisingly easy to just have some hidden text on a website and get the model to exfiltrate data to some endpoint. Paired with access to the debugger, the model can easily exfiltrate your auth credentials and browser-side secrets. None of the big lab browser extensions have a solution for this. And neither do I. I did some experiments isolating the JavaScript execution environment in a more controlled way (see the [JailJS blog post](/posts/2025-10-05-jailjs/)). Ultimately, that too cannot cover all attack surfaces. I personally think that Anthropic putting Claude for Chrome into the hands of normies is a really bad idea, specifically since it seems that the model can only interact with a website through the debugger, which means the model potentially has access to all those secrets needed to impersonate a normie on the web.
+
+On the other hand, I don't see a lot of people actually using browser agents, just because it takes some technical ability to make them useful. So maybe the great prompt injection and exfiltration crisis is averted simply by the fact that these agents aren't fit for the general populace yet.
+
+Given how much better Sitegeist performs compared to other offerings, I originally planned on commercializing it. But then I realized that for normies I would have to become a token gateway as well. And for techies, it just feels wrong to ask for money for such a tool. So I'll open source Sitegeist probably in a few weeks when I clean it up and switch it over to pi as the underlying agent engine.
+
+As a fun little experiment, I also built [Cellgeist](https://cellgeist.ai), which is the same exact thing, just living in your Excel.
+
+<figure>
+<video src="media/cellgeist.mp4" controls loading="lazy">
+</video>
+<figcaption>Cellgeist analyzing data and creating charts in Excel</figcaption>
+</figure>
+
+This too I will open source, but it's really just a proof of concept, while Sitegeist is actually quite robust and useful already.
 
 ### pi coding agent
 
-TODO: pi coding agent story, terminal-bench ranking. Also discuss Lemmy as precursor here.
+<figure>
+<img src="media/pi.png" loading="lazy">
+<figcaption>pi exploring its own codebase</figcaption>
+</figure>
+
+Anthropic kept adding features to Claude Code and would also mess with the toolset and system prompt constantly. This fucked with my workflows and I got more and more annoyed over the months. So I eventually set out to write my own little coding agent that works exactly the way I want it to work. That meant stripping away all the stuff I don't need and that I consider to be an anti-pattern. No MCP support, no built-in sub-agents, no plan mode, no to-do tool. I found that the models are really effective if you give them just a minimal set of tools: read, write, edit, bash. Anything else on top of that should be an extension of this minimal core and not a built-in thing. As [Armin put it](https://lucumr.pocoo.org/2025/11/22/llm-apis/), pi is "the Hacker's Open Source choice." It's infinitely extensible without having to touch the core itself, allowing you to create entirely different agents like Peter's [Clawdis](https://clawdis.ai/), a personal agent that lives in your chat app of choice with computer access.
+
+While the core is minimal, pi comes with all the same creature comforts you're used to from Claude Code, Codex, Amp, opencode, or what have you. It's just that you can easily write your own features on top of it, down to custom compaction. This also includes hooks and custom tools being able to contribute custom UI to pi, a feature I haven't seen in any of the other coding agent harnesses.
+
+pi is also multi-provider and multi-model, so you can use your GitHub Copilot subscription, your Claude Max plan, Cerebras, OpenRouter, local models, whatever. You can also switch models within the same session, which may or may not be a good idea. It also includes cost tracking, something other coding agent harnesses do a bad job of.
+
+I've written extensively about how and why I built pi in [What I learned building a minimal LLM coding agent](/posts/2025-11-30-pi-coding-agent/), so I won't repeat all of that here. Since I wrote that blog post, pi has seen a lot of third-party contributions from really nice people.
+
+<figure style="display: flex; gap: 1rem; justify-content: center;">
+<img src="media/pi-prs.png" loading="lazy" style="height: 2rem; width: auto;">
+<img src="media/pi-issues.png" loading="lazy" style="height: 2rem; width: auto;">
+</figure>
+
+I'm kinda glad I'm back in the open source game with it. It brings me great joy to sit down at night after everyone's asleep and just collaborate with people on GitHub or tune tiny little things I've found to be lacking. Pi has been my exclusive daily driver for the past two months.
+
+### Teaching My Linguist Wife Claude Code
+
+<figure>
+<img src="media/steffi-claude.png" loading="lazy">
+</figure>
+
+My lovely SO Steffi ([@steedl.bsky.social](https://bsky.app/profile/steedl.bsky.social)) is a linguist who usually does her data analysis by hand in Excel. While she has a minor technical background (a little HTML, JavaScript, and some Python), she's definitely not a programmer. As she worked on her last paper, I looked over her shoulder to see what she was doing and realized that Claude Code could help her with some of that. So we set out to teach her Claude Code in two short sessions over two nights.
+
+Her research project involved analyzing Austrian dialect verb prefixes across 32 speakers, each with two conversation settings. She had folders full of Excel files with 18,000+ rows of linguistic annotations. The manual workflow would have been: open each file, split a column containing four values separated by semicolons into four separate columns, filter out certain forms marked with asterisks, then aggregate the results per speaker and setting.
+
+Instead, Claude Code wrote Python scripts for each step. One script converted all Excel files to CSV with the right delimiter. Another split the annotation column into four columns. A third filtered out the irrelevant forms and wrote them to separate files. Then came the analysis scripts that counted the three possible values of her linguistic phenomenon per speaker and setting, followed by summary statistics comparing settings and analyzing factors, clustering analysis, and finally a visualization script that generated charts.
+
+The beautiful thing about this workflow is reproducibility. When we found that 10 out of 18,000 data points had errors in the source database, she fixed them in the cloud database, re-exported, and just re-ran the three Python scripts. Everything regenerated automatically. She can attach the raw data and the scripts to her paper as supplementary material, and anyone can reproduce her results.
+
+What I found interesting was that just by telling her that Claude can write code for her, she developed an intuition of what's possible and what's hard rather quickly. By giving her some idea about how to structure her work (building a pipeline made of small scripts that take files as inputs and generate files as outputs that feed into the next little program), she was able to run with Claude Code on her own in pretty much no time. She cannot judge the Python code Claude generated for her. But she can judge the outputs of each individual pipeline stage and verify their correctness.
+
+This is a repeating theme with agents: they're really only effective in the hands of domain experts. Another repeating theme is that domain experts don't yet understand how these tools can actually help them automate verifiable tasks, so they have more time to focus on the actual work. While the experiment with Steffi was a great success in terms of increasing her productivity, I still struggle to come up with teaching materials that could be deployed to a bigger audience of non-technical domain experts so they too can benefit from these kinds of tools. Sitting down with everyone for two nights is not a scalable approach. I think the biggest problem is that the baseline knowledge each domain expert comes with, with respect to technical things, is different. So while they learn these tools, the questions will also differ. Which kind of requires a very personal tutor to help them.
+
+The videos are in German: [Part 1](https://www.youtube.com/watch?v=YcK37Fy24uw), [Part 2](https://www.youtube.com/watch?v=hj8_N_5W4PU), [Part 3](https://www.youtube.com/watch?v=uFi_OqgcIqc), [Part 4](https://www.youtube.com/watch?v=IP8LfqO4gbw). The code is on [GitHub](https://github.com/badlogic/prefix-reduction).
 
 ## Investigating Slop in the Wild
 
-TODO: Austrian media LLM usage (OE24, Heute, Exxpress, RTR funding), fobizz school AI tools (Sophie Scholl chatbot), Government chatbots (Kremsi, Feldi, Tirol bot), Clinara medical transcription, Coalition protocols leak, StoryOne book generator (FAZ AI slop), Facial recognition hiring paper debunk.
+Since the release of ChatGPT, I've been hard on organizations and companies that use LLMs irresponsibly or in ways that are actually detrimental. You can read some of that in my [two years in review](/posts/2024-07-15-two-years-in-review/) blog post. This kind of topic plays well on social media and allows me to create long threads explaining different aspects of LLMs and their use and why certain uses are not a great idea. At the end of these threads, I usually beg for donations for our association, which explains why I put so much time into this kind of "work." Here's a selection of fun little explorations I did over the past year.
+
+### Austrian Media LLM Usage
+
+<figure>
+<img src="media/oe24-chatgpt.jpg" loading="lazy">
+</figure>
+
+[Commander Raika](https://bsky.app/profile/plocaploca.bsky.social) posted a [screenshot on Bluesky](https://bsky.app/profile/plocaploca.bsky.social/post/3m4kbikwcbc2l) showing an OE24 article containing unedited ChatGPT artifacts. That's what we in my industry call nerd sniping.
+
+Austrian newspapers are heavily subsidized, both with government ads and direct funding. One of these funding programs is called "Fonds Digitale Transformation," where newspapers can hand in shoddy project descriptions that lay out digitalization efforts, for which they then get thousands to hundreds of thousands of euros. Most of these projects are just bullshit. So when I saw Commander Raika's screenshot, I thought this is a good time to investigate how this money is spent. Here's a table for OE24 showing some of their funded "Digital Transformation" projects.
+
+<figure>
+<img src="media/oe24-rtr-funding.jpg" loading="lazy">
+</figure>
+
+So how could I numerically investigate whether OE24 was using LLMs to write articles? We already had direct evidence by them leaving traces of ChatGPT output in their online articles. But that could be just a single person at the newspaper fucking up. I needed more data.
+
+The basic idea was this: LLMs love inserting em-dashes and en-dashes everywhere. The hypothesis is that after the introduction of ChatGPT, (plus some time for the technology to actually reach newsrooms), we would see an increase in em-dash or en-dash use over time. That increase can obviously also be explained by other causes, such as changed style guides, new authors coming into the team, or changes in the CMS. But given enough data, we might be able to differentiate between these causes.
+
+So I scraped OE24's sitemap, downloading thousands of articles for each October for the years 2021 to 2025, and counted dashes normalized by article length. The result: stable dash usage from 2021-2024, then a massive spike in 2025. Categories like Shopping, Tierschutz, and lifestyle content went from almost no dashes to being full of them.
+
+<figure>
+<img src="media/oe24-categories-1.jpg" loading="lazy">
+</figure>
+
+<figure>
+<img src="media/oe24-categories-2.jpg" loading="lazy">
+</figure>
+
+Since the spikes weren't uniform across categories, I would assume this wasn't a style guide or CMS change that caused the spike. It is also unlikely that they switched out the entire team for these categories with authors who have writing styles with more en-dashes. So I would count this as direct evidence that at least for these categories, OE24 now lets LLMs write the articles. It kind of makes sense because this is the kind of content that LLMs excel at and don't necessarily need a human in the loop. I made a [YouTube video](https://www.youtube.com/watch?v=4rvPK6jB3l4) and wrote a [Bluesky thread](https://bsky.app/profile/mariozechner.at/post/3m4lw57dsus2o) explaining the whole thing.
+
+For the [second investigation](https://www.youtube.com/watch?v=Gy8XxNfF-6M), I was joined by my linguist friend [Jenia](https://bsky.app/profile/schenior.bsky.social). We expanded to Exxpress, Heute, Krone, and Falter. Falter and Krone also showed rising dash usage:
+
+<figure>
+<img src="media/falter-dashes.jpg" loading="lazy">
+<figcaption>Falter</figcaption>
+</figure>
+
+<figure>
+<img src="media/krone-dashes.jpg" loading="lazy">
+<figcaption>Krone</figcaption>
+</figure>
+
+While our biases would lead us to believe that's expected for Krone, we didn't expect it for Falter, which is generally considered a high quality weekly. Did they start using LLMs too?
+
+Not necessarily. Many CMS systems auto-convert `<space><hyphen><space>` to `<space><en-dash><space>`. So a CMS update could explain the pattern. The solution: differential analysis. If dashes go up while hyphens go down proportionally, that's a CMS doing find-and-replace on existing content. If dashes explode while hyphens stay flat, that's new dash-heavy content being added, which means LLM generation. Falter and Krone showed the CMS pattern. Exxpress, OE24, and Heute showed the LLM pattern:
+
+<figure>
+<img src="media/oe24-dash-hyphen.jpg" loading="lazy">
+<figcaption>OE24</figcaption>
+</figure>
+
+<figure>
+<img src="media/heute-dash-hyphen.jpg" loading="lazy">
+<figcaption>Heute</figcaption>
+</figure>
+
+For the [final investigation](https://bsky.app/profile/mariozechner.at/post/3m4skag5thc22), we added Kurier and Kleine Zeitung. Both showed selective LLM adoption in specific verticals like lifestyle and entertainment, while keeping hard news human-written.
+
+This correlates nicely with RTR (Austrian Regulatory Authority) public funding. OE24's parent company received €287,000 in 2024 for "KI Bilderkennung/Datenbanken/Korrektur/Creation." Heute got €140,876 for "KI-gestützter Journalismus." Austrian taxpayers funded these AI deployments, yet none of the publications disclose LLM usage to readers.
+
+As a byproduct, I now have a scraper for all major Austrian news websites. I'm working on turning that into a media monitoring tool and a public search engine across all news articles published in the past 30 days.
+
+For shits and giggles, Jenia and I had Claude write up a [full methodology paper](https://sink.mariozechner.at/api/share/1094cc9dbc6e11c26ac8e94826101de0/file/llm-detection-paper.html) with all the charts and details if you want to dig deeper.
+
+### fobizz School AI Tools
+
+TODO: Sophie Scholl chatbot investigation.
+
+### Government Chatbots
+
+TODO: Kremsi, Feldi, Tirol bot testing.
+
+### Other Investigations
+
+TODO: Clinara medical transcription, StoryOne book generator (FAZ AI slop), Facial recognition hiring paper debunk.
 
 ## Workshops and Talks
 
