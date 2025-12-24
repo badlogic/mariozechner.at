@@ -291,7 +291,19 @@ For the [second investigation](https://www.youtube.com/watch?v=Gy8XxNfF-6M), I w
 
 While our biases would lead us to believe that's expected for Krone, we didn't expect it for Falter, which is generally considered a high quality weekly. Did they start using LLMs too?
 
-Not necessarily. Many CMS systems auto-convert `<space><hyphen><space>` to `<space><en-dash><space>`. So a CMS update could explain the pattern. The solution: differential analysis. If dashes go up while hyphens go down proportionally, that's a CMS doing find-and-replace on existing content. If dashes explode while hyphens stay flat, that's new dash-heavy content being added, which means LLM generation. Falter and Krone showed the CMS pattern. Exxpress, OE24, and Heute showed the LLM pattern:
+Not necessarily. Many CMS systems auto-convert `<space><hyphen><space>` to `<space><en-dash><space>`. So a CMS update could explain the pattern. The solution: differential analysis. If dashes go up while hyphens go down proportionally, that's a CMS doing find-and-replace on existing content. If dashes explode while hyphens stay flat, that's new dash-heavy content being added, which means LLM generation. Falter and Krone showed the CMS pattern:
+
+<figure>
+<img src="media/falter-cms-pattern.jpg" loading="lazy">
+<figcaption>Falter</figcaption>
+</figure>
+
+<figure>
+<img src="media/krone-cms-pattern.jpg" loading="lazy">
+<figcaption>Krone</figcaption>
+</figure>
+
+Exxpress, OE24, and Heute showed the LLM pattern:
 
 <figure>
 <img src="media/oe24-dash-hyphen.jpg" loading="lazy">
