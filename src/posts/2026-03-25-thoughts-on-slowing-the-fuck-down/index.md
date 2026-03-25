@@ -17,7 +17,7 @@ And I think that's fine. Spending your free time building things is super enjoya
 
 During the Christmas break, both Anthropic and OpenAI handed out some freebies to hook people to their addictive slot machines. For many, it was the first time they experienced the magic of agentic coding. The fold's getting bigger.
 
-After 12 months, we are now beginning to see the effects of all that "progress". Here's my current view.
+Coding agents are now also introduced to production codebases. After 12 months, we are now beginning to see the effects of all that "progress". Here's my current view.
 
 ## Everything is broken
 While all of this is anecdotal, it sure feels like software has become a brittle mess, with 98% uptime becoming the norm instead of the exception, including for big services. And user interfaces have the weirdest fucking bugs that you'd think a QA team would catch. I give you that that's been the case for longer than agents exist. But we seem to be accelerating.
