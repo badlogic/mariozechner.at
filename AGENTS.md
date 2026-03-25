@@ -26,9 +26,12 @@ A minimalist personal blog and portfolio website built with **blargh**, a custom
 ## Common Tasks
 
 ### Add a New Blog Post
+When the user asks to create a new blog post, scaffold it immediately by following these steps. Do NOT ask for confirmation, just create the files.
+
 1. Check today's date first: `date +%Y-%m-%d`
-2. Create directory: `src/posts/YYYY-MM-DD-post-title/` (use short slugs)
-3. Add `meta.json`:
+2. Create directory: `src/posts/YYYY-MM-DD-post-title/media/` (use short slugs)
+3. Start the dev server: `nohup blargh --in src --out html --watch --serve 8080 > /tmp/blargh.log 2>&1 &`, then `open http://127.0.0.1:8080/posts/<post-slug>/`
+4. Add `meta.json` (set `published` to `false` until the user says to publish):
    ```json
    {
        "title": "Post Title",
@@ -47,7 +50,7 @@ A minimalist personal blog and portfolio website built with **blargh**, a custom
    	const path = require('path');
    	url = url + "/posts/" + path.basename(path.dirname(outputPath)) + "/";
    %>
-   <%= render("../../_partials/post-header.html", { title, image, url }) %>
+   <%= render("../../_partials/post-header.html", { title, image, url, caption }) %>
 
    <h1 class="toc-header">Table of contents</h1>
    <div class="toc">
