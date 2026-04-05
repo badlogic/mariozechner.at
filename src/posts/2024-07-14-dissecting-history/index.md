@@ -59,14 +59,14 @@ C:\GAMES\QBASIC.EXE /RUN NIBBLES.BAS
 Running this magic spell resulted in <u>instant gratification</u>. The command would launch the game [Nibbles](https://www.dosgamesarchive.com/play/nibbles/), an early variant of "Snake," which we all enjoyed on our Nokia phones.
 
 <figure>
-![Nibbles](media/nibbles.jpg)
+<img src="media/nibbles.jpg" loading="lazy">
 <figcaption>Poor Sammy.</figcaption>
 </figure>
 
 After defeating enough Sammies, I pressed `CTRL + BREAK`, as instructed, and found myself in one of the most iconic programming tools of the nineties: QBasic.
 
 <figure>
-![QBasic](media/nibbles-code.jpg)
+<img src="media/nibbles-code.jpg" loading="lazy">
 <figcaption>Glory. I had the German version.</figcaption>
 </figure>
 
