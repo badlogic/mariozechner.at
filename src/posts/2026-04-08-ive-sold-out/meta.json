@@ -4,5 +4,5 @@
     "image": "media/header.png",
     "caption": "What a nice WebGL shader. Look at draining your battery.",
     "description": "I've sold out",
-    "published": false
+    "published": true
 }

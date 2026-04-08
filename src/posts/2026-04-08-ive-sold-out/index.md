@@ -163,7 +163,11 @@ I'm very happy that the last 2 months are behind me. I think I've found a good h
 
 And not having to go this alone feels great.
 
-Sincerely,
+Sincerely,<br>
 Pidalf
+
+Read Armin's thoughts here: https://lucumr.pocoo.org/2026/4/8/mario-and-earendil/
+
+Read Colin's thoughts here: https://www.foggynotions.day/
 
 <%= render("../../\_partials/post-footer.html", { title, url }) %>
