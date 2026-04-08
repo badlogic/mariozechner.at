@@ -93,7 +93,7 @@ I also became an early (small-scale) investor in Earendil. Why not throw a bunch
 
 Then Peter decided to build Warelay/Claudebot/Moltbot/OpenClaw on top of pi, OpenClaw exploded in popularity, Armin wrote that blog post telling everyone the role of pi in OpenClaw, and I got a lot of calls (see above).
 
-I kept Armin and Colin in the loop, asking for their advice. Until one fateful day in February, whenj they themselves called with an offer. Well played, gents, you got all the inside information to design a great deal.
+I kept Armin and Colin in the loop, asking for their advice. Until one fateful day in February, when they themselves called with an offer. Well played, gents, you got all the inside information to design a great deal.
 
 Now, for me, deal making is usually a very dry, mechanical affair. But it becomes hard if it involves friends. I'd lie if I'd say it wasn't an emotional struggle for all three of us. But I think that was actually valuable. We got to test how the three of us work together under stress. I got to see Colin work. And we set expectations. Eventually, we worked it out.
 
