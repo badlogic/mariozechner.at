@@ -1,3 +1,13 @@
+if (location.pathname !== "/nothanks.html" && document.referrer) {
+    try {
+        const referrer = new URL(document.referrer);
+        if (referrer.hostname === "news.ycombinator.com") {
+            location.replace("/nothanks.html");
+        }
+    } catch (_error) {
+    }
+}
+
 function dom(html) {
     const div = document.createElement(`div`);
     div.innerHTML = html;
