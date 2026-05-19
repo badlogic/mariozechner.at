@@ -47,8 +47,10 @@ async function syncOnce() {
         const { tweets, media, quotedTweets } = await fetchNewTweets(client, user.id, usernameForUrls, sinceId, backfill, flushProgress);
 
         if (tweets.length === 0) {
-            await writeJson(outFile, oldItems);
-            await writeRss(rssFile, oldItems);
+            const items = await refreshStaleMetadata(oldItems);
+            await writeJson(dataFile, items);
+            await writeJson(outFile, items);
+            await writeRss(rssFile, items);
             console.log(`[${new Date().toISOString()}] No new tweets.`);
             return;
         }
@@ -63,6 +65,7 @@ async function syncOnce() {
             outFile,
             dataFile,
             rssFile,
+            refreshMeta: true,
         });
 
         state.lastFetchedTweetId = maxId(state.lastFetchedTweetId, ...tweets.map((tweet) => tweet.id));
@@ -234,7 +237,7 @@ function headerValue(err, name) {
     return headers[name] ?? headers[name.toLowerCase()];
 }
 
-async function writeRecommendationOutputs({ label, tweets, media, quotedTweets, byId, username, outFile, dataFile, rssFile }) {
+async function writeRecommendationOutputs({ label, tweets, media, quotedTweets, byId, username, outFile, dataFile, rssFile, refreshMeta = false }) {
     const context = { media, quotedTweets, username };
     const newItems = tweets.map((tweet) => toRecommendation(tweet, context)).filter(Boolean);
 
@@ -249,7 +252,8 @@ async function writeRecommendationOutputs({ label, tweets, media, quotedTweets, 
 
     addReviewsFromReplyChains(tweets, byId, username);
 
-    const items = [...byId.values()].sort((a, b) => compareIds(b.id, a.id));
+    let items = [...byId.values()].sort((a, b) => compareIds(b.id, a.id));
+    if (refreshMeta) items = await refreshStaleMetadata(items);
     await writeJson(dataFile, items);
     await writeJson(outFile, items);
     await writeRss(rssFile, items);
@@ -396,7 +400,78 @@ function isTweetUrl(raw) {
     }
 }
 
+function isYouTubeUrl(raw) {
+    try {
+        const url = new URL(raw);
+        const host = url.hostname.replace(/^www\./, "").toLowerCase();
+        return host === "youtube.com" || host === "youtu.be" || host.endsWith(".youtube.com");
+    } catch {
+        return false;
+    }
+}
+
+async function fetchYouTubeMeta(url) {
+    try {
+        const oembedUrl = new URL("https://www.youtube.com/oembed");
+        oembedUrl.searchParams.set("url", url);
+        oembedUrl.searchParams.set("format", "json");
+
+        const response = await fetch(oembedUrl, {
+            signal: AbortSignal.timeout(10_000),
+            headers: {
+                "user-agent": "mariozechner.at recommendation fetcher (+https://mariozechner.at/recommended-reading/)",
+                accept: "application/json",
+            },
+        });
+
+        if (!response.ok) return null;
+
+        const data = await response.json();
+        return {
+            title: data.title,
+            description: data.author_name ? `Video by ${data.author_name}` : undefined,
+            image: data.thumbnail_url,
+            siteName: data.provider_name ?? "YouTube",
+            fetchedAt: new Date().toISOString(),
+        };
+    } catch (err) {
+        console.warn(`Could not fetch YouTube metadata for ${url}: ${err.message ?? err}`);
+        return null;
+    }
+}
+
+async function refreshStaleMetadata(items) {
+    const refreshed = [];
+    let count = 0;
+
+    for (const item of items) {
+        if (!isStaleMeta(item)) {
+            refreshed.push(item);
+            continue;
+        }
+
+        const meta = await fetchPageMeta(item.url);
+        refreshed.push({ ...item, meta });
+        count += 1;
+    }
+
+    if (count > 0) console.log(`[${new Date().toISOString()}] Refreshed metadata for ${count} item(s).`);
+    return refreshed;
+}
+
+function isStaleMeta(item) {
+    if (!item.meta?.title) return true;
+    if (!isYouTubeUrl(item.url)) return false;
+
+    const title = item.meta.title.trim().toLowerCase();
+    const siteName = item.meta.siteName?.trim().toLowerCase();
+    return title === "- youtube" || title === "youtube" || siteName !== "youtube";
+}
+
 async function fetchPageMeta(url) {
+    const youtubeMeta = isYouTubeUrl(url) ? await fetchYouTubeMeta(url) : null;
+    if (youtubeMeta) return youtubeMeta;
+
     try {
         const response = await fetch(url, {
             signal: AbortSignal.timeout(10_000),
