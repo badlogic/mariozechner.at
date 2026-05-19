@@ -12,6 +12,28 @@ services:
         networks:
             - network
 
+    recommendations-sync:
+        build:
+            context: ..
+            dockerfile: docker/recommendations.Dockerfile
+        restart: always
+        environment:
+            - TWITTER_API_KEY
+            - TWITTER_BEARER_TOKEN
+            - TWITTER_USERNAME=badlogicgames
+            - SYNC_INTERVAL_SECONDS=3600
+            - MAX_PAGES=10
+            - RECOMMENDATIONS_DAYS_BACK=365
+            - RECOMMENDATIONS_FILE=/www/recommended-reading/recommendations.json
+            - RECOMMENDATIONS_RSS_FILE=/www/recommended-reading/rss.xml
+            - RECOMMENDATIONS_DATA_FILE=/state/recommendations.json
+            - STATE_FILE=/state/recommendations-state.json
+        volumes:
+            - ../html:/www
+            - ./data/recommendations:/state
+        networks:
+            - network
+
 networks:
     network:
         driver: bridge

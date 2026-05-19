@@ -1,0 +1,124 @@
+<%
+    meta("../meta.json")
+    title = "Recommended reading/viewing"
+    description = "Articles and videos I recommended on socials."
+    url = url + "/recommended-reading/"
+%>
+
+<%= render("../_partials/header.html", { title, description, url }) %>
+
+<article>
+    <h3>
+        Recommended reading/viewing
+        <a href="/recommended-reading/rss.xml" class="text-sm" aria-label="RSS feed">
+            <svg style="width: 18px; color: var(--link-color);" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 11a9 9 0 0 1 9 9" />
+                <path d="M4 4a16 16 0 0 1 16 16" />
+                <circle cx="5" cy="19" r="1" />
+            </svg>
+        </a>
+    </h3>
+    <p class="text-muted">Articles and videos I recommended on socials. Updated periodically.</p>
+
+    <div id="recommendations" class="recommendations-list">
+        <p class="text-muted">Loading recommendations...</p>
+    </div>
+</article>
+
+<script>
+    const list = document.getElementById("recommendations");
+
+    fetch("/recommended-reading/recommendations.json", { cache: "no-store" })
+        .then((response) => {
+            if (!response.ok) throw new Error("Could not load recommendations.");
+            return response.json();
+        })
+        .then((items) => {
+            if (!items.length) {
+                list.innerHTML = '<p class="text-muted">No recommendations yet.</p>';
+                return;
+            }
+
+            list.innerHTML = "";
+            for (const item of items) list.appendChild(renderRecommendation(item));
+        })
+        .catch((error) => {
+            list.innerHTML = `<p class="text-muted">${escapeHtml(error.message)}</p>`;
+        });
+
+    function renderRecommendation(item) {
+        const meta = item.meta || {};
+        const article = document.createElement("article");
+        article.className = "recommendation";
+
+        const date = item.createdAt ? new Date(item.createdAt).toISOString().slice(0, 10) : "";
+        const kind = item.kind === "viewing" ? "Viewing" : "Reading";
+        const site = meta.siteName || hostnameOf(item.url);
+        const title = meta.title || hostnameOf(item.url) || item.url;
+        const note = ownNote(item.text);
+
+        const meta_line = [
+            date && `<span class="recommendation-date">${escapeHtml(date)}</span>`,
+            `<span class="recommendation-kind recommendation-kind--${item.kind}">${kind}</span>`,
+            site && `<span class="recommendation-site">${escapeHtml(site)}</span>`,
+        ].filter(Boolean).join('<span class="recommendation-sep">·</span>');
+
+        const thumb = meta.image
+            ? `<img class="recommendation-thumb" loading="lazy" src="${escapeAttribute(meta.image)}" alt="">`
+            : "";
+
+        const description = meta.description
+            ? `<p class="recommendation-description">${escapeHtml(meta.description)}</p>`
+            : "";
+
+        const annotations = [
+            note && `<p class="recommendation-note">${escapeHtml(note)}</p>`,
+            ...(item.reviews || []).map((review) => `<p class="recommendation-review">${escapeHtml(review.text)}</p>`),
+        ].filter(Boolean);
+
+        const annotationsBlock = annotations.length
+            ? `<div class="recommendation-thread">${annotations.join("")}</div>`
+            : "";
+
+        article.innerHTML = `
+            <div class="recommendation-header">${meta_line}</div>
+            ${thumb}
+            <h4 class="recommendation-title"><a href="${escapeAttribute(item.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(title)}</a></h4>
+            ${description}
+            ${annotationsBlock}
+            <a class="recommendation-source" href="${escapeAttribute(item.tweetUrl)}" target="_blank" rel="noopener noreferrer">source ↗</a>
+        `;
+
+        return article;
+    }
+
+    function ownNote(text) {
+        if (!text) return "";
+        const stripped = text.replace(/^\s*recommended\s+(reading|viewing)\b[\s.,!:;-]*/i, "").trim();
+        return stripped;
+    }
+
+    function hostnameOf(url) {
+        try {
+            return new URL(url).hostname.replace(/^www\./, "");
+        } catch {
+            return "";
+        }
+    }
+
+    function escapeHtml(value) {
+        return String(value ?? "").replace(/[&<>'"]/g, (char) => ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            "'": "&#39;",
+            '"': "&quot;",
+        })[char]);
+    }
+
+    function escapeAttribute(value) {
+        return escapeHtml(value).replace(/`/g, "&#96;");
+    }
+</script>
+
+<%= render("../_partials/footer.html") %>

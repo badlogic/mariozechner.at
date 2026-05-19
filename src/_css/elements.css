@@ -56,6 +56,13 @@ a {
     text-decoration: none;
 }
 
+.featured-link {
+    color: var(--link-color);
+    font-family: var(--font-sans);
+    font-weight: 800;
+    border-bottom: 1px solid var(--border-color);
+}
+
 ul {
     list-style-type: disc;
     padding-left: 1.5rem;
@@ -266,4 +273,117 @@ article p > video {
 
 .toc ul li > ul a:hover {
     color: var(--link-color);
+}
+
+.recommendations-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.recommendation {
+    display: block;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.recommendation:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+}
+
+.recommendation-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.4rem;
+    margin-bottom: 0.4rem;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: var(--dimmed-text-color);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.recommendation-sep {
+    opacity: 0.5;
+}
+
+.recommendation-kind {
+    font-weight: 600;
+    color: var(--link-color);
+}
+
+.recommendation-thumb {
+    float: right;
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    margin: 0 0 0.5rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-color);
+}
+
+.recommendation-title {
+    margin: 0 0 0.5rem 0;
+    font-family: var(--font-sans);
+    font-weight: 800;
+    font-size: 1.125rem;
+    line-height: 1.4;
+}
+
+.recommendation-title a {
+    color: var(--link-color);
+    border-bottom-width: 0;
+}
+
+.recommendation-description {
+    margin: 0 0 0.75rem 0;
+}
+
+.recommendation-thread {
+    clear: both;
+    margin: 0.75rem 0;
+    padding-left: 0.75rem;
+    border-left: 3px solid var(--border-color);
+    color: var(--dimmed-text-color);
+    font-style: italic;
+}
+
+.recommendation-thread p {
+    margin: 0 0 0.5rem 0;
+    white-space: pre-wrap;
+}
+
+.recommendation-thread p:last-child {
+    margin-bottom: 0;
+}
+
+.recommendation-source {
+    clear: both;
+    display: inline-block;
+    margin-top: 0.5rem;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    line-height: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--dimmed-text-color);
+    border-bottom-width: 0;
+}
+
+.recommendation-source:hover {
+    color: var(--link-color);
+}
+
+@media (max-width: 560px) {
+    .recommendation-thumb {
+        float: none;
+        display: block;
+        width: 100%;
+        height: auto;
+        max-height: 220px;
+        margin: 0 0 0.75rem 0;
+    }
 }

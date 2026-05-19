@@ -24,7 +24,7 @@
         })
         rss("./rss.xml", channel, items);
     %>
-    <div class="post-list flex flex-col gap-4">
+    <div class="post-list flex flex-col gap-4 mb-8">
         <% for (const post of posts) { %>
             <a href="/posts/<%=post.directory%>/" class="flex gap-4 items-center">
                 <div class="flex row gap-4 items-baseline">
@@ -34,6 +34,10 @@
             </a>
         <% } %>
     </div>
+
+    <h4 class="mb-6">Recommended reading/viewing <a href="/recommended-reading/rss.xml" class="text-sm" aria-label="RSS feed"><svg style="width: 18px; color: var(--link-color);" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rss-icon lucide-rss"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg></a></h4>
+    <div id="latest-recommendations" class="post-list flex flex-col gap-4"></div>
+    <p class="mt-4"><a href="/recommended-reading/" class="featured-link">More recommended reading/viewing &rarr;</a></p>
 
     <h4 class="mt-8 mb-6">Who I am</h4>
     <p>
@@ -99,5 +103,47 @@
         <span>8010 Graz</span>
         <span>Austria</span>
     </div>
+
+    <script>
+        fetch("/recommended-reading/recommendations.json", { cache: "no-store" })
+            .then((response) => response.ok ? response.json() : [])
+            .then((items) => {
+                const list = document.getElementById("latest-recommendations");
+                list.innerHTML = items.slice(0, 5).map((item) => {
+                    const title = item.meta?.title || hostnameOf(item.url) || item.url;
+                    const date = item.createdAt ? new Date(item.createdAt).toISOString().slice(0, 10) : "";
+                    return `
+                        <a href="${escapeAttribute(item.url)}" class="flex gap-4 items-center" target="_blank" rel="noopener noreferrer">
+                            <div class="flex row gap-4 items-baseline">
+                                <span class="text-sm text-muted italic whitespace-nowrap">${escapeHtml(date)}</span>
+                                <span>${escapeHtml(title)}</span>
+                            </div>
+                        </a>
+                    `;
+                }).join("");
+            });
+
+        function escapeHtml(value) {
+            return String(value ?? "").replace(/[&<>'"]/g, (char) => ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                "'": "&#39;",
+                '"': "&quot;",
+            })[char]);
+        }
+
+        function escapeAttribute(value) {
+            return escapeHtml(value).replace(/`/g, "&#96;");
+        }
+
+        function hostnameOf(url) {
+            try {
+                return new URL(url).hostname.replace(/^www\./, "");
+            } catch {
+                return "";
+            }
+        }
+    </script>
 
     <%= render("./_partials/footer.html") %>

@@ -13,7 +13,21 @@ rsync -avz --exclude node_modules --exclude .git --exclude data --exclude docker
 
 if [ "$1" == "server" ]; then
     echo "Publishing client & server"
-    ssh -t $host "cd $host_dir && ./docker/control.sh stop && ./docker/control.sh start && ./docker/control.sh logs"
+
+    if [ -z "$TWITTER_API_KEY" ] && [ -z "$TWITTER_BEARER_TOKEN" ]; then
+        echo "TWITTER_API_KEY or TWITTER_BEARER_TOKEN must be set when publishing the server"
+        exit 1
+    fi
+
+    remote_env=""
+    if [ -n "$TWITTER_API_KEY" ]; then
+        remote_env="$remote_env TWITTER_API_KEY=$(printf "%q" "$TWITTER_API_KEY")"
+    fi
+    if [ -n "$TWITTER_BEARER_TOKEN" ]; then
+        remote_env="$remote_env TWITTER_BEARER_TOKEN=$(printf "%q" "$TWITTER_BEARER_TOKEN")"
+    fi
+
+    ssh -t $host "cd $host_dir && ./docker/control.sh stop && $remote_env ./docker/control.sh start && ./docker/control.sh logs"
 else
     echo "Publishing client only"
 fi
