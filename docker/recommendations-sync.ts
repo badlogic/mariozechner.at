@@ -276,9 +276,8 @@ function toRecommendation(tweet, context) {
     const kind = recommendationKind(tweet.text);
 
     if (!kind || isReplyTweet(tweet)) return null;
-    if (kind === "reading" && isQuoteTweet(tweet)) return null;
 
-    const url = kind === "viewing" ? videoUrl(tweet, context) : externalUrl(tweet);
+    const url = kind === "viewing" ? videoUrl(tweet, context) : readingUrl(tweet, context);
     if (!url) {
         console.warn(`Skipping ${tweet.id}: no linked ${kind === "reading" ? "article" : "video"} URL found.`);
         return null;
@@ -304,6 +303,19 @@ function externalUrl(tweet) {
     return (tweet.entities?.urls ?? [])
         .map((url) => url.unwound_url ?? url.expanded_url ?? url.url)
         .find((url) => url && !isTweetUrl(url));
+}
+
+function readingUrl(tweet, context) {
+    const linkedArticle = externalUrl(tweet);
+    if (linkedArticle) return linkedArticle;
+
+    for (const ref of tweet.referenced_tweets ?? []) {
+        if (ref.type !== "quoted") continue;
+        const quoted = context.quotedTweets.get(ref.id);
+        if (!quoted) continue;
+        const quotedArticle = externalUrl(quoted);
+        if (quotedArticle) return quotedArticle;
+    }
 }
 
 function videoUrl(tweet, context) {
@@ -332,13 +344,6 @@ function nativeVideoUrl(tweet, media) {
         if (item.url) return item.url;
         if (item.preview_image_url) return item.preview_image_url;
     }
-}
-
-function isQuoteTweet(tweet) {
-    return (
-        tweet.referenced_tweets?.some((ref) => ref.type === "quoted") ||
-        (tweet.entities?.urls ?? []).some((url) => isTweetUrl(url.expanded_url ?? url.url))
-    );
 }
 
 function isReplyTweet(tweet) {
