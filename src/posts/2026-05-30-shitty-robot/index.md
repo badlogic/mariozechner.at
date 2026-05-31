@@ -64,7 +64,7 @@ The PCB turned out to be really, really simple. I suppose Chinese electronics to
 
 In the top left you see the battery connector, which on the back is connected to two capacitors that just make sure the motor gets enough juice in case they stall or draw more power than expected.
 
-The big IC in the middle is the brain. It handles communication with the RF receiver on the middle right, controls the LEDs on either side, and drives the H-bridge, which is the tiny black chip at the bottom.
+The big IC in the middle is the brain. It handles communication with the IR receiver on the middle right, controls the LEDs on either side, and drives the H-bridge, which is the tiny black chip at the bottom.
 
 Interestingly enough, the PCB is a single layer board. If you look closer, you can spot two zero ohm resistors used as little bridges over traces that would otherwise cross.
 
